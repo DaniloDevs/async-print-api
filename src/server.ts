@@ -3,5 +3,5 @@ import { env } from "./env";
 
 
 app.listen({ port: env.PORT, host: "0.0.0.0" }).then(() => {
-   console.log(`API rodando na porta ${env.PORT}`);
+   console.log(`Server running on port: ${env.PORT} \n Docs running at URL: http://localhost:3333/docs/ \n Jobs Dashboard running at URL: http://localhost:3333/dashboard/jobs/`);
 });

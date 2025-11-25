@@ -4,8 +4,15 @@ import ScalarSwagger from "@scalar/fastify-api-reference";
 import jobsRoute from "./routes/jobs";
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import leadsRoute from "./routes/leads";
+import { serverAdapter } from "./connections/bull-board";
 
 const app = Fastify();
+
+
+app.register(serverAdapter.registerPlugin(), {
+   prefix: "/dashboard/jobs",
+});
+
 
 // Add schema validator and serializer
 app.setValidatorCompiler(validatorCompiler);

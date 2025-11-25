@@ -3,22 +3,91 @@ version: "3.9"
 services:
   redis:
     image: redis:7-alpine
-    container_name: redis
+    container_name: dev-redis
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
+      - ./redis.dev.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    networks:
+      - dev-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: dev-redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - dev-net
 
   app:
-    build: .
-    container_name: bullmq-app
-    depends_on:
-      - redis
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: dev-app
     environment:
+      NODE_ENV: development
       REDIS_HOST: redis
       REDIS_PORT: 6379
     ports:
       - "3000:3000"
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - dev-net
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: dev-worker
+    command: npm run worker
+    environment:
+      NODE_ENV: development
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - dev-net
+    restart: unless-stopped
+
+bull-board:
+  build:
+    context: .
+    dockerfile: Dockerfile.bull-board
+  ports:
+    - "3001:3001"
+  environment:
+    - REDIS_HOST=redis
+    - REDIS_PORT=6379
+  depends_on:
+    - redis
+  networks:
+    - print-network
+
 
 volumes:
   redis_data:
+
+networks:
+  dev-net:
+    driver: bridge
