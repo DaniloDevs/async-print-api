@@ -1,7 +1,7 @@
 import Fastify from "fastify";
 import Swagger from "@fastify/swagger";
 import ScalarSwagger from "@scalar/fastify-api-reference";
-import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
+import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import { serverAdapter } from "./connections/bull-board";
 import SetupRoutes from "./routes/setup-routes";
 
@@ -11,7 +11,6 @@ const app = Fastify();
 app.register(serverAdapter.registerPlugin(), {
    prefix: "/dashboard/jobs",
 });
-
 
 // Add schema validator and serializer
 app.setValidatorCompiler(validatorCompiler);
@@ -25,6 +24,7 @@ app.register(Swagger, {
          version: "0.0.1",
       },
    },
+   transform: jsonSchemaTransform
 });
 
 app.register(ScalarSwagger, {

@@ -8,6 +8,7 @@ import { DetectPrinter } from "./printer/detect-printer";
 import { GetPrintStatus } from "./printer/get-print-status";
 import { TestPrintDevice } from "./printer/test-print-device";
 import { ConfigurePrintDevice } from "./printer/configure-print";
+import DeleteAllJobsByType from "./jobs/delete-all-jobs-by-type";
 
 
 export default async function SetupRoutes(app: FastifyInstance) {
@@ -16,6 +17,7 @@ export default async function SetupRoutes(app: FastifyInstance) {
    app.register(FetchCompletedJobs)
    app.register(FetchFailedJobs)
    app.register(FetchWaitingJobs)
+   app.register(DeleteAllJobsByType)
    
 
    // Create Lead

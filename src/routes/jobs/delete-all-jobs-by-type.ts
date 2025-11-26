@@ -7,7 +7,7 @@ import { queue } from '../../jobs/queue';
 export default async function DeleteAllJobsByType(app: FastifyInstance) {
    app
       .withTypeProvider<ZodTypeProvider>()
-      .get("/jobs/waiting", {
+      .post("/jobs/waiting", {
          schema: {
             summary: "Delete Jobs by Type",
             description: "Permanently removes all job entries matching the specified job-type parameter from the current event. This action cannot be undone",
