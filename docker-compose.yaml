@@ -70,19 +70,19 @@ services:
       - dev-net
     restart: unless-stopped
 
-bull-board:
-  build:
-    context: .
-    dockerfile: Dockerfile.bull-board
-  ports:
-    - "3001:3001"
-  environment:
-    - REDIS_HOST=redis
-    - REDIS_PORT=6379
-  depends_on:
-    - redis
-  networks:
-    - print-network
+  bull-board:
+    build:
+      context: .
+      dockerfile: Dockerfile.bull-board
+    ports:
+      - "3001:3001"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    networks:
+      - dev-net
 
 
 volumes:
