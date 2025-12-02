@@ -27,6 +27,14 @@ export default async function CreateLeads(app: FastifyInstance) {
             }
          })
 
+         await prisma.leads.create({
+            data: {
+               name,
+               cellphone,
+               eventsId
+            }
+         })
+
          // Salvar user 
          const job = await queue.add("capture lead", {
             name,
