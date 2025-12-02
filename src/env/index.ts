@@ -12,6 +12,7 @@ const envSchema = z.object({
 	MINIO_ACCESS_KEY: z.string(),
 	MINIO_SECRET_KEY: z.string(),
 	MINIO_ENDPOINT: z.string(),
+	MINIO_BUCKET: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);

@@ -23,6 +23,6 @@ model leads {
   name      String
   cellphone String @unique
 
-  events   events? @relation(fields: [eventsId], references: [id])
-  eventsId String?
+  events   events @relation(fields: [eventsId], references: [id])
+  eventsId String
 }
