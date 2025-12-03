@@ -1,6 +1,5 @@
 import type { FastifyInstance } from "fastify"
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { getPrinter, setupPrinter } from "../../utils/setup-printer";
 import z from "zod";
 import { prisma } from "../../connections/prisma";
 import { createSlug } from "../../utils/create-slug";
@@ -10,13 +9,18 @@ export async function CreateEvent(app: FastifyInstance) {
       .withTypeProvider<ZodTypeProvider>()
       .post('/events', {
          schema: {
-            summary: "Create Event",
+            summary: "Create new event",
             tags: ["Events"],
-            description: "Create a new Event",
+            description: "Registers a new event resource in the system. Initializes the event with the provided details and assigns a unique identifier. Returns the newly created event object.",
             body: z.object({
                title: z.string().min(1),
-               active: z.boolean().default(true),
-            })
+               active: z.boolean().default(true)
+            }),
+            response: {
+               201: z.object({
+                  id: z.string()
+               })
+            }
          }
       }, async (request, reply) => {
 
