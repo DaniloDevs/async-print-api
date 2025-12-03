@@ -11,7 +11,7 @@ import { ConfigurePrintDevice } from "./printer/configure-print";
 import DeleteAllJobsByType from "./jobs/delete-all-jobs-by-type";
 import { CreateBannerById } from "./events/create-banner-by-id";
 import { CreateEvent } from "./events/create-event";
-import { DisabledEventById } from "./events/disabled-event-by-id";
+import { ChangeStatus } from "./events/change-status";
 import { FetchEvents } from "./events/fetch-events";
 
 
@@ -36,6 +36,6 @@ export default async function SetupRoutes(app: FastifyInstance) {
    // Events
    app.register(CreateBannerById)
    app.register(CreateEvent)
-   app.register(DisabledEventById)
+   app.register(ChangeStatus)
    app.register(FetchEvents)
 }
