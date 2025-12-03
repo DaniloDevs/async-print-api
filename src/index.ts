@@ -1,6 +1,6 @@
 import Fastify from "fastify";
-import Swagger from "@fastify/swagger";
-import ScalarSwagger from "@scalar/fastify-api-reference";
+import fastifySwagger from "@fastify/swagger";
+import fastifyScalar from "@scalar/fastify-api-reference";
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import { serverAdapter } from "./connections/bull-board";
 import SetupRoutes from "./routes/setup-routes";
@@ -19,19 +19,39 @@ app.setSerializerCompiler(serializerCompiler);
 
 app.register(Multipart);
 
-app.register(Swagger, {
+app.register(fastifySwagger, {
    openapi: {
       info: {
-         title: "Lead Print",
-         description: "Sistema de captação de lead e impressão para sorteiow",
-         version: "0.0.1",
+         title: "Lead Print API",
+         description: `
+**Orquestrador de Captação de Leads e Impressão Térmica.**
+
+Esta API gerencia o fluxo completo de eventos presenciais, desde o cadastro de participantes até a emissão física de comprovantes para sorteios.
+
+### Módulos Principais:
+* **Hardware Integration:** Controle direto de impressoras térmicas (USB/Serial).
+* **Background Jobs:** Processamento assíncrono de filas (via BullMQ) para garantir alta disponibilidade.
+* **Event Management:** Gestão de múltiplos eventos e seus respectivos leads.
+         `,
+         version: "1.0.0",
       },
+      tags: [
+         { name: 'Events', description: 'Gerenciamento do ciclo de vida dos eventos e configurações globais.' },
+         { name: 'Leads', description: 'Cadastro e consulta de participantes captados.' },
+         { name: 'Printer', description: 'Integração direta com hardware, diagnóstico e comandos de impressão ESC/POS.' },
+         { name: 'Jobs', description: 'Monitoramento de filas de processamento em segundo plano (BullMQ).' },
+      ]
    },
-   transform: jsonSchemaTransform
+   transform: jsonSchemaTransform,
 });
 
-app.register(ScalarSwagger, {
+app.register(fastifyScalar, {
    routePrefix: "/docs",
+   configuration: {
+      searchHotKey: 'k',
+      theme: 'deepSpace', 
+      layout: 'modern',
+   }
 });
 
 
