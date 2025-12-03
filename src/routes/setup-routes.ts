@@ -13,6 +13,8 @@ import { CreateBannerById } from "./events/create-banner-by-id";
 import { CreateEvent } from "./events/create-event";
 import { ChangeStatus } from "./events/change-status";
 import { FetchEvents } from "./events/fetch-events";
+import { FetchLeadsByEvent } from "./events/fetch-leads-by-event";
+import FetchEventsBySlug from "./events/fetch-events-by-slug";
 
 
 export default async function SetupRoutes(app: FastifyInstance) {
@@ -38,4 +40,6 @@ export default async function SetupRoutes(app: FastifyInstance) {
    app.register(CreateEvent)
    app.register(ChangeStatus)
    app.register(FetchEvents)
+   app.register(FetchLeadsByEvent)
+   app.register(FetchEventsBySlug)
 }

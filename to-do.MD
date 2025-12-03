@@ -2,7 +2,7 @@
 # **Events**
 
 * [x] `GET /events` 
-* [ ] `GET /events/:slug` (buscar por slug)
+* [x] `GET /events/:slug` (buscar por slug)
 * [x] `POST /events` (criar evento)
 * [x] `PATCH /events/:id/status` (ativar/desativar)
 * [ ] `GET /events/:id/leads` (listar leads do evento)

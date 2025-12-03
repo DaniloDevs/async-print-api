@@ -7,17 +7,17 @@ import z from "zod";
 export default async function FetchEventsBySlug(app: FastifyInstance) {
    app
       .withTypeProvider<ZodTypeProvider>()
-      .get('/events', {
+      .get('/events/:slug', {
          schema: {
-            summary: "Fetch Events",
+            summary: "Fetch Events By Slug",
             tags: ["Events"],
             description: "Fetch All Events",
-            body: z.object({
+            params: z.object({
                slug: z.string()
             })
          }
       }, async (request, reply) => {
-         const { slug } = request.body
+         const { slug } = request.params
 
          const events = await prisma.events.findFirst({
             where: { slug }
