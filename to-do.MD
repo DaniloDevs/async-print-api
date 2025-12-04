@@ -1,5 +1,6 @@
+# Async Print
 
-# **Events**
+## **Events**
 
 * [x] `GET /events` 
 * [x] `GET /events/:slug` (buscar por slug)
@@ -8,14 +9,14 @@
 * [x] `GET /events/:id/leads` (listar leads do evento)
 * [x] `GET /events/:id/export/leads.csv` (exportar leads do evento)
 
-# **Leads**
+## **Leads**
 
 * [ ] `GET /leads` (listar com filtros)
 * [x] `POST /leads` (criar lead vinculado ao evento)
 * [ ] `GET /leads/export/all.csv` (exportar todos os leads)
 
 
-# **Metrics**
+## **Metrics**
 
 * [x] `GET /metrics/overview` (visão geral)
 * [x] `GET /metrics/events/:id` (métricas por evento)
@@ -24,7 +25,7 @@
 * [x] `GET /metrics/events-ranking` (ranking de eventos por leads)
 
 
-# **Jobs**
+## **Jobs**
 
 * [ ] Criar rota admin: `GET /jobs/queues` (listar filas e status)
 * [ ] Criar rota admin: `GET /jobs/queues/:name` (detalhes de uma fila)
