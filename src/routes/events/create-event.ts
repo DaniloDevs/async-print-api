@@ -3,7 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import z from "zod";
 import { prisma } from "../../connections/prisma";
 import { createSlug } from "../../utils/create-slug";
-import dayjs from "dayjs";
+
 
 export async function CreateEvent(app: FastifyInstance) {
    app
@@ -15,7 +15,9 @@ export async function CreateEvent(app: FastifyInstance) {
             description: "Registers a new event resource in the system. Initializes the event with the provided details and assigns a unique identifier. Returns the newly created event object.",
             body: z.object({
                title: z.string().min(1),
-               active: z.boolean().default(true)
+               active: z.boolean().default(true),
+               startIn: z.string(),
+               endIn: z.string(),
             }),
             response: {
                201: z.object({
@@ -25,14 +27,16 @@ export async function CreateEvent(app: FastifyInstance) {
          }
       }, async (request, reply) => {
 
-         const { title, active } = request.body;
+         const { title, active, endIn, startIn } = request.body;
 
          const event = await prisma.events.create({
             data: {
                title,
                slug: createSlug(title),
                active,
-               createdAt: dayjs().format("DD/MM/YYYY")
+               createdAt: new Date(),
+               startIn: new Date(startIn),
+               endIn: new Date(endIn)
             }
          });
 

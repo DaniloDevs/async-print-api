@@ -6,9 +6,16 @@ import { serverAdapter } from "./connections/bull-board";
 import SetupRoutes from "./routes/setup-routes";
 import Multipart from "@fastify/multipart"
 import { env } from "./env";
+import cors from "@fastify/cors"
+import fastifyStatic from '@fastify/static'
+import path from "path";
 
 const app = Fastify();
 
+
+app.register(cors, {
+   origin: true
+})
 
 app.register(serverAdapter.registerPlugin(), {
    prefix: "/dashboard/jobs",

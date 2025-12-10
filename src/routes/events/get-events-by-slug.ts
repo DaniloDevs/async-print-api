@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { prisma } from "../../connections/prisma";
 import z from "zod";
+import dayjs from "dayjs";
 
 
 export default async function ListEventsBySlug(app: FastifyInstance) {
@@ -17,34 +18,50 @@ export default async function ListEventsBySlug(app: FastifyInstance) {
             }),
             response: {
                200: z.object({
-                  events: z.object({
+                  event: z.object({
                      title: z.string(),
                      bannerURL: z.string().nullable(),
-                     createdAt: z.date(),
+                     createdAt: z.string(),
+                     startIn: z.string(),
+                     endIn: z.string(),
                      _count: z.object({
                         leads: z.number()
                      })
-                  }).array()
-               })
+                  })
+               }),
+               404: z.object({
+                  message: z.string()
+               }),
             }
          }
       }, async (request, reply) => {
          const { slug } = request.params
 
-         const events = await prisma.events.findMany({
+         const event = await prisma.events.findUnique({
             where: { slug },
             select: {
                title: true,
                bannerURL: true,
                createdAt: true,
-               _count: {
-                  select: { leads: true }
-               }
+               endIn: true,
+               startIn: true,
+               _count: { select: { leads: true } }
             }
          })
 
-         return reply.code(200).send({
-            events,
-         });
+         if (!event) {
+            return reply.code(404).send({
+               message: "Evento não encontrado"
+            })
+         }
+
+         const formattedEvent = {
+            ...event,
+            startIn: dayjs(event.startIn).format("HH:mm"),
+            endIn: dayjs(event.endIn).format("HH:mm"),
+            createdAt: dayjs(event.createdAt).format('dd/mm/yyyy')
+         }
+         return reply.code(200).send({ event: formattedEvent })
+
       });
 }

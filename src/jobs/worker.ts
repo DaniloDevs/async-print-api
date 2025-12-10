@@ -6,31 +6,14 @@ import type { ThermalPrinter } from "node-thermal-printer";
 import { s3 } from '../connections/minio';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import type { Ticket } from '../types/ticket';
-import axios from "axios";
-
-async function downloadImage(url: string) {
-   const response = await axios.get(url, { responseType: "arraybuffer" });
-   const buffer = Buffer.from(response.data);
-
-   return buffer;
-}
+import { getImageFromS3BySignedUrl } from '../utils/get-banner-url';
 
 
 async function TempleteTickt(printer: ThermalPrinter, job: Job<Ticket>) {
-   const [bucket, key] = job.data.bannerURL.split('/')
-
-   const presignedUrl = await getSignedUrl(
-      s3,
-      new GetObjectCommand({
-         Bucket: bucket,
-         Key: key,
-      }),
-      { expiresIn: 3600 }
-   );
-
-   const localPath = await downloadImage(presignedUrl);
-
+   
+   const localPath = await getImageFromS3BySignedUrl(job.data.bannerURL, s3)
    printer.alignCenter()
+   
    await printer.printImageBuffer(localPath);
 
    // Titulo 

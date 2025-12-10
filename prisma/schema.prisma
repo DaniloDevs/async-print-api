@@ -8,13 +8,15 @@ datasource db {
 }
 
 model events {
-  id        String   @id @default(cuid())
+  id        String  @id @default(cuid())
   title     String
-  slug      String   @unique
+  slug      String  @unique
   active    Boolean
-  createdAt DateTime
   bannerURL String?
-
+  createdAt DateTime
+  startIn   DateTime
+  endIn     DateTime
+  
   leads leads[]
 }
 

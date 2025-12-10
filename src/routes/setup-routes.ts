@@ -7,7 +7,7 @@ import { ConfigurePrintDevice } from "./printer/configure-print";
 import { CreateEvent } from "./events/create-event";
 import { ListEvents } from "./events/list-events";
 import { ListLeadsByEvent } from "./events/list-leads-by-event";
-import ListEventsBySlug from "./events/list-events-by-slug";
+import ListEventsBySlug from "./events/get-events-by-slug";
 import { UpdateEventBanner } from "./events/update-event-banner";
 import { UpdateEventStatus } from "./events/update-event-status";
 import { ExportEventLeads } from "./events/export-event-leads";

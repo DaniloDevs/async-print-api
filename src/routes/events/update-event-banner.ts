@@ -5,7 +5,8 @@ import { prisma } from "../../connections/prisma";
 import z from "zod";
 import { s3 } from "../../connections/minio";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { env } from "process";
+import path from "path";
+import { env } from "../../env";
 
 
 export async function UpdateEventBanner(app: FastifyInstance) {
@@ -21,7 +22,7 @@ export async function UpdateEventBanner(app: FastifyInstance) {
             }),
             response: {
                200: z.object({
-                  message: z.string()
+                  message: z.string(),
                }),
                400: z.object({
                   message: z.string()
@@ -44,8 +45,9 @@ export async function UpdateEventBanner(app: FastifyInstance) {
          const event = await prisma.events.findUnique({ where: { id } });
          if (!event) return reply.code(404).send({ message: "Evento não encontrado" });
 
-         const buffer = await file.toBuffer();
-         const filename = `${Date.now()}-${id}`;
+         const buffer = await file.toBuffer()
+         const ext = path.extname(file.filename)
+         const filename = `${crypto.randomUUID()}${ext}`
 
          // ------ UPLOAD MINIO ------
          await s3.send(
@@ -57,16 +59,14 @@ export async function UpdateEventBanner(app: FastifyInstance) {
             })
          );
 
-         // URL pública depende da sua política de bucket
-         const publicUrl = `${env.MINIO_BUCKET}/${filename}`;
 
          await prisma.events.update({
             where: { id },
-            data: { bannerURL: publicUrl }
+            data: { bannerURL: filename }
          });
 
          return reply.code(200).send({
-            message: "Banner atualizado"
+            message: "Banner atualizado",
          });
       });
 }

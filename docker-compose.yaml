@@ -3,12 +3,12 @@ version: "3.9"
 services:
   redis:
     image: redis:7-alpine
-    container_name: dev-redis
+    container_name: dev-redis-jobs
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
-      - ./redis.dev.conf:/usr/local/etc/redis/redis.conf
+      - ./redis:/usr/local/etc/redis/redis.conf
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     networks:
       - dev-net
@@ -20,7 +20,7 @@ services:
 
   redis-commander:
     image: rediscommander/redis-commander:latest
-    container_name: dev-redis-commander
+    container_name: dev-redis-commander-job
     environment:
       - REDIS_HOSTS=local:redis:6379
     ports:
@@ -34,8 +34,8 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    container_name: dev-app
+      dockerfile: dockerfile
+    container_name: dev-apps
     environment:
       NODE_ENV: development
       REDIS_HOST: redis
@@ -54,7 +54,7 @@ services:
   worker:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: dockerfile
     container_name: dev-worker
     command: npm run worker
     environment:
@@ -70,54 +70,9 @@ services:
       - dev-net
     restart: unless-stopped
 
-  bull-board:
-    build:
-      context: .
-      dockerfile: Dockerfile.bull-board
-    ports:
-      - "3001:3001"
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-    depends_on:
-      - redis
-    networks:
-      - dev-net
-  jobs-event-pg:
-    image: bitnami/postgresql:latest
-    container_name: jobs-event-postgres
-    restart: unless-stopped
-    ports:
-      - "1234:5432"
-    environment:
-      - POSTGRESQL_USERNAME=docker
-      - POSTGRESQL_PASSWORD=docker
-      - POSTGRESQL_DATABASE=jobs-event
-    volumes:
-      - pg_data:/bitnami/postgresql
-  minio:
-      image: minio/minio
-      container_name: minio
-      ports:
-        - "9000:9000"      # API
-        - "9001:9001"      # Console Web
-      environment:
-        MINIO_ROOT_USER: minioadmin
-        MINIO_ROOT_PASSWORD: minioadmin123
-      volumes:
-        - minio_data:/data
-      command: server /data --console-address ":9001"
-      healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-        interval: 30s
-        timeout: 20s
-        retries: 3
-
-
 volumes:
   redis_data:
   pg_data:
-  minio_data:
   
 networks:
   dev-net:
