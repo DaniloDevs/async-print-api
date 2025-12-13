@@ -6,7 +6,7 @@ import z from "zod";
 export async function UpdateEventStatus(app: FastifyInstance) {
    app
       .withTypeProvider<ZodTypeProvider>()
-      .patch('/events/:id/status', {
+      .post('/events/:id/status', {
          schema: {
             summary: "Update event activation status",
             tags: ["Events"],

@@ -21,7 +21,8 @@ export async function CreateEvent(app: FastifyInstance) {
             }),
             response: {
                201: z.object({
-                  id: z.string()
+                  id: z.string(),
+                  slug: z.string()
                })
             }
          }
@@ -40,6 +41,6 @@ export async function CreateEvent(app: FastifyInstance) {
             }
          });
 
-         return reply.code(201).send({ id: event.id });
+         return reply.code(201).send({ id: event.id, slug: event.slug });
       });
 }

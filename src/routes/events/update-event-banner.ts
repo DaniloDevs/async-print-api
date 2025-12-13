@@ -12,7 +12,7 @@ import { env } from "../../env";
 export async function UpdateEventBanner(app: FastifyInstance) {
    app
       .withTypeProvider<ZodTypeProvider>()
-      .patch('/events/:id/banner', {
+      .post('/events/:id/banner', {
          schema: {
             summary: "Update event banner image",
             tags: ["Events"],

@@ -61,6 +61,7 @@ export default async function ListEventsBySlug(app: FastifyInstance) {
             endIn: dayjs(event.endIn).format("HH:mm"),
             createdAt: dayjs(event.createdAt).format('dd/mm/yyyy')
          }
+         
          return reply.code(200).send({ event: formattedEvent })
 
       });
