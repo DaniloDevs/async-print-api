@@ -1,83 +1,200 @@
 import type { FastifyInstance } from "fastify";
 import { prisma } from "../../connections/prisma";
 import z from "zod";
+import type { ZodTypeProvider } from "fastify-type-provider-zod";
+import dayjs from "dayjs";
 
 
 export async function OverviewMetrics(app: FastifyInstance) {
-   app.get(
-      "/metrics/overview",
-      {
-         schema: {
-            summary: "Retrieve dashboard overview metrics",
-            tags: ["Metrics"],
-            description: "Aggregates key performance indicators (KPIs) for the administrative dashboard. Returns total counts, event activity status, a leaderboard of top-performing events, and recent lead acquisition data.",
-            response: {
-               200: z.object({
-                  totalEvents: z.number().int().nonnegative(),
-                  totalLeads: z.number().int().nonnegative(),
-                  activeEvents: z.number().int().nonnegative(),
-                  eventsRankingTop5: z.array(
-                     z.object({
-                        event: z.object({
-                           id: z.string(),
-                           title: z.string().optional(),
-                           slug: z.string().optional(),
-                        }).nullable(),
-                        totalLeads: z.number().int(),
-                     })
-                  ),
-                  last7Days: z.array(
-                     z.object({
-                        createdAt: z.union([z.string(), z.date()]),
-                        _count: z.object({
-                           id: z.number().int()
+   app
+      .withTypeProvider<ZodTypeProvider>()
+      .get(
+         "/:eventSlug/metrics/overview",
+         {
+            schema: {
+               summary: "Retrieve total leads",
+               tags: ["Metrics"],
+               description: "Returns the total number of leads.",
+               params: z.object({
+                  eventSlug: z.string()
+               }),
+               response: {
+                  200: z.object({
+                     metrics: z.object({
+                        // Card 1: Leads generated in the last hour
+                        leadsLastHour: z.object({
+                           value: z.number().int().nonnegative(),
+                           growthPercentage: z.number(),
+                           trend: z.enum(['up', 'down']),
+                           label: z.string(),
+                           status: z.string()
                         }),
+
+                        // Card 2: Total leads generated
+                        totalLeads: z.object({
+                           value: z.number().int().nonnegative(),
+                           retentionRate: z.number().nonnegative(),
+                           trend: z.enum(['up', 'down']),
+                           label: z.string(),
+                           status: z.string()
+                        }),
+
+                        // Card 3: Conversions per hour (%)
+                        conversionsPerHour: z.object({
+                           value: z.number().nonnegative(),
+                           growthPercentage: z.number(),
+                           trend: z.enum(['up', 'down']),
+                           label: z.string(),
+                           status: z.string()
+                        })
                      })
-                  ),
+                  }),
+               },
+            },
+         },
+         async (request, reply) => {
+            const { eventSlug } = request.params
+
+            const now = dayjs();
+            const oneHourAgo = now.subtract(1, "hour").toDate();
+            const twoHoursAgo = now.subtract(2, "hour").toDate();
+
+            const [
+               totalLeads,
+               currentLeads,
+               previousHour,
+               totalConversions,
+               currentConversions,
+               previousConversions
+            ] = await Promise.all([
+               // Leads na última hora
+               prisma.leads.count({
+                  where: {
+                     events: { slug: eventSlug },
+                     createdAt: { gte: oneHourAgo }
+                  }
+               }),
+
+               // Total de leads (todos os tempos)
+               prisma.leads.count({
+                  where: {
+                     events: { slug: eventSlug },
+                  }
+               }),
+
+               // Leads na hora anterior (2h atrás até 1h atrás)
+               prisma.leads.count({
+                  where: {
+                     events: { slug: eventSlug },
+                     createdAt: {
+                        gte: twoHoursAgo,
+                        lt: oneHourAgo
+                     }
+                  }
+               }),
+
+               // Conversões na última hora
+               prisma.leads.count({
+                  where: {
+                     events: { slug: eventSlug },
+
+                     createdAt: { gte: oneHourAgo }
+                  }
+               }),
+
+               // Total de conversões
+               prisma.leads.count({
+                  where: {
+                     events: { slug: eventSlug },
+
+                  }
+               }),
+
+               // Conversões na hora anterior
+               prisma.leads.count({
+                  where: {
+                     events: { slug: eventSlug },
+
+                     createdAt: {
+                        gte: twoHoursAgo,
+                        lt: oneHourAgo
+                     }
+                  }
                })
-            }
+            ]);
+
+            // Cálculo do crescimento de leads
+            const leadsGrowthPercentage =
+               previousHour === 0
+                  ? (currentLeads > 0 ? 100 : 0)
+                  : ((currentLeads - previousHour) / previousHour) * 100;
+
+            // Cálculo da taxa de conversão atual
+            const currentConversionRate =
+               currentLeads === 0
+                  ? 0
+                  : (currentConversions / currentLeads) * 100;
+
+            // Cálculo da taxa de conversão anterior
+            const previousConversionRate =
+               previousHour === 0
+                  ? 0
+                  : (previousConversions / previousHour) * 100;
+
+            // Crescimento da taxa de conversão
+            const conversionGrowthPercentage =
+               previousConversionRate === 0
+                  ? (currentConversionRate > 0 ? 100 : 0)
+                  : ((currentConversionRate - previousConversionRate) / previousConversionRate) * 100;
+
+            // Taxa de retenção/engajamento total
+            const totalRetentionRate =
+               totalLeads === 0
+                  ? 0
+                  : (totalConversions / totalLeads) * 100;
+
+            return reply.send({
+               metrics: {
+                  // Card 1: Leads generated in the last hour
+                  leadsLastHour: {
+                     value: currentLeads,
+                     growthPercentage: Number(leadsGrowthPercentage.toFixed(2)),
+                     trend: leadsGrowthPercentage >= 0 ? 'up' : 'down',
+                     label: leadsGrowthPercentage < 0
+                        ? `Down ${Math.abs(leadsGrowthPercentage).toFixed(0)}% this period`
+                        : `Up ${leadsGrowthPercentage.toFixed(0)}% this period`,
+                     status: leadsGrowthPercentage < -10
+                        ? 'Acquisition needs attention'
+                        : 'Performance on track'
+                  },
+
+                  // Card 2: Total leads generated
+                  totalLeads: {
+                     value: totalLeads,
+                     retentionRate: Number(totalRetentionRate.toFixed(2)),
+                     trend: 'up',
+                     label: totalRetentionRate > 50
+                        ? 'Strong user retention'
+                        : 'Engagement needs improvement',
+                     status: totalRetentionRate > 50
+                        ? 'Engagement exceed targets'
+                        : 'Focus on retention'
+                  },
+
+                  // Card 3: Conversions per hour
+                  conversionsPerHour: {
+                     value: Number(currentConversionRate.toFixed(0)),
+                     growthPercentage: Number(conversionGrowthPercentage.toFixed(2)),
+                     trend: conversionGrowthPercentage >= 0 ? 'up' : 'down',
+                     label: conversionGrowthPercentage > 0
+                        ? 'Steady performance increase'
+                        : 'Performance declined',
+                     status: conversionGrowthPercentage > 0
+                        ? 'Meets growth projections'
+                        : 'Below projections'
+                  }
+               }
+            });
          }
-      },
-      async () => {
-         const [totalEvents, totalLeads, activeEvents] = await prisma.$transaction([
-            prisma.events.count(),
-            prisma.leads.count(),
-            prisma.events.count({
-               where: { active: true },
-            })
-         ])
-
-         const leadsPerEvent = await prisma.leads.groupBy({
-            by: ["eventsId"],
-            _count: { id: true },
-            orderBy: { _count: { id: "desc" } },
-            take: 5,
-         });
-
-         const events = await prisma.events.findMany({
-            where: { id: { in: leadsPerEvent.map((l) => l.eventsId) } },
-         });
-
-         const ranking = leadsPerEvent.map((item) => ({
-            event: events.find((e) => e.id === item.eventsId),
-            totalLeads: item._count.id,
-         }));
-
-         const recentLeads = await prisma.leads.groupBy({
-            by: ["createdAt"],
-            _count: { id: true },
-            orderBy: { createdAt: "asc" },
-            take: 7,
-         });
-
-         return {
-            totalEvents,
-            totalLeads,
-            activeEvents,
-            eventsRankingTop5: ranking,
-            last7Days: recentLeads,
-         };
-      }
-   );
-
+      );
 }
