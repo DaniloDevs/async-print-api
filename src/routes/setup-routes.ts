@@ -1,5 +1,4 @@
 import type { FastifyInstance } from "fastify";
-import CreateLeads from "./leads/create-lead";
 import { DetectPrinter } from "./printer/detect-printer";
 import { GetPrintStatus } from "./printer/get-print-status";
 import { TestPrintDevice } from "./printer/test-print-device";
@@ -8,18 +7,17 @@ import { CreateEvent } from "./events/create-event";
 import { ListEvents } from "./events/list-events";
 import { ListLeadsByEvent } from "./events/list-leads-by-event";
 import ListEventsBySlug from "./events/get-events-by-slug";
-import { UpdateEventBanner } from "./events/update-event-banner";
 import { UpdateEventStatus } from "./events/update-event-status";
 import { ExportEventLeads } from "./events/export-event-leads";
-import { DailyMetrics } from "./metrics/daily-metrics";
-import { EventMetrics } from "./metrics/event-metrics";
 import { OverviewMetrics } from "./metrics/overview";
-import { EventRankings } from "./metrics/event-rankings";
+import { LeadsPerHour } from "./metrics/leads-per-hour";
+import CreateLeadsByEventSlug from "./leads/create-lead-by-slug";
+import { UpdateEventBanner } from "./events/update-event-banner";
 
 
 export default async function SetupRoutes(app: FastifyInstance) {
    // Create Lead
-   app.register(CreateLeads)
+   app.register(CreateLeadsByEventSlug)
 
    // Printers
    app.register(DetectPrinter)
@@ -32,13 +30,11 @@ export default async function SetupRoutes(app: FastifyInstance) {
    app.register(ListEvents)
    app.register(ListLeadsByEvent)
    app.register(ListEventsBySlug)
-   app.register(UpdateEventBanner)
    app.register(UpdateEventStatus)
+   app.register(UpdateEventBanner)
    app.register(ExportEventLeads)
 
    // Metrics
-   app.register(DailyMetrics)
-   app.register(EventMetrics)
-   app.register(EventRankings)
    app.register(OverviewMetrics)
+   app.register(LeadsPerHour)
 }

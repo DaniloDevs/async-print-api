@@ -70,10 +70,42 @@ services:
       - dev-net
     restart: unless-stopped
 
+  jobs-event-pg:
+      image: bitnami/postgresql:latest
+      container_name: jobs-event-postgres
+      restart: unless-stopped
+      ports:
+        - "1234:5432"
+      environment:
+        - POSTGRESQL_USERNAME=docker
+        - POSTGRESQL_PASSWORD=docker
+        - POSTGRESQL_DATABASE=jobs-event
+      volumes:
+        - pg_data:/bitnami/postgresql
+  minio:
+      image: minio/minio
+      container_name: minios
+      ports:
+        - "9000:9000"      # API
+        - "9001:9001"      # Console Web
+      environment:
+        MINIO_ROOT_USER: minioadmin
+        MINIO_ROOT_PASSWORD: minioadmin123
+        MINIO_CORS_ALLOWED_ORIGINS: "http://localhost:5173,http://localhost:3000"
+      volumes:
+        - minio_data:/data
+      command: server /data --console-address ":9001"
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+        interval: 30s
+        timeout: 20s
+        retries: 3
+
 volumes:
   redis_data:
   pg_data:
-  
+  minio_data:
+
 networks:
   dev-net:
     driver: bridge

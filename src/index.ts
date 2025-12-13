@@ -7,14 +7,13 @@ import SetupRoutes from "./routes/setup-routes";
 import Multipart from "@fastify/multipart"
 import { env } from "./env";
 import cors from "@fastify/cors"
-import fastifyStatic from '@fastify/static'
-import path from "path";
 
 const app = Fastify();
 
 
 app.register(cors, {
-   origin: true
+   origin: '*',
+   methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"]
 })
 
 app.register(serverAdapter.registerPlugin(), {
@@ -25,7 +24,11 @@ app.register(serverAdapter.registerPlugin(), {
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
-app.register(Multipart);
+app.register(Multipart, {
+   limits: {
+      fileSize: 5 * 1024 * 1024, // 5MB máximo
+   },
+});
 
 app.register(fastifySwagger, {
    openapi: {

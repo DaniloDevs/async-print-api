@@ -7,15 +7,18 @@ import z from "zod";
 import dayjs from "dayjs";
 
 
-export default async function CreateLeads(app: FastifyInstance) {
+export default async function CreateLeadsByEventSlug(app: FastifyInstance) {
    app
       .withTypeProvider<ZodTypeProvider>()
-      .post("/leads", {
+      .post("/:eventSlug/leads", {
          schema: {
             summary: "Register new lead",
             tags: ["Leads"],
             description: "Registers a new lead in the database and enqueues a background task for further processing (e.g., CRM sync, welcome email). Returns the Job ID to allow tracking of the asynchronous operation status.",
             body: leadSchema,
+            params: z.object({
+               eventSlug: z.string()
+            }),
             response: {
                201: z.object({
                   message: z.string(),
@@ -26,10 +29,11 @@ export default async function CreateLeads(app: FastifyInstance) {
             }
          }
       }, async (request, reply) => {
-         const { name, cellphone, eventsId,isValid } = request.body
+         const { name, cellphone, isValid } = request.body
+         const { eventSlug } = request.params
 
          const event = await prisma.events.findUnique({
-            where: { id: eventsId },
+            where: { slug: eventSlug },
             select: {
                bannerURL: true
             }
@@ -41,9 +45,13 @@ export default async function CreateLeads(app: FastifyInstance) {
             data: {
                name,
                cellphone,
-               eventsId,
+               events: {
+                  connect: {
+                     slug: eventSlug
+                  }
+               },
                isValid,
-               createdAt: dayjs().format("DD/MM/YYYY")
+               createdAt: new Date()
             }
          })
 
