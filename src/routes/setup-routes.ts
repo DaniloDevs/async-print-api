@@ -11,7 +11,7 @@ import { UpdateEventStatus } from "./events/update-event-status";
 import { ExportEventLeads } from "./events/export-event-leads";
 import { OverviewMetrics } from "./metrics/overview";
 import { LeadsPerHour } from "./metrics/leads-per-hour";
-import CreateLeadsByEventSlug from "./leads/create-lead-by-slug";
+import CreateLeadsByEventSlug from "./events/create-lead-by-slug";
 import { UpdateEventBanner } from "./events/update-event-banner";
 
 
