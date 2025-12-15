@@ -15,25 +15,25 @@ import { GetPrintStatus } from "./printer/get-print-status";
 import { TestPrintDevice } from "./printer/test-print-device";
 
 export default async function SetupRoutes(app: FastifyInstance) {
-  // Create Lead
-  app.register(CreateLeadsByEventSlug);
+    // Create Lead
+    app.register(CreateLeadsByEventSlug);
 
-  // Printers
-  app.register(DetectPrinter);
-  app.register(GetPrintStatus);
-  app.register(TestPrintDevice);
-  app.register(ConfigurePrintDevice);
+    // Printers
+    app.register(DetectPrinter);
+    app.register(GetPrintStatus);
+    app.register(TestPrintDevice);
+    app.register(ConfigurePrintDevice);
 
-  // Events
-  app.register(CreateEvent);
-  app.register(ListEvents);
-  app.register(ListLeadsByEvent);
-  app.register(ListEventsBySlug);
-  app.register(UpdateEventStatus);
-  app.register(UpdateEventBanner);
-  app.register(ExportEventLeads);
+    // Events
+    app.register(CreateEvent);
+    app.register(ListEvents);
+    app.register(ListLeadsByEvent);
+    app.register(ListEventsBySlug);
+    app.register(UpdateEventStatus);
+    app.register(UpdateEventBanner);
+    app.register(ExportEventLeads);
 
-  // Metrics
-  app.register(OverviewMetrics);
-  app.register(LeadsPerHour);
+    // Metrics
+    app.register(OverviewMetrics);
+    app.register(LeadsPerHour);
 }

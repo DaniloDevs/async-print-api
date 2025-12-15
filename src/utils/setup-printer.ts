@@ -3,11 +3,11 @@ import { createPrinter } from "../connections/printer";
 let printerPath = "/dev/usb/lp0";
 
 export function setupPrinter(customPath?: string) {
-  printerPath = customPath || "/dev/usb/lp0";
+    printerPath = customPath || "/dev/usb/lp0";
 
-  return printerPath;
+    return printerPath;
 }
 
 export function getPrinter(path?: string) {
-  return createPrinter(printerPath);
+    return createPrinter(printerPath);
 }

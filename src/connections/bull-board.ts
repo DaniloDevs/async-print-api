@@ -7,8 +7,8 @@ const serverAdapter = new FastifyAdapter();
 serverAdapter.setBasePath("/dashboard/jobs");
 
 createBullBoard({
-  queues: [new BullMQAdapter(queue)],
-  serverAdapter,
+    queues: [new BullMQAdapter(queue)],
+    serverAdapter,
 });
 
 export { serverAdapter };

@@ -6,37 +6,37 @@ import type { EventCreateInput, IEventRepository } from "../repository/event";
 import { createSlug } from "../utils/create-slug";
 
 export class CreateEventService {
-  constructor(private repository: IEventRepository) {}
+	constructor(private repository: IEventRepository) { }
 
-  async execute(data: EventCreateInput) {
-    const slug = createSlug(data.title);
+	async execute(data: EventCreateInput) {
+		const slug = createSlug(data.title);
 
-    // Verifica se evento já existe
-    const existEvent = await this.repository.findBySlug(slug);
-    if (existEvent) {
-      throw new EventAlreadyExistsError(slug);
-    }
+		// Verifica se evento já existe
+		const existEvent = await this.repository.findBySlug(slug);
+		if (existEvent) {
+			throw new EventAlreadyExistsError(slug);
+		}
 
-    const startAt = dayjs(data.startAt).toDate();
-    const endsAt = dayjs(data.endsAt).toDate();
-    const now = dayjs();
+		const startAt = dayjs(data.startAt).toDate();
+		const endsAt = dayjs(data.endsAt).toDate();
+		const now = dayjs();
 
-    // Valida data de início não está no passado
-    if (now.isAfter(startAt)) {
-      throw new EventStartDateInPastError(startAt);
-    }
+		// Valida data de início não está no passado
+		if (now.isAfter(startAt)) {
+			throw new EventStartDateInPastError(startAt);
+		}
 
-    // Valida data de término não é antes ou igual ao início
-    if (dayjs(endsAt).isBefore(startAt)) {
-      throw new EventEndBeforeStartError(startAt, endsAt);
-    }
+		// Valida data de término não é antes ou igual ao início
+		if (dayjs(endsAt).isBefore(startAt)) {
+			throw new EventEndBeforeStartError(startAt, endsAt);
+		}
 
-    const event = await this.repository.create({
-      ...data,
-      startAt,
-      endsAt,
-    });
+		const event = await this.repository.create({
+			...data,
+			startAt,
+			endsAt,
+		});
 
-    return { event };
-  }
+		return { event };
+	}
 }
