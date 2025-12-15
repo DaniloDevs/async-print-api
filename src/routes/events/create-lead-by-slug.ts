@@ -12,7 +12,7 @@ export default async function CreateLeadsBySlug(app: FastifyInstance) {
       .post("/:eventSlug/leads", {
          schema: {
             summary: "Register new lead",
-            tags: ["Metrics"],
+            tags: ["Events"],
             description: "Registers a new lead in the database and enqueues a background task for further processing (e.g., CRM sync, welcome email). Returns the Job ID to allow tracking of the asynchronous operation status.",
             body: leadSchema,
             params: z.object({
