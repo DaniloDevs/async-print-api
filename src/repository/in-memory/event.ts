@@ -13,6 +13,7 @@ export class EventInMemomryRepository implements IEventRepository {
             startAt: dayjs(data.startAt).toDate(),
             endsAt: dayjs(data.endsAt).toDate(),
             banner: data.banner,
+            isActivated: data.isActivated,
         };
 
         this.items.push(event);
