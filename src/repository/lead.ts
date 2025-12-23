@@ -69,4 +69,5 @@ export type LeadCreateInput = z.infer<typeof leadCreateInput>;
 export interface ILeadrepository {
     create(data: LeadCreateInput): Promise<Lead>;
     findByEmailAndEventId(email: string, eventId: string): Promise<Lead | null>;
+    findManyByEventId(eventId: string): Promise<Lead[]>
 }

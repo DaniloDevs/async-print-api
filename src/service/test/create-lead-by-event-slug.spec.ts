@@ -21,7 +21,7 @@ describe("RegisterLeadByEventSlugService", () => {
 
     const eventInput: EventCreateInput = {
         title: "Event Test",
-        banner: null,
+        bannerKey: null,
         isActivated: true,
         startAt: dayjs("2021-01-25").toDate(),
         endsAt: dayjs("2021-01-25").add(3, "day").toDate(),
