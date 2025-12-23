@@ -2,7 +2,6 @@ import dayjs from "dayjs";
 import type { ILeadrepository, Lead, LeadCreateInput } from "../lead";
 
 export class LeadInMemomryRepository implements ILeadrepository {
-    
     public items: Lead[] = [];
 
     async create(data: LeadCreateInput): Promise<Lead> {
@@ -35,12 +34,9 @@ export class LeadInMemomryRepository implements ILeadrepository {
         return lead || null;
     }
 
-
     async findManyByEventId(eventId: string): Promise<Lead[]> {
-        const lead = this.items.filter(
-            (item) => item.eventId === eventId
-        );
+        const lead = this.items.filter((item) => item.eventId === eventId);
 
-        return lead
+        return lead;
     }
 }
