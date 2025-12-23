@@ -14,7 +14,6 @@ export class CreateEventService {
     async execute(data: EventsCreateInput) {
         const slug = createSlug(data.title);
 
-        // Verifica se evento já existe
         const existEvent = await this.repository.findBySlug(slug);
         if (existEvent) {
             throw new EventAlreadyExistsError(slug);
@@ -22,15 +21,12 @@ export class CreateEventService {
 
         const startAt = dayjs(data.startAt).toDate();
         const endsAt = dayjs(data.endsAt).toDate();
-        const now = dayjs();
 
-        // Valida data de início não está no passado
-        if (now.isAfter(startAt)) {
+        if (dayjs().isAfter(startAt)) {
             throw new EventStartDateInPastError(startAt);
         }
 
-        // Valida data de término não é antes ou igual ao início
-        if (dayjs(endsAt).isBefore(startAt)) {
+        if (!dayjs(endsAt).isAfter(startAt)) {
             throw new EventEndBeforeStartError(startAt, endsAt);
         }
 
@@ -40,6 +36,6 @@ export class CreateEventService {
             endsAt,
         });
 
-        return { event };
+        return event;
     }
 }
