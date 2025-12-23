@@ -12,7 +12,7 @@ export class EventInMemomryRepository implements IEventRepository {
             slug: createSlug(data.title),
             startAt: dayjs(data.startAt).toDate(),
             endsAt: dayjs(data.endsAt).toDate(),
-            banner: data.banner,
+            bannerKey: data.bannerKey,
             isActivated: data.isActivated,
         };
 
@@ -36,7 +36,7 @@ export class EventInMemomryRepository implements IEventRepository {
 
         if (!event) return null;
 
-        event.banner = banner;
+        event.bannerKey = banner;
         return event;
     }
 }

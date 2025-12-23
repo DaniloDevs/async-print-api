@@ -23,6 +23,7 @@ describe("UpdateBannerEventService", () => {
 
         storageProvider = {
             upload: vi.fn(),
+            getPublicUrl: vi.fn(),
         };
 
         service = new UpdateBannerEventService(
@@ -32,7 +33,7 @@ describe("UpdateBannerEventService", () => {
 
         Event = await eventRepository.create({
             title: "Event Test",
-            banner: null,
+            bannerKey: null,
             isActivated: true,
             startAt: dayjs("2021-01-25").toDate(),
             endsAt: dayjs("2021-01-25").add(3, "day").toDate(),
@@ -76,7 +77,7 @@ describe("UpdateBannerEventService", () => {
             contentType: "image/png",
         });
 
-        expect(updatedEvent?.banner).toBe("stored-banner.png");
+        expect(updatedEvent?.bannerKey).toBe("stored-banner.png");
     });
 
     it("It should be possible to preserve the original file extension.", async () => {

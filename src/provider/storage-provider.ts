@@ -6,4 +6,5 @@ export type uploadInput = {
 
 export interface IStorageProvider {
     upload(input: uploadInput): Promise<string>;
+    getPublicUrl(key: string): Promise<string>;
 }

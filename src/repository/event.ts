@@ -4,7 +4,7 @@ const event = z.object({
     id: z.string(),
     title: z.string(),
     slug: z.string(),
-    banner: z.string().nullable(),
+    bannerKey: z.string().nullable(),
     startAt: z.date(),
     endsAt: z.date(),
     isActivated: z.boolean(),
