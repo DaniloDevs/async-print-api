@@ -3,7 +3,10 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { EventAlreadyExistsError } from "../../_errors/event-already-exist-error";
 import { EventEndBeforeStartError } from "../../_errors/event-end-before-start-error";
 import { EventStartDateInPastError } from "../../_errors/event-start-date-in-past-error";
-import type { EventCreateInput, IEventRepository } from "../../repository/event";
+import type {
+    EventCreateInput,
+    IEventRepository,
+} from "../../repository/event";
 import { EventInMemomryRepository } from "../../repository/in-memory/event";
 import { createSlug } from "../../utils/create-slug";
 import { CreateEventService } from "../create-event";

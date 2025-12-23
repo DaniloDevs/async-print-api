@@ -33,11 +33,10 @@ export class EventInMemomryRepository implements IEventRepository {
 
     async updateBanner(id: string, banner: string): Promise<Event | null> {
         const event = this.items.find((item) => item.id === id);
-        
-        if(!event) return null
+
+        if (!event) return null;
 
         event.banner = banner;
         return event;
     }
-    
 }

@@ -1,12 +1,5 @@
 import dayjs from "dayjs";
-import {
-    afterEach,
-    beforeEach,
-    describe,
-    expect,
-    it,
-    vi,
-} from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EventAlreadyEndedError } from "../../_errors/event-already-ended-error";
 import { EventNotActiveError } from "../../_errors/event-not-active-error";
 import { EventNotStartedYetError } from "../../_errors/event-not-started-yet-error";
