@@ -20,5 +20,7 @@ export type EventCreateInput = z.infer<typeof EventCreateInput>;
 
 export interface IEventRepository {
     create(data: EventCreateInput): Promise<Event>;
+    updateBanner(id: string, banner: string): Promise<Event | null>;
     findBySlug(slug: string): Promise<Event | null>;
+    findById(id: string): Promise<Event | null>;
 }
