@@ -4,27 +4,27 @@ import { EventAlreadyExistsError } from "../../_errors/event-already-exist-error
 import { EventEndBeforeStartError } from "../../_errors/event-end-before-start-error";
 import { EventStartDateInPastError } from "../../_errors/event-start-date-in-past-error";
 import type {
-    EventCreateInput,
-    IEventRepository,
-} from "../../repository/event";
-import { EventInMemomryRepository } from "../../repository/in-memory/event";
+    EventsCreateInput,
+    IEventsRepository,
+} from "../../repository/events";
+import { EventsInMemomryRepository } from "../../repository/in-memory/events-repo";
 import { createSlug } from "../../utils/create-slug";
 import { CreateEventService } from "../create-event";
 
 describe("Create Event - Service", () => {
-    let eventRepository: IEventRepository;
+    let eventRepository: IEventsRepository;
     let sut: CreateEventService;
 
     beforeEach(() => {
-        eventRepository = new EventInMemomryRepository();
+        eventRepository = new EventsInMemomryRepository();
         sut = new CreateEventService(eventRepository);
     });
 
     it("should be able to create a new event", async () => {
-        const eventData: EventCreateInput = {
+        const eventData: EventsCreateInput = {
             title: "Evento Teste Loide Maxima",
             isActivated: true,
-            banner: null,
+            bannerKey: null,
             startAt: dayjs().add(7, "day").toDate(),
             endsAt: dayjs().add(7, "day").add(10, "hour").toDate(),
         };
@@ -38,10 +38,10 @@ describe("Create Event - Service", () => {
     });
 
     it("should not be able to create an event with duplicated slug", async () => {
-        const eventData: EventCreateInput = {
+        const eventData: EventsCreateInput = {
             title: "Evento Duplicado",
             isActivated: true,
-            banner: null,
+            bannerKey: null,
             startAt: dayjs().add(5, "day").toDate(),
             endsAt: dayjs().add(5, "day").add(2, "hour").toDate(),
         };
@@ -54,10 +54,10 @@ describe("Create Event - Service", () => {
     });
 
     it("should not be able to create an event with start date in the past", async () => {
-        const eventData: EventCreateInput = {
+        const eventData: EventsCreateInput = {
             title: "Evento no Passado",
             isActivated: true,
-            banner: null,
+            bannerKey: null,
             startAt: dayjs().subtract(1, "day").toDate(),
             endsAt: dayjs().add(1, "day").toDate(),
         };
@@ -70,10 +70,10 @@ describe("Create Event - Service", () => {
     it("should not be able to create an event that ends before it starts", async () => {
         const startDate = dayjs().add(5, "day");
 
-        const eventData: EventCreateInput = {
+        const eventData: EventsCreateInput = {
             title: "Evento com Data Final Inválida",
             isActivated: true,
-            banner: null,
+            bannerKey: null,
             startAt: startDate.toDate(),
             endsAt: startDate.subtract(2, "hour").toDate(), // termina ANTES de começar
         };
@@ -86,10 +86,10 @@ describe("Create Event - Service", () => {
     it("should create event with end date exactly 1 minute after start", async () => {
         const startDate = dayjs().add(2, "day");
 
-        const eventData: EventCreateInput = {
+        const eventData: EventsCreateInput = {
             title: "Evento Curto Válido",
             isActivated: true,
-            banner: null,
+            bannerKey: null,
             startAt: startDate.toDate(),
             endsAt: startDate.add(1, "minute").toDate(),
         };
@@ -103,10 +103,10 @@ describe("Create Event - Service", () => {
     it("should create event starting exactly now", async () => {
         const now = dayjs();
 
-        const eventData: EventCreateInput = {
+        const eventData: EventsCreateInput = {
             title: "Evento Começando Agora",
             isActivated: true,
-            banner: null,
+            bannerKey: null,
             startAt: now.toDate(),
             endsAt: now.add(2, "hour").toDate(),
         };

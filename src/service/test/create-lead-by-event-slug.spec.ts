@@ -6,20 +6,23 @@ import { EventNotStartedYetError } from "../../_errors/event-not-started-yet-err
 import { LeadAlreadyRegisteredError } from "../../_errors/lead-already-registered-error";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type {
-    EventCreateInput,
-    IEventRepository,
-} from "../../repository/event";
-import { EventInMemomryRepository } from "../../repository/in-memory/event";
-import { LeadInMemomryRepository } from "../../repository/in-memory/lead";
-import type { ILeadrepository, LeadCreateInput } from "../../repository/lead";
-import { CreateLeadByEventSlugService } from "../create-lead.by-event-slug";
+    EventsCreateInput,
+    IEventsRepository,
+} from "../../repository/events";
+import { EventsInMemomryRepository } from "../../repository/in-memory/events-repo";
+import { LeadsInMemomryRepository } from "../../repository/in-memory/leads-repo";
+import type {
+    ILeadsrepository,
+    LeadsCreateInput,
+} from "../../repository/leads";
+import { CreateLeadByEventSlugService } from "../create-lead-by-event-slug";
 
-describe("RegisterLeadByEventSlugService", () => {
-    let eventRepository: IEventRepository;
-    let leadRepository: ILeadrepository;
+describe("Create Lead by Event Slug - Service", () => {
+    let eventRepository: IEventsRepository;
+    let leadRepository: ILeadsrepository;
     let service: CreateLeadByEventSlugService;
 
-    const eventInput: EventCreateInput = {
+    const eventInput: EventsCreateInput = {
         title: "Event Test",
         bannerKey: null,
         isActivated: true,
@@ -27,7 +30,7 @@ describe("RegisterLeadByEventSlugService", () => {
         endsAt: dayjs("2021-01-25").add(3, "day").toDate(),
     };
 
-    const leadInput: LeadCreateInput = {
+    const leadInput: LeadsCreateInput = {
         name: "Danilo Ribeiro Pinho",
         phone: "21 983294521",
         email: "yuri.sena@loidecriativo.com.br",
@@ -42,8 +45,8 @@ describe("RegisterLeadByEventSlugService", () => {
         vi.useFakeTimers();
         vi.setSystemTime(dayjs("2021-01-25").toDate());
 
-        eventRepository = new EventInMemomryRepository();
-        leadRepository = new LeadInMemomryRepository();
+        eventRepository = new EventsInMemomryRepository();
+        leadRepository = new LeadsInMemomryRepository();
         service = new CreateLeadByEventSlugService(
             eventRepository,
             leadRepository,

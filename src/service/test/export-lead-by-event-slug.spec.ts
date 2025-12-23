@@ -1,28 +1,31 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type { Event } from "./../../repository/event";
-import { EventInMemomryRepository } from "../../repository/in-memory/event";
-import { LeadInMemomryRepository } from "../../repository/in-memory/lead";
-import { ExportLeadBySlug } from "../export-lead-by-slug";
+import type { Events } from "../../repository/events";
+import { EventsInMemomryRepository } from "../../repository/in-memory/events-repo";
+import { LeadsInMemomryRepository } from "../../repository/in-memory/leads-repo";
+import { ExportLeadByEventSlugService } from "../export-lead-by-event-slug";
 
-describe("ExportLeadBySlug", () => {
-    let eventRepository: EventInMemomryRepository;
-    let leadRepository: LeadInMemomryRepository;
-    let service: ExportLeadBySlug;
+describe("Export Lead by Event Slug - Service", () => {
+    let eventRepository: EventsInMemomryRepository;
+    let leadRepository: LeadsInMemomryRepository;
+    let service: ExportLeadByEventSlugService;
 
-    let event: Event;
+    let event: Events;
 
     beforeEach(async () => {
         vi.useFakeTimers();
         vi.setSystemTime(dayjs("2021-01-25").toDate());
 
-        eventRepository = new EventInMemomryRepository();
-        leadRepository = new LeadInMemomryRepository();
+        eventRepository = new EventsInMemomryRepository();
+        leadRepository = new LeadsInMemomryRepository();
 
         vi.spyOn(leadRepository, "findManyByEventId");
 
-        service = new ExportLeadBySlug(eventRepository, leadRepository);
+        service = new ExportLeadByEventSlugService(
+            eventRepository,
+            leadRepository,
+        );
 
         event = await eventRepository.create({
             title: "Event Test",

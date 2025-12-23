@@ -4,29 +4,29 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { InvalidFileTypeError } from "../../_errors/invalid-file-type-error";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../../provider/storage-provider";
-import type { Event } from "../../repository/event";
-import { EventInMemomryRepository } from "../../repository/in-memory/event";
-import { UpdateBannerEventService } from "../update-banner-event";
+import type { Events } from "../../repository/events";
+import { EventsInMemomryRepository } from "../../repository/in-memory/events-repo";
+import { UpdateBannerByEventSlugService } from "../update-banner-by-event-slug";
 
-describe("UpdateBannerEventService", () => {
-    let eventRepository: EventInMemomryRepository;
+describe("Update Banner by Event Slug - Service", () => {
+    let eventRepository: EventsInMemomryRepository;
     let storageProvider: IStorageProvider;
-    let service: UpdateBannerEventService;
+    let service: UpdateBannerByEventSlugService;
 
-    let Event: Event;
+    let Event: Events;
 
     beforeEach(async () => {
         vi.useFakeTimers();
         vi.setSystemTime(dayjs("2021-01-25").toDate());
 
-        eventRepository = new EventInMemomryRepository();
+        eventRepository = new EventsInMemomryRepository();
 
         storageProvider = {
             upload: vi.fn(),
             getPublicUrl: vi.fn(),
         };
 
-        service = new UpdateBannerEventService(
+        service = new UpdateBannerByEventSlugService(
             eventRepository,
             storageProvider,
         );

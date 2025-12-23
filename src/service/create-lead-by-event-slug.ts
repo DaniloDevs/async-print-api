@@ -4,17 +4,17 @@ import { EventNotActiveError } from "../_errors/event-not-active-error";
 import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
 import { LeadAlreadyRegisteredError } from "../_errors/lead-already-registered-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import type { IEventRepository } from "../repository/event";
-import type { ILeadrepository, LeadCreateInput } from "../repository/lead";
+import type { IEventsRepository } from "../repository/events";
+import type { ILeadsrepository, LeadsCreateInput } from "../repository/leads";
 import { normalizePhoneToDDNumber } from "../utils/normalize-phone-to-ddnumber";
 
 export class CreateLeadByEventSlugService {
     constructor(
-        private eventRepository: IEventRepository,
-        private leadRepository: ILeadrepository,
+        private eventRepository: IEventsRepository,
+        private leadRepository: ILeadsrepository,
     ) {}
 
-    async execute(data: LeadCreateInput, eventSlug: string) {
+    async execute(data: LeadsCreateInput, eventSlug: string) {
         const event = await this.eventRepository.findBySlug(eventSlug);
         if (!event) {
             throw new ResourceNotFoundError({

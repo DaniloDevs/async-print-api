@@ -1,15 +1,14 @@
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../provider/storage-provider";
-import type { Event } from "./../repository/event";
-import type { IEventRepository } from "../repository/event";
+import type { Events, IEventsRepository } from "../repository/events";
 
 type GetEventBySlugOutput = {
     bannerUrl: string | null;
-} & Event;
+} & Events;
 
 export class GetEventBySlugService {
     constructor(
-        private readonly eventRepository: IEventRepository,
+        private readonly eventRepository: IEventsRepository,
         private readonly storageProvider: IStorageProvider,
     ) {}
 

@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
-import type { ILeadrepository, Lead, LeadCreateInput } from "../lead";
+import type { ILeadsrepository, Leads, LeadsCreateInput } from "../leads";
 
-export class LeadInMemomryRepository implements ILeadrepository {
-    public items: Lead[] = [];
+export class LeadsInMemomryRepository implements ILeadsrepository {
+    public items: Leads[] = [];
 
-    async create(data: LeadCreateInput): Promise<Lead> {
-        const lead: Lead = {
+    async create(data: LeadsCreateInput): Promise<Leads> {
+        const leads: Leads = {
             id: crypto.randomUUID(),
             name: data.name,
             phone: data.phone,
@@ -18,25 +18,25 @@ export class LeadInMemomryRepository implements ILeadrepository {
             eventId: data.eventId,
         };
 
-        this.items.push(lead);
+        this.items.push(leads);
 
-        return lead;
+        return leads;
     }
 
     async findByEmailAndEventId(
         email: string,
         eventId: string,
-    ): Promise<Lead | null> {
-        const lead = this.items.find(
+    ): Promise<Leads | null> {
+        const leads = this.items.find(
             (item) => item.email === email || item.eventId === eventId,
         );
 
-        return lead || null;
+        return leads || null;
     }
 
-    async findManyByEventId(eventId: string): Promise<Lead[]> {
-        const lead = this.items.filter((item) => item.eventId === eventId);
+    async findManyByEventId(eventId: string): Promise<Leads[]> {
+        const leads = this.items.filter((item) => item.eventId === eventId);
 
-        return lead;
+        return leads;
     }
 }

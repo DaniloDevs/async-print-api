@@ -2,11 +2,11 @@ import path from "node:path";
 import { InvalidFileTypeError } from "../_errors/invalid-file-type-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../provider/storage-provider";
-import type { IEventRepository } from "../repository/event";
+import type { IEventsRepository } from "../repository/events";
 
-export class UpdateBannerEventService {
+export class UpdateBannerByEventSlugService {
     constructor(
-        private eventRepository: IEventRepository,
+        private eventRepository: IEventsRepository,
         private storageProvider: IStorageProvider,
     ) {}
 

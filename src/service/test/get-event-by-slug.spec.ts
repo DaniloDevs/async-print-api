@@ -2,22 +2,22 @@ import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../../provider/storage-provider";
-import type { Event } from "./../../repository/event";
-import { EventInMemomryRepository } from "../../repository/in-memory/event";
+import type { Events } from "../../repository/events";
+import { EventsInMemomryRepository } from "../../repository/in-memory/events-repo";
 import { GetEventBySlugService } from "../get-event-by-slug";
 
-describe("Get Event By Slug Service", () => {
-    let eventRepository: EventInMemomryRepository;
+describe("Get Event By Slug - Service", () => {
+    let eventRepository: EventsInMemomryRepository;
     let storageProvider: IStorageProvider;
     let service: GetEventBySlugService;
 
-    let event: Event;
+    let event: Events;
 
     beforeEach(async () => {
         vi.useFakeTimers();
         vi.setSystemTime(dayjs("2021-01-25").toDate());
 
-        eventRepository = new EventInMemomryRepository();
+        eventRepository = new EventsInMemomryRepository();
 
         storageProvider = {
             upload: vi.fn(),

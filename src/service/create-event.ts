@@ -2,13 +2,16 @@ import dayjs from "dayjs";
 import { EventAlreadyExistsError } from "../_errors/event-already-exist-error";
 import { EventEndBeforeStartError } from "../_errors/event-end-before-start-error";
 import { EventStartDateInPastError } from "../_errors/event-start-date-in-past-error";
-import type { EventCreateInput, IEventRepository } from "../repository/event";
+import type {
+    EventsCreateInput,
+    IEventsRepository,
+} from "../repository/events";
 import { createSlug } from "../utils/create-slug";
 
 export class CreateEventService {
-    constructor(private repository: IEventRepository) {}
+    constructor(private repository: IEventsRepository) {}
 
-    async execute(data: EventCreateInput) {
+    async execute(data: EventsCreateInput) {
         const slug = createSlug(data.title);
 
         // Verifica se evento já existe

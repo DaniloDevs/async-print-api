@@ -1,11 +1,11 @@
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import type { IEventRepository } from "../repository/event";
-import type { ILeadrepository } from "../repository/lead";
+import type { IEventsRepository } from "../repository/events";
+import type { ILeadsrepository } from "../repository/leads";
 
-export class ExportLeadBySlug {
+export class ExportLeadByEventSlugService {
     constructor(
-        private readonly eventRepository: IEventRepository,
-        private readonly leadRepository: ILeadrepository,
+        private readonly eventRepository: IEventsRepository,
+        private readonly leadRepository: ILeadsrepository,
     ) {}
 
     async execute(eventSlug: string) {
