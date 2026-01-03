@@ -8,8 +8,8 @@
 - [x] Deve ser possivel criar um lead de um evento
 - [x] Deve ser possivel atualizar o banner de um evento
 - [x] Deve ser possivel buscar um evento pelo slug
-- [] Deve ser possivel exportar leads de um evento
-- [] Deve ser possivel listar leads de um evento
+- [x] Deve ser possivel exportar leads de um evento
+- [x] Deve ser possivel listar leads de um evento
 - [] Deve ser possivel atualizar o status do evento
 
 ## **Metrics**
@@ -23,3 +23,8 @@
 - [ ] Deve ser possivel detectar uma impressora 
 - [ ] Deve ser possivel pegar o status de uma impressora 
 - [ ] Deve ser possivel fazer um teste na impressora
+
+
+# Requisitos Não Funcionais
+
+- [ ] Deve ser possivel fazer paginação

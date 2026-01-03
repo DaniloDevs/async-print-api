@@ -99,10 +99,9 @@ describe("Create Event - Service", () => {
                 bannerKey: null,
                 startAt: start,
                 endsAt: start,
-            })
+            }),
         ).rejects.toBeInstanceOf(EventEndBeforeStartError);
     });
-
 
     it("should create event with end date exactly 1 minute after start", async () => {
         const startDate = dayjs().add(2, "day");
