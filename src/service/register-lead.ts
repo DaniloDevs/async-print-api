@@ -8,23 +8,23 @@ import type { IEventsRepository } from "../repository/events";
 import type { ILeadsrepository, LeadsCreateInput } from "../repository/leads";
 import { normalizePhoneToDDNumber } from "../utils/normalize-phone-to-ddnumber";
 
-export class CreateLeadByEventSlugService {
+export class RegisterLeadService {
     constructor(
         private eventRepository: IEventsRepository,
         private leadRepository: ILeadsrepository,
     ) {}
 
-    async execute(data: LeadsCreateInput, eventSlug: string) {
-        const event = await this.eventRepository.findBySlug(eventSlug);
+    async execute(data: LeadsCreateInput, eventId: string) {
+        const event = await this.eventRepository.findById(eventId);
         if (!event) {
             throw new ResourceNotFoundError({
                 resourceType: "Event",
-                resource: eventSlug,
+                resource: eventId,
             });
         }
 
         if (!event.isActivated) {
-            throw new EventNotActiveError(eventSlug);
+            throw new EventNotActiveError(eventId);
         }
 
         const startEventDate = dayjs(event.startAt);
@@ -45,7 +45,7 @@ export class CreateLeadByEventSlugService {
         );
 
         if (existingLead) {
-            throw new LeadAlreadyRegisteredError(data.email, eventSlug);
+            throw new LeadAlreadyRegisteredError(data.email, eventId);
         }
 
         const formattedPhoneNumber = normalizePhoneToDDNumber(data.phone);

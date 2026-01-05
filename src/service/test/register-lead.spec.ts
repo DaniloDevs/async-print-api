@@ -15,12 +15,13 @@ import type {
     ILeadsrepository,
     LeadsCreateInput,
 } from "../../repository/leads";
-import { CreateLeadByEventSlugService } from "../create-lead-by-event-slug";
+import { RegisterLeadService } from "../register-lead";
 
-describe("Create Lead by Event Slug - Service", () => {
+
+describe("Register Lead - Service", () => {
     let eventRepository: IEventsRepository;
     let leadRepository: ILeadsrepository;
-    let service: CreateLeadByEventSlugService;
+    let service: RegisterLeadService;
 
     const eventInput: EventsCreateInput = {
         title: "Event Test",
@@ -47,7 +48,7 @@ describe("Create Lead by Event Slug - Service", () => {
 
         eventRepository = new EventsInMemomryRepository();
         leadRepository = new LeadsInMemomryRepository();
-        service = new CreateLeadByEventSlugService(
+        service = new RegisterLeadService(
             eventRepository,
             leadRepository,
         );
@@ -63,7 +64,7 @@ describe("Create Lead by Event Slug - Service", () => {
         vi.setSystemTime(dayjs(event.startAt).add(2, "hour").toDate());
         const result = await service.execute(
             { ...leadInput, eventId: event.id },
-            event.slug,
+            event.id,
         );
 
         expect(result.phone).toBe("+5521983294521");
@@ -84,7 +85,7 @@ describe("Create Lead by Event Slug - Service", () => {
         });
 
         await expect(() =>
-            service.execute({ ...leadInput, eventId: event.id }, event.slug),
+            service.execute({ ...leadInput, eventId: event.id }, event.id),
         ).rejects.toBeInstanceOf(EventNotActiveError);
     });
 
@@ -95,7 +96,7 @@ describe("Create Lead by Event Slug - Service", () => {
         });
 
         await expect(() =>
-            service.execute({ ...leadInput, eventId: event.id }, event.slug),
+            service.execute({ ...leadInput, eventId: event.id }, event.id),
         ).rejects.toBeInstanceOf(EventNotStartedYetError);
     });
 
@@ -105,7 +106,7 @@ describe("Create Lead by Event Slug - Service", () => {
         vi.setSystemTime(dayjs("2021-02-29").toDate());
 
         await expect(() =>
-            service.execute({ ...leadInput, eventId: event.id }, event.slug),
+            service.execute({ ...leadInput, eventId: event.id }, event.id),
         ).rejects.toBeInstanceOf(EventAlreadyEndedError);
     });
 
@@ -114,7 +115,7 @@ describe("Create Lead by Event Slug - Service", () => {
         await leadRepository.create(leadInput);
 
         await expect(() =>
-            service.execute({ ...leadInput, eventId: event.id }, event.slug),
+            service.execute({ ...leadInput, eventId: event.id }, event.id),
         ).rejects.toBeInstanceOf(LeadAlreadyRegisteredError);
     });
 });
