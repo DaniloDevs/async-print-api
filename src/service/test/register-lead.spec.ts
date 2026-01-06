@@ -17,7 +17,6 @@ import type {
 } from "../../repository/leads";
 import { RegisterLeadService } from "../register-lead";
 
-
 describe("Register Lead - Service", () => {
     let eventRepository: IEventsRepository;
     let leadRepository: ILeadsrepository;
@@ -48,10 +47,7 @@ describe("Register Lead - Service", () => {
 
         eventRepository = new EventsInMemomryRepository();
         leadRepository = new LeadsInMemomryRepository();
-        service = new RegisterLeadService(
-            eventRepository,
-            leadRepository,
-        );
+        service = new RegisterLeadService(eventRepository, leadRepository);
     });
 
     afterEach(() => {

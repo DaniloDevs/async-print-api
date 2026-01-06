@@ -1,12 +1,15 @@
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IEventsRepository } from "../repository/events";
-import { ILeadsrepository } from "../repository/leads";
+import type { ILeadsrepository } from "../repository/leads";
 
 export class ListLeadsByEventSlug {
-    constructor(private eventRepository: IEventsRepository, private leadsRepository: ILeadsrepository) { }
+    constructor(
+        private eventRepository: IEventsRepository,
+        private leadsRepository: ILeadsrepository,
+    ) {}
 
     async execute(slug: string) {
-        const event = await this.eventRepository.findBySlug(slug)
+        const event = await this.eventRepository.findBySlug(slug);
 
         if (!event) {
             throw new ResourceNotFoundError({
@@ -15,10 +18,9 @@ export class ListLeadsByEventSlug {
             });
         }
 
-        const leads = await this.leadsRepository.findManyByEventId(event.id)
+        const leads = await this.leadsRepository.findManyByEventId(event.id);
 
-
-        return leads.map(lead => ({
+        return leads.map((lead) => ({
             eventId: lead.eventId,
             id: lead.id,
             name: lead.name,
@@ -26,6 +28,5 @@ export class ListLeadsByEventSlug {
             intendsToStudyNextYear: lead.intendsToStudyNextYear,
             segmentInterest: lead.segmentInterest,
         }));
-
     }
 }
