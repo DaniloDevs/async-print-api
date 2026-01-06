@@ -34,7 +34,7 @@ describe("Update Banner by Event Slug - Service", () => {
         Event = await eventRepository.create({
             title: "Event Test",
             bannerKey: null,
-            isActivated: true,
+            status: "active",
             startAt: dayjs("2021-01-25").toDate(),
             endsAt: dayjs("2021-01-25").add(3, "day").toDate(),
         });

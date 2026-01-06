@@ -34,6 +34,7 @@ export class CreateEventService {
             ...data,
             startAt,
             endsAt,
+            status: "draft",
         });
 
         return event;

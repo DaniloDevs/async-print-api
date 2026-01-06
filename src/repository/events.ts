@@ -1,5 +1,7 @@
 import z from "zod";
 
+const eventstatus = z.enum(["active", "inactive", "draft"]);
+
 const events = z.object({
     id: z.string(),
     title: z.string(),
@@ -7,7 +9,7 @@ const events = z.object({
     bannerKey: z.string().nullable(),
     startAt: z.date(),
     endsAt: z.date(),
-    isActivated: z.boolean(),
+    status: eventstatus,
 });
 
 const EventsCreateInput = events.omit({

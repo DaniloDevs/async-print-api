@@ -25,7 +25,7 @@ describe("Register Lead - Service", () => {
     const eventInput: EventsCreateInput = {
         title: "Event Test",
         bannerKey: null,
-        isActivated: true,
+        status: "active",
         startAt: dayjs("2021-01-25").toDate(),
         endsAt: dayjs("2021-01-25").add(3, "day").toDate(),
     };
@@ -77,7 +77,7 @@ describe("Register Lead - Service", () => {
     it("deve lançar erro se o evento não estiver ativo", async () => {
         const event = await eventRepository.create({
             ...eventInput,
-            isActivated: false,
+            status: "draft",
         });
 
         await expect(() =>

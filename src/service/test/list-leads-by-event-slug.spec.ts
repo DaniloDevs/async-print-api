@@ -22,7 +22,7 @@ describe("List Leads By Event Slug - Service", () => {
         event = await eventRepository.create({
             title: "Event Test",
             bannerKey: null,
-            isActivated: true,
+            status: "active",
             startAt: new Date("2021-01-25"),
             endsAt: new Date("2021-01-28"),
         });

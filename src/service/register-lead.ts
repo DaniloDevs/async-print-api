@@ -23,7 +23,7 @@ export class RegisterLeadService {
             });
         }
 
-        if (!event.isActivated) {
+        if (event.status !== "active") {
             throw new EventNotActiveError(eventId);
         }
 
