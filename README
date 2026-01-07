@@ -10,7 +10,7 @@
 - [x] Deve ser possivel buscar um evento pelo slug
 - [x] Deve ser possivel exportar leads de um evento
 - [x] Deve ser possivel listar leads de um evento
-- [] Deve ser possivel atualizar o status do evento
+- [x] Deve ser possivel atualizar o status do evento
 
 ## **Metrics**
 
