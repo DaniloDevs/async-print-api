@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { createSlug } from "../../utils/create-slug";
-import type { Events, EventsCreateInput, IEventsRepository } from "../events";
+import type { Events, EventsCreateInput, EventsStatus, IEventsRepository } from "../events";
 
 export class EventsInMemomryRepository implements IEventsRepository {
     public items: Events[] = [];
@@ -39,4 +39,21 @@ export class EventsInMemomryRepository implements IEventsRepository {
         events.bannerKey = banner;
         return events;
     }
+
+    async updateStatus(id: string, status: EventsStatus): Promise<Events | null> {
+        const events = this.items.find((item) => item.id === id);
+
+        if (!events) return null;
+
+        events.status = status;
+        return events;
+    }
+    
+    async forceStatus(id: string, status: EventsStatus) {
+        const event = this.items.find(e => e.id === id);
+        if (!event) throw new Error("Event not found");
+
+        event.status = status;
+    }
+
 }

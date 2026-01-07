@@ -1,6 +1,6 @@
 import z from "zod";
 
-const eventstatus = z.enum(["active", "inactive", "draft"]);
+const eventstatus = z.enum(["active", "inactive", "draft", "finished", "canceled"]);
 
 const events = z.object({
     id: z.string(),
@@ -19,10 +19,13 @@ const EventsCreateInput = events.omit({
 
 export type Events = z.infer<typeof events>;
 export type EventsCreateInput = z.infer<typeof EventsCreateInput>;
+export type EventsStatus = z.infer<typeof eventstatus>;
 
 export interface IEventsRepository {
     create(data: EventsCreateInput): Promise<Events>;
     updateBanner(id: string, banner: string): Promise<Events | null>;
     findBySlug(slug: string): Promise<Events | null>;
     findById(id: string): Promise<Events | null>;
+    updateStatus(id: string, status: EventsStatus): Promise<Events | null>;
+    forceStatus(id: string, status: EventsStatus) : Promise<void>;
 }

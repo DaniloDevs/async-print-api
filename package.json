@@ -9,6 +9,7 @@
     "start": "node dist/server.js",
     "worker": "tsx src/jobs/worker.ts",
     "test": "vitest run",
+    "test:cover": "vitest run --coverage",
     "lint": "biome check --write"
   },
   "keywords": [],
@@ -44,6 +45,7 @@
     "@biomejs/biome": "2.3.8",
     "@types/node": "^24.10.1",
     "@types/pg": "^8.15.6",
+    "@vitest/coverage-v8": "4.0.15",
     "prisma": "^7.0.1",
     "vitest": "4.0.15"
   }
