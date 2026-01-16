@@ -14,8 +14,14 @@
 
 ## **Metrics**
 
-- [] Deve ser possivel listar todos os leads capturando durante o intervalo de tempo
-- [] Deve ser possivel buscar um overview de um evento
+- [] Deve ser possível obter métricas de leads por período, agrupadas por:
+- [] Deve ser possível calcular a taxa média de captura de leads por evento:
+    - leads por hora
+- [] Deve ser possível obter um overview consolidado de um evento, contendo obrigatoriamente:
+    - total de leads capturados
+    - leads capturados no dia atual
+    - leads capturados por intervalo configurável
+    - status atual do evento (ativo/inativo)
 
 ## **Printer Device**
 
