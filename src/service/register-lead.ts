@@ -5,16 +5,24 @@ import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error"
 import { LeadAlreadyRegisteredError } from "../_errors/lead-already-registered-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IEventsRepository } from "../repository/events";
-import type { ILeadsrepository, LeadsCreateInput } from "../repository/leads";
+import type { ILeadsrepository, Leads, LeadsCreateInput } from "../repository/leads";
 import { normalizePhoneToDDNumber } from "../utils/normalize-phone-to-ddnumber";
+
+interface RequestDate {
+    eventId: string
+    data: LeadsCreateInput
+}
+interface ResponseDate {
+    lead: Leads
+}
 
 export class RegisterLeadService {
     constructor(
         private eventRepository: IEventsRepository,
         private leadRepository: ILeadsrepository,
-    ) {}
+    ) { }
 
-    async execute(data: LeadsCreateInput, eventId: string) {
+    async execute({ data, eventId }: RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findById(eventId);
         if (!event) {
             throw new ResourceNotFoundError({
@@ -56,6 +64,6 @@ export class RegisterLeadService {
             phone: formattedPhoneNumber,
         });
 
-        return lead;
+        return { lead };
     }
 }

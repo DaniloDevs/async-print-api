@@ -5,13 +5,21 @@ import { EventStartDateInPastError } from "../_errors/event-start-date-in-past-e
 import type {
     EventsCreateInput,
     IEventsRepository,
+    Events
 } from "../repository/events";
 import { createSlug } from "../utils/create-slug";
 
-export class CreateEventService {
-    constructor(private repository: IEventsRepository) {}
+interface RequestDate { 
+    data: EventsCreateInput 
+}
+interface ResponseDate {
+    event: Events
+}
 
-    async execute(data: EventsCreateInput) {
+export class CreateEventService {
+    constructor(private repository: IEventsRepository) { }
+
+    async execute({ data }: RequestDate): Promise<ResponseDate> {
         const slug = createSlug(data.title);
 
         const existEvent = await this.repository.findBySlug(slug);
@@ -37,6 +45,6 @@ export class CreateEventService {
             status: "draft",
         });
 
-        return event;
+        return { event };
     }
 }

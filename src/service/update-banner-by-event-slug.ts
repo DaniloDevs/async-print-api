@@ -4,23 +4,26 @@ import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../provider/storage-provider";
 import type { IEventsRepository } from "../repository/events";
 
+interface RequestDate {
+    eventId: string;
+    file: {
+        buffer: Buffer;
+        filename: string;
+        mimetype: string;
+    };
+}
+// interface ResponseDate {}
+
 export class UpdateBannerByEventSlugService {
     constructor(
         private eventRepository: IEventsRepository,
         private storageProvider: IStorageProvider,
-    ) {}
+    ) { }
 
     async execute({
         eventId,
         file,
-    }: {
-        eventId: string;
-        file: {
-            buffer: Buffer;
-            filename: string;
-            mimetype: string;
-        };
-    }) {
+    }: RequestDate): Promise<void> {
         if (!file.mimetype.startsWith("image/")) {
             throw new InvalidFileTypeError({
                 mimetype: file.mimetype,

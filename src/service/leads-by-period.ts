@@ -6,13 +6,23 @@ import type { ILeadsrepository } from "../repository/leads";
 
 dayjs.extend(utc);
 
+interface RequestDate {
+    eventId: string
+}
+interface ResponseDate  {
+    leads: {
+        hour: string,
+        total: number
+    }[]
+}
+
 export class LeadsByPeriod {
     constructor(
         private eventRepository: IEventsRepository,
         private leadsRepository: ILeadsrepository,
     ) {}
 
-    async execute(eventId: string) {
+    async execute({eventId}:RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findById(eventId);
 
         if (!event) {
@@ -53,9 +63,11 @@ export class LeadsByPeriod {
         }
 
         // 3. saída ordenada e explícita
-        return Array.from(buckets.entries()).map(([hour, total]) => ({
-            hour,
-            total,
-        }));
+        return {
+            leads: Array.from(buckets.entries()).map(([hour, total]) => ({
+                hour,
+                total,
+            }))
+        }
     }
 }
