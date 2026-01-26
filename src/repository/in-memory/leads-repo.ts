@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
-import type { ILeadsrepository, Leads, LeadsCreateInput } from "../lead";
+import type { Lead, LeadCreateInput,ILeadRepository } from "../lead";
 
-export class LeadsInMemomryRepository implements ILeadsrepository {
-    public items: Leads[] = [];
+export class LeadInMemoryRepository implements ILeadRepository {
+    public items: Lead[] = [];
 
-    async create(data: LeadsCreateInput): Promise<Leads> {
-        const leads: Leads = {
+    async create(data: LeadCreateInput): Promise<Lead> {
+        const leads: Lead = {
             id: crypto.randomUUID(),
             name: data.name,
             phone: data.phone,
@@ -26,7 +26,7 @@ export class LeadsInMemomryRepository implements ILeadsrepository {
     async findByEmailAndEventId(
         email: string,
         eventId: string,
-    ): Promise<Leads | null> {
+    ): Promise<Lead | null> {
         const leads = this.items.find(
             (item) => item.email === email || item.eventId === eventId,
         );
@@ -34,7 +34,7 @@ export class LeadsInMemomryRepository implements ILeadsrepository {
         return leads || null;
     }
 
-    async findManyByEventId(eventId: string): Promise<Leads[]> {
+    async findManyByEventId(eventId: string): Promise<Lead[]> {
         const leads = this.items.filter((item) => item.eventId === eventId);
 
         return leads;

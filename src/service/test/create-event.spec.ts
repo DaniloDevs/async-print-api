@@ -3,23 +3,20 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EventAlreadyExistsError } from "../../_errors/event-already-exist-error";
 import { EventEndBeforeStartError } from "../../_errors/event-end-before-start-error";
 import { EventStartDateInPastError } from "../../_errors/event-start-date-in-past-error";
-import type {
-    EventsCreateInput,
-    IEventsRepository,
-} from "../../repository/events";
-import { EventsInMemomryRepository } from "../../repository/in-memory/events-repo";
+import type { EventCreateInput, IEventRepository } from "../../repository/event";
+import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { createSlug } from "../../utils/create-slug";
 import { CreateEventService } from "../create-event";
 
 describe("Create Event - Service", () => {
-    let eventRepository: IEventsRepository;
+    let eventRepository: IEventRepository;
     let sut: CreateEventService;
 
     beforeEach(() => {
         vi.useFakeTimers();
         vi.setSystemTime(new Date("2025-01-01T10:00:00Z"));
 
-        eventRepository = new EventsInMemomryRepository();
+        eventRepository = new EventInMemoryRepository();
         sut = new CreateEventService(eventRepository);
     });
 
@@ -28,7 +25,7 @@ describe("Create Event - Service", () => {
     });
 
     it("should be able to create a new event", async () => {
-        const eventData: EventsCreateInput = {
+        const eventData: EventCreateInput = {
             title: "Evento Teste Loide Maxima",
             status: "draft",
             bannerKey: null,
@@ -36,7 +33,7 @@ describe("Create Event - Service", () => {
             endsAt: dayjs().add(7, "day").add(10, "hour").toDate(),
         };
 
-        const event = await sut.execute(eventData);
+        const { event } = await sut.execute({ data: eventData });
 
         expect(event.id).toEqual(expect.any(String));
         expect(event.slug).toBe(createSlug(eventData.title));
@@ -44,7 +41,7 @@ describe("Create Event - Service", () => {
     });
 
     it("should not be able to create an event with duplicated slug", async () => {
-        const eventData: EventsCreateInput = {
+        const eventData: EventCreateInput = {
             title: "Evento Duplicado",
             status: "draft",
             bannerKey: null,
@@ -52,15 +49,15 @@ describe("Create Event - Service", () => {
             endsAt: dayjs().add(5, "day").add(2, "hour").toDate(),
         };
 
-        await sut.execute(eventData);
+        await sut.execute({ data: eventData });
 
         await expect(
-            Promise.all([sut.execute(eventData), sut.execute(eventData)]),
+            Promise.all([sut.execute({ data: eventData }), sut.execute({ data: eventData })]),
         ).rejects.toBeInstanceOf(EventAlreadyExistsError);
     });
 
     it("should not be able to create an event with start date in the past", async () => {
-        const eventData: EventsCreateInput = {
+        const eventData: EventCreateInput = {
             title: "Evento no Passado",
             status: "draft",
             bannerKey: null,
@@ -68,7 +65,7 @@ describe("Create Event - Service", () => {
             endsAt: dayjs().add(1, "day").toDate(),
         };
 
-        await expect(sut.execute(eventData)).rejects.toBeInstanceOf(
+        await expect(sut.execute({ data: eventData })).rejects.toBeInstanceOf(
             EventStartDateInPastError,
         );
     });
@@ -76,7 +73,7 @@ describe("Create Event - Service", () => {
     it("should not be able to create an event that ends before it starts", async () => {
         const startDate = dayjs().add(5, "day");
 
-        const eventData: EventsCreateInput = {
+        const eventData: EventCreateInput = {
             title: "Evento com Data Final Inválida",
             status: "draft",
             bannerKey: null,
@@ -84,7 +81,7 @@ describe("Create Event - Service", () => {
             endsAt: startDate.subtract(2, "hour").toDate(), // termina ANTES de começar
         };
 
-        await expect(sut.execute(eventData)).rejects.toBeInstanceOf(
+        await expect(sut.execute({ data: eventData })).rejects.toBeInstanceOf(
             EventEndBeforeStartError,
         );
     });
@@ -94,11 +91,13 @@ describe("Create Event - Service", () => {
 
         await expect(
             sut.execute({
-                title: "Evento inválido",
-                status: "draft",
-                bannerKey: null,
-                startAt: start,
-                endsAt: start,
+                data: {
+                    title: "Evento inválido",
+                    status: "draft",
+                    bannerKey: null,
+                    startAt: start,
+                    endsAt: start,
+                }
             }),
         ).rejects.toBeInstanceOf(EventEndBeforeStartError);
     });
@@ -106,7 +105,7 @@ describe("Create Event - Service", () => {
     it("should create event with end date exactly 1 minute after start", async () => {
         const startDate = dayjs().add(2, "day");
 
-        const eventData: EventsCreateInput = {
+        const eventData: EventCreateInput = {
             title: "Evento Curto Válido",
             status: "draft",
             bannerKey: null,
@@ -114,7 +113,7 @@ describe("Create Event - Service", () => {
             endsAt: startDate.add(1, "minute").toDate(),
         };
 
-        const event = await sut.execute(eventData);
+        const { event } = await sut.execute({ data: eventData });
 
         expect(event.id).toEqual(expect.any(String));
         expect(dayjs(event.endsAt).isAfter(event.startAt)).toBe(true);
@@ -123,7 +122,7 @@ describe("Create Event - Service", () => {
     it("should create event starting exactly now", async () => {
         const now = dayjs("2025-01-01T10:00:00Z");
 
-        const eventData: EventsCreateInput = {
+        const eventData: EventCreateInput = {
             title: "Evento Começando Agora",
             status: "draft",
             bannerKey: null,
@@ -131,7 +130,7 @@ describe("Create Event - Service", () => {
             endsAt: now.add(2, "day").toDate(),
         };
 
-        const event = await sut.execute(eventData);
+        const { event } = await sut.execute({ data: eventData });
 
         expect(event.id).toEqual(expect.any(String));
         expect(event.startAt).toEqual(eventData.startAt);

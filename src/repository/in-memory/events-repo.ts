@@ -7,7 +7,7 @@ import type {
     IEventRepository,
 } from "../event";
 
-export class EventInMemomryRepository implements IEventRepository {
+export class EventInMemoryRepository implements IEventRepository {
     public items: Event[] = [];
 
     async create(data: EventCreateInput): Promise<Event> {

@@ -5,24 +5,18 @@ import { EventNotActiveError } from "../../_errors/event-not-active-error";
 import { EventNotStartedYetError } from "../../_errors/event-not-started-yet-error";
 import { LeadAlreadyRegisteredError } from "../../_errors/lead-already-registered-error";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type {
-    EventsCreateInput,
-    IEventsRepository,
-} from "../../repository/events";
-import { EventsInMemomryRepository } from "../../repository/in-memory/events-repo";
-import { LeadsInMemomryRepository } from "../../repository/in-memory/leads-repo";
-import type {
-    ILeadsrepository,
-    LeadsCreateInput,
-} from "../../repository/lead";
+import type { EventCreateInput, IEventRepository } from "../../repository/event";
+import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
+import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
+import type { ILeadRepository, LeadCreateInput } from "../../repository/lead";
 import { RegisterLeadService } from "../register-lead";
 
 describe("Register Lead - Service", () => {
-    let eventRepository: IEventsRepository;
-    let leadRepository: ILeadsrepository;
+    let eventRepository: IEventRepository;
+    let leadRepository: ILeadRepository;
     let service: RegisterLeadService;
 
-    const eventInput: EventsCreateInput = {
+    const eventInput: EventCreateInput = {
         title: "Event Test",
         bannerKey: null,
         status: "active",
@@ -30,7 +24,7 @@ describe("Register Lead - Service", () => {
         endsAt: dayjs("2021-01-25").add(3, "day").toDate(),
     };
 
-    const leadInput: LeadsCreateInput = {
+    const leadInput: LeadCreateInput = {
         name: "Danilo Ribeiro Pinho",
         phone: "21 983294521",
         email: "yuri.sena@loidecriativo.com.br",
@@ -45,8 +39,8 @@ describe("Register Lead - Service", () => {
         vi.useFakeTimers();
         vi.setSystemTime(dayjs("2021-01-25").toDate());
 
-        eventRepository = new EventsInMemomryRepository();
-        leadRepository = new LeadsInMemomryRepository();
+        eventRepository = new EventInMemoryRepository();
+        leadRepository = new LeadInMemoryRepository();
         service = new RegisterLeadService(eventRepository, leadRepository);
     });
 
@@ -58,19 +52,20 @@ describe("Register Lead - Service", () => {
         const event = await eventRepository.create(eventInput);
 
         vi.setSystemTime(dayjs(event.startAt).add(2, "hour").toDate());
-        const result = await service.execute(
-            { ...leadInput, eventId: event.id },
-            event.id,
-        );
 
-        expect(result.phone).toBe("+5521983294521");
+        const { lead } = await service.execute({
+            data: { ...leadInput, eventId: event.id },
+            eventId: event.id,
+        });
+
+        expect(lead.phone).toBe("+5521983294521");
     });
 
     it("deve lançar erro se o evento não existir", async () => {
         eventRepository.findBySlug("non-exist-event");
 
         await expect(() =>
-            service.execute(leadInput, "invalid-slug"),
+            service.execute({ data: leadInput, eventId: "non-exist" }),
         ).rejects.toBeInstanceOf(ResourceNotFoundError);
     });
 
@@ -81,7 +76,10 @@ describe("Register Lead - Service", () => {
         });
 
         await expect(() =>
-            service.execute({ ...leadInput, eventId: event.id }, event.id),
+            service.execute({
+                data: { ...leadInput, eventId: event.id },
+                eventId: event.id,
+            }),
         ).rejects.toBeInstanceOf(EventNotActiveError);
     });
 
@@ -92,7 +90,10 @@ describe("Register Lead - Service", () => {
         });
 
         await expect(() =>
-            service.execute({ ...leadInput, eventId: event.id }, event.id),
+            service.execute({
+                data: { ...leadInput, eventId: event.id },
+                eventId: event.id,
+            }),
         ).rejects.toBeInstanceOf(EventNotStartedYetError);
     });
 
@@ -102,7 +103,10 @@ describe("Register Lead - Service", () => {
         vi.setSystemTime(dayjs("2021-02-29").toDate());
 
         await expect(() =>
-            service.execute({ ...leadInput, eventId: event.id }, event.id),
+            service.execute({
+                data: { ...leadInput, eventId: event.id },
+                eventId: event.id,
+            }),
         ).rejects.toBeInstanceOf(EventAlreadyEndedError);
     });
 
@@ -111,7 +115,10 @@ describe("Register Lead - Service", () => {
         await leadRepository.create(leadInput);
 
         await expect(() =>
-            service.execute({ ...leadInput, eventId: event.id }, event.id),
+            service.execute({
+                data: { ...leadInput, eventId: event.id },
+                eventId: event.id,
+            }),
         ).rejects.toBeInstanceOf(LeadAlreadyRegisteredError);
     });
 });

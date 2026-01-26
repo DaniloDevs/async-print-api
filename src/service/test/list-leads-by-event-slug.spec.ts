@@ -1,21 +1,22 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type { Events, IEventsRepository } from "../../repository/events";
-import { EventsInMemomryRepository } from "../../repository/in-memory/events-repo";
-import { LeadsInMemomryRepository } from "../../repository/in-memory/leads-repo";
-import type { ILeadsrepository } from "../../repository/lead";
+import type { Event } from './../../repository/event';
+import type { IEventRepository } from "../../repository/event";
+import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
+import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
+import type { ILeadRepository } from "../../repository/lead";
 import { ListLeadsByEventSlug } from "../list-leads-by-event-slug";
 
 describe("List Leads By Event Slug - Service", () => {
     let service: ListLeadsByEventSlug;
-    let eventRepository: IEventsRepository;
-    let leadsRepository: ILeadsrepository;
+    let eventRepository: IEventRepository;
+    let leadsRepository: ILeadRepository;
 
-    let event: Events;
+    let event: Event
 
     beforeEach(async () => {
-        eventRepository = new EventsInMemomryRepository();
-        leadsRepository = new LeadsInMemomryRepository();
+        eventRepository = new EventInMemoryRepository();
+        leadsRepository = new LeadInMemoryRepository();
 
         service = new ListLeadsByEventSlug(eventRepository, leadsRepository);
 
@@ -44,21 +45,21 @@ describe("List Leads By Event Slug - Service", () => {
             });
         }
 
-        const result = await service.execute(event.slug);
+        const { leads } = await service.execute({ slug: event.slug });
 
-        expect(result).toHaveLength(leadsCount);
-        expect(result.every((lead) => lead.eventId === event.id)).toBe(true);
+        expect(leads).toHaveLength(leadsCount);
+        expect(leads.every((lead) => lead.eventId === event.id)).toBe(true);
     });
 
     it("returns an empty array when the event has no leads", async () => {
-        const result = await service.execute(event.slug);
+        const { leads } = await service.execute({ slug: event.slug });
 
-        expect(result).toEqual([]);
+        expect(leads).toEqual([]);
     });
 
     it("throws ResourceNotFoundError when event slug does not exist", async () => {
         await expect(
-            service.execute("non-existent-slug"),
+            service.execute({ slug: "non-existent-slug" }),
         ).rejects.toBeInstanceOf(ResourceNotFoundError);
     });
 });

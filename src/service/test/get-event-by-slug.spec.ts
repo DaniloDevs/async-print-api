@@ -2,22 +2,22 @@ import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../../provider/storage-provider";
-import type { Events } from "../../repository/events";
-import { EventsInMemomryRepository } from "../../repository/in-memory/events-repo";
+import type { Event, IEventRepository } from './../../repository/event';
+import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { GetEventBySlugService } from "../get-event-by-slug";
 
 describe("Get Event By Slug - Service", () => {
-    let eventRepository: EventsInMemomryRepository;
+    let eventRepository: IEventRepository;
     let storageProvider: IStorageProvider;
     let service: GetEventBySlugService;
 
-    let event: Events;
+    let event: Event;
 
     beforeEach(async () => {
         vi.useFakeTimers();
         vi.setSystemTime(dayjs("2021-01-25").toDate());
 
-        eventRepository = new EventsInMemomryRepository();
+        eventRepository = new EventInMemoryRepository();
 
         storageProvider = {
             upload: vi.fn(),
@@ -41,10 +41,10 @@ describe("Get Event By Slug - Service", () => {
     });
 
     it("should be able to get an event by slug without banner", async () => {
-        const result = await service.execute(event.slug);
+        const { event: getEvent } = await service.execute({ slug: event.slug });
 
         expect(storageProvider.getPublicUrl).not.toHaveBeenCalled();
-        expect(result).toEqual({
+        expect(getEvent).toEqual({
             ...event,
             bannerUrl: null,
             bannerKey: null,
@@ -64,14 +64,14 @@ describe("Get Event By Slug - Service", () => {
             "https://storage.example.com/event-banner.png",
         );
 
-        const result = await service.execute(eventWithBanner.slug);
+        const { event: getEvent } = await service.execute({ slug: eventWithBanner.slug });
 
         expect(storageProvider.getPublicUrl).toHaveBeenCalledTimes(1);
         expect(storageProvider.getPublicUrl).toHaveBeenCalledWith(
             "event-banner.png",
         );
 
-        expect(result).toEqual({
+        expect(getEvent).toEqual({
             ...eventWithBanner,
             bannerUrl: "https://storage.example.com/event-banner.png",
             bannerKey: "event-banner.png",
@@ -79,7 +79,7 @@ describe("Get Event By Slug - Service", () => {
     });
 
     it("should throw ResourceNotFoundError when event does not exist", async () => {
-        await expect(service.execute("non-existent-slug")).rejects.instanceOf(
+        await expect(service.execute({ slug: "non-existent-slug" })).rejects.instanceOf(
             ResourceNotFoundError,
         );
     });
