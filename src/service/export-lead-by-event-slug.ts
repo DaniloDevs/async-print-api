@@ -1,22 +1,22 @@
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import type { IEventsRepository } from "../repository/events";
-import type { ILeadsrepository, Leads } from "../repository/leads";
+import type { IEventRepository } from "../repository/events";
+import type { ILeadRepository, Lead } from "../repository/lead";
 
 interface RequestDate {
-    slug: string
+    slug: string;
 }
 interface ResponseDate {
-    eventId: string
-    eventSlug: string
-    eventTitle: string
-    leads: Leads[],
+    eventId: string;
+    eventSlug: string;
+    eventTitle: string;
+    leads: Lead[];
 }
 
 export class ExportLeadByEventSlugService {
     constructor(
-        private readonly eventRepository: IEventsRepository,
-        private readonly leadRepository: ILeadsrepository,
-    ) { }
+        private readonly eventRepository: IEventRepository,
+        private readonly leadRepository: ILeadRepository,
+    ) {}
 
     async execute({ slug }: RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findBySlug(slug);
@@ -34,7 +34,7 @@ export class ExportLeadByEventSlugService {
             eventId: event.id,
             eventSlug: event.slug,
             eventTitle: event.title,
-            leads
+            leads,
         };
     }
 }

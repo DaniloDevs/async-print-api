@@ -1,12 +1,17 @@
 import dayjs from "dayjs";
 import { createSlug } from "../../utils/create-slug";
-import type { Events, EventsCreateInput, EventsStatus, IEventsRepository } from "../events";
+import type {
+    Event,
+    EventCreateInput,
+    EventStatus,
+    IEventRepository,
+} from "../event";
 
-export class EventsInMemomryRepository implements IEventsRepository {
-    public items: Events[] = [];
+export class EventInMemomryRepository implements IEventRepository {
+    public items: Event[] = [];
 
-    async create(data: EventsCreateInput): Promise<Events> {
-        const events: Events = {
+    async create(data: EventCreateInput): Promise<Event> {
+        const event: Event = {
             id: crypto.randomUUID(),
             title: data.title,
             slug: createSlug(data.title),
@@ -16,44 +21,43 @@ export class EventsInMemomryRepository implements IEventsRepository {
             status: data.status,
         };
 
-        this.items.push(events);
+        this.items.push(event);
 
-        return events;
+        return event;
     }
 
-    async findBySlug(slug: string): Promise<Events | null> {
-        const events = this.items.find((item) => item.slug === slug);
-        return events || null;
+    async findBySlug(slug: string): Promise<Event | null> {
+        const event = this.items.find((item) => item.slug === slug);
+        return event || null;
     }
 
-    async findById(id: string): Promise<Events | null> {
-        const events = this.items.find((item) => item.id === id);
-        return events || null;
+    async findById(id: string): Promise<Event | null> {
+        const event = this.items.find((item) => item.id === id);
+        return event || null;
     }
 
-    async updateBanner(id: string, banner: string): Promise<Events | null> {
-        const events = this.items.find((item) => item.id === id);
+    async updateBanner(id: string, banner: string): Promise<Event | null> {
+        const event = this.items.find((item) => item.id === id);
 
-        if (!events) return null;
+        if (!event) return null;
 
-        events.bannerKey = banner;
-        return events;
+        event.bannerKey = banner;
+        return event;
     }
 
-    async updateStatus(id: string, status: EventsStatus): Promise<Events | null> {
-        const events = this.items.find((item) => item.id === id);
+    async updateStatus(id: string, status: EventStatus): Promise<Event | null> {
+        const event = this.items.find((item) => item.id === id);
 
-        if (!events) return null;
+        if (!event) return null;
 
-        events.status = status;
-        return events;
+        event.status = status;
+        return event;
     }
-    
-    async forceStatus(id: string, status: EventsStatus) {
-        const event = this.items.find(e => e.id === id);
+
+    async forceStatus(id: string, status: EventStatus) {
+        const event = this.items.find((e) => e.id === id);
         if (!event) throw new Error("Event not found");
 
         event.status = status;
     }
-
 }

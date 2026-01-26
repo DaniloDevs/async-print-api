@@ -3,7 +3,7 @@ import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { Events, IEventsRepository } from "../../repository/events";
 import { EventsInMemomryRepository } from "../../repository/in-memory/events-repo";
 import { LeadsInMemomryRepository } from "../../repository/in-memory/leads-repo";
-import type { ILeadsrepository } from "../../repository/leads";
+import type { ILeadsrepository } from "../../repository/lead";
 import { ListLeadsByEventSlug } from "../list-leads-by-event-slug";
 
 describe("List Leads By Event Slug - Service", () => {

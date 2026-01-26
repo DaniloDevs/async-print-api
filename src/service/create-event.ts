@@ -3,21 +3,21 @@ import { EventAlreadyExistsError } from "../_errors/event-already-exist-error";
 import { EventEndBeforeStartError } from "../_errors/event-end-before-start-error";
 import { EventStartDateInPastError } from "../_errors/event-start-date-in-past-error";
 import type {
-    EventsCreateInput,
-    IEventsRepository,
-    Events
+    Event,
+    EventCreateInput,
+    IEventRepository,
 } from "../repository/events";
 import { createSlug } from "../utils/create-slug";
 
-interface RequestDate { 
-    data: EventsCreateInput 
+interface RequestDate {
+    data: EventCreateInput;
 }
 interface ResponseDate {
-    event: Events
+    event: Event;
 }
 
 export class CreateEventService {
-    constructor(private repository: IEventsRepository) { }
+    constructor(private repository: IEventRepository) {}
 
     async execute({ data }: RequestDate): Promise<ResponseDate> {
         const slug = createSlug(data.title);

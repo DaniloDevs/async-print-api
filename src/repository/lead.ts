@@ -20,7 +20,7 @@ const segmentInterest = z.enum([
     "ANO_3_MEDIO",
 ]);
 
-const leads = z.object({
+const lead = z.object({
     id: z.string(),
     name: z.string(),
     phone: z
@@ -58,19 +58,18 @@ const leads = z.object({
     eventId: z.string(),
 });
 
-const leadsCreateInput = leads.omit({
+const leadCreateInput = lead.omit({
     id: true,
     createdAt: true,
 });
 
-export type Leads = z.infer<typeof leads>;
-export type LeadsCreateInput = z.infer<typeof leadsCreateInput>;
+export type Lead = z.infer<typeof lead>;
+export type LeadCreateInput = z.infer<typeof leadCreateInput>;
+export type SegmentInterest = z.infer<typeof segmentInterest>;
+export type TechnicalInterestEnum = z.infer<typeof technicalInterestEnum>;
 
-export interface ILeadsrepository {
-    create(data: LeadsCreateInput): Promise<Leads>;
-    findByEmailAndEventId(
-        email: string,
-        eventId: string,
-    ): Promise<Leads | null>;
-    findManyByEventId(eventId: string): Promise<Leads[]>;
+export interface ILeadRepository {
+    create(data: LeadCreateInput): Promise<Lead>;
+    findByEmailAndEventId(email: string, eventId: string): Promise<Lead | null>;
+    findManyByEventId(eventId: string): Promise<Lead[]>;
 }

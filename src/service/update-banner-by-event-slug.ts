@@ -2,7 +2,7 @@ import path from "node:path";
 import { InvalidFileTypeError } from "../_errors/invalid-file-type-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../provider/storage-provider";
-import type { IEventsRepository } from "../repository/events";
+import type { IEventRepository } from "../repository/events";
 
 interface RequestDate {
     eventId: string;
@@ -16,14 +16,11 @@ interface RequestDate {
 
 export class UpdateBannerByEventSlugService {
     constructor(
-        private eventRepository: IEventsRepository,
+        private eventRepository: IEventRepository,
         private storageProvider: IStorageProvider,
-    ) { }
+    ) {}
 
-    async execute({
-        eventId,
-        file,
-    }: RequestDate): Promise<void> {
+    async execute({ eventId, file }: RequestDate): Promise<void> {
         if (!file.mimetype.startsWith("image/")) {
             throw new InvalidFileTypeError({
                 mimetype: file.mimetype,

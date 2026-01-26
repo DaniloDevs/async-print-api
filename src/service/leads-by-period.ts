@@ -1,28 +1,28 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import type { IEventsRepository } from "../repository/events";
-import type { ILeadsrepository } from "../repository/leads";
+import type { IEventRepository } from "../repository/events";
+import type { ILeadRepository } from "../repository/lead";
 
 dayjs.extend(utc);
 
 interface RequestDate {
-    eventId: string
+    eventId: string;
 }
-interface ResponseDate  {
+interface ResponseDate {
     leads: {
-        hour: string,
-        total: number
-    }[]
+        hour: string;
+        total: number;
+    }[];
 }
 
 export class LeadsByPeriod {
     constructor(
-        private eventRepository: IEventsRepository,
-        private leadsRepository: ILeadsrepository,
+        private eventRepository: IEventRepository,
+        private leadsRepository: ILeadRepository,
     ) {}
 
-    async execute({eventId}:RequestDate): Promise<ResponseDate> {
+    async execute({ eventId }: RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findById(eventId);
 
         if (!event) {
@@ -67,7 +67,7 @@ export class LeadsByPeriod {
             leads: Array.from(buckets.entries()).map(([hour, total]) => ({
                 hour,
                 total,
-            }))
-        }
+            })),
+        };
     }
 }

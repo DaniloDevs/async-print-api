@@ -1,19 +1,19 @@
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../provider/storage-provider";
-import type { Events, IEventsRepository } from "../repository/events";
+import type { Event, IEventRepository } from "../repository/events";
 
 interface RequestDate {
-    slug: string
+    slug: string;
 }
-interface ResponseDate extends Events {
+interface ResponseDate extends Event {
     bannerUrl: string | null;
 }
 
 export class GetEventBySlugService {
     constructor(
-        private readonly eventRepository: IEventsRepository,
+        private readonly eventRepository: IEventRepository,
         private readonly storageProvider: IStorageProvider,
-    ) { }
+    ) {}
 
     async execute({ slug }: RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findBySlug(slug);

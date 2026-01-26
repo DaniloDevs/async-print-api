@@ -14,7 +14,7 @@ import { LeadsInMemomryRepository } from "../../repository/in-memory/leads-repo"
 import type {
     ILeadsrepository,
     LeadsCreateInput,
-} from "../../repository/leads";
+} from "../../repository/lead";
 import { RegisterLeadService } from "../register-lead";
 
 describe("Register Lead - Service", () => {
