@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import type { Lead, LeadCreateInput,ILeadRepository } from "../lead";
+import type { ILeadRepository, Lead, LeadCreateInput } from "../lead";
 
 export class LeadInMemoryRepository implements ILeadRepository {
     public items: Lead[] = [];

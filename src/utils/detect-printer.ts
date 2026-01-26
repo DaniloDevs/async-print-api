@@ -21,7 +21,7 @@ export async function detectPrinter() {
                 console.log(`✓ Impressora encontrada em: ${path}`);
                 return path;
             }
-        } catch (error) {
+        } catch (_error) {
             // Continua tentando
         }
     }

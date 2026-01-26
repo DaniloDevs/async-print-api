@@ -1,7 +1,7 @@
+import path from "node:path";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
-import path from "path";
 import z from "zod";
 import { s3 } from "../../connections/minio";
 import { prisma } from "../../connections/prisma";

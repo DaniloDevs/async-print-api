@@ -4,10 +4,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { InvalidFileTypeError } from "../../_errors/invalid-file-type-error";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../../provider/storage-provider";
-import type { Event } from './../../repository/event';
+import type { Event } from "./../../repository/event";
 import type { IEventRepository } from "../../repository/event";
-import { UpdateBannerByEventSlugService } from "../update-banner-by-event-slug";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
+import { UpdateBannerByEventSlugService } from "../update-banner-by-event-slug";
 
 describe("Update Banner by Event Slug - Service", () => {
     let eventRepository: IEventRepository;

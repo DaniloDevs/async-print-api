@@ -1,5 +1,3 @@
-import { GetObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { type Job, Worker } from "bullmq";
 import type { ThermalPrinter } from "node-thermal-printer";
 import { s3 } from "../connections/minio";

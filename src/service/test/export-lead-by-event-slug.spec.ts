@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type { Event } from './../../repository/event';
+import type { Event } from "./../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import { ExportLeadByEventSlugService } from "../export-lead-by-event-slug";
@@ -53,7 +53,7 @@ describe("Export Lead by Event Slug - Service", () => {
             eventId: event.id,
         });
 
-        const result = await service.execute({slug: event.slug});
+        const result = await service.execute({ slug: event.slug });
 
         expect(result).toEqual({
             eventId: event.id,
@@ -71,7 +71,7 @@ describe("Export Lead by Event Slug - Service", () => {
     });
 
     it("returns empty leads array when event has no leads", async () => {
-        const result = await service.execute({slug: event.slug})
+        const result = await service.execute({ slug: event.slug });
 
         expect(result.leads).toEqual([]);
         expect(leadRepository.findManyByEventId).toHaveBeenCalledWith(event.id);
@@ -79,7 +79,7 @@ describe("Export Lead by Event Slug - Service", () => {
 
     it("throws ResourceNotFoundError when event does not exist", async () => {
         await expect(
-            service.execute({slug: "non-exist"})
+            service.execute({ slug: "non-exist" }),
         ).rejects.toBeInstanceOf(ResourceNotFoundError);
     });
 
@@ -99,7 +99,7 @@ describe("Export Lead by Event Slug - Service", () => {
             });
         }
 
-        const result = await service.execute({slug: event.slug});
+        const result = await service.execute({ slug: event.slug });
 
         expect(result.leads).toHaveLength(leadsCount);
         expect(leadRepository.findManyByEventId).toHaveBeenCalledTimes(1);

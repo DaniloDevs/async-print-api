@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../../provider/storage-provider";
-import type { Event, IEventRepository } from './../../repository/event';
+import type { Event, IEventRepository } from "./../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { GetEventBySlugService } from "../get-event-by-slug";
 
@@ -64,7 +64,9 @@ describe("Get Event By Slug - Service", () => {
             "https://storage.example.com/event-banner.png",
         );
 
-        const { event: getEvent } = await service.execute({ slug: eventWithBanner.slug });
+        const { event: getEvent } = await service.execute({
+            slug: eventWithBanner.slug,
+        });
 
         expect(storageProvider.getPublicUrl).toHaveBeenCalledTimes(1);
         expect(storageProvider.getPublicUrl).toHaveBeenCalledWith(
@@ -79,8 +81,8 @@ describe("Get Event By Slug - Service", () => {
     });
 
     it("should throw ResourceNotFoundError when event does not exist", async () => {
-        await expect(service.execute({ slug: "non-existent-slug" })).rejects.instanceOf(
-            ResourceNotFoundError,
-        );
+        await expect(
+            service.execute({ slug: "non-existent-slug" }),
+        ).rejects.instanceOf(ResourceNotFoundError);
     });
 });

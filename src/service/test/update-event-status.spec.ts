@@ -6,8 +6,6 @@ import type { EventStatus, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { UpdateEventStatusService } from "../update-event-status";
 
-
-
 describe("UpdateEventStatusService", () => {
     let eventRepository: IEventRepository;
     let sut: UpdateEventStatusService;
@@ -35,11 +33,8 @@ describe("UpdateEventStatusService", () => {
         vi.useRealTimers();
     });
 
-
     describe("valid status transitions", () => {
-        it.each<
-            [from: EventStatus, to: EventStatus]
-        >([
+        it.each<[from: EventStatus, to: EventStatus]>([
             ["draft", "active"],
             ["draft", "canceled"],
 
@@ -57,7 +52,10 @@ describe("UpdateEventStatusService", () => {
                 await eventRepository.forceStatus(eventId, from);
             }
 
-            const { event } = await sut.execute({ eventId: eventId, newStatus: to });
+            const { event } = await sut.execute({
+                eventId: eventId,
+                newStatus: to,
+            });
 
             expect(event.status).toBe(to);
 
@@ -67,9 +65,7 @@ describe("UpdateEventStatusService", () => {
     });
 
     describe("invalid status transitions", () => {
-        it.each<
-            [from: EventStatus, to: EventStatus]
-        >([
+        it.each<[from: EventStatus, to: EventStatus]>([
             ["draft", "inactive"],
             ["draft", "finished"],
 
@@ -91,25 +87,26 @@ describe("UpdateEventStatusService", () => {
             }
 
             await expect(
-                sut.execute({ eventId: eventId, newStatus: to })
+                sut.execute({ eventId: eventId, newStatus: to }),
             ).rejects.toBeInstanceOf(InvalidEventStatusTransitionError);
         });
     });
 
-
-
     describe("error cases", () => {
         it("should throw ResourceNotFoundError if event does not exist", async () => {
             await expect(
-                sut.execute({ eventId: "non-existent-id", newStatus: "active" })
+                sut.execute({
+                    eventId: "non-existent-id",
+                    newStatus: "active",
+                }),
             ).rejects.toBeInstanceOf(ResourceNotFoundError);
         });
 
         it("should not allow idempotent transition (same status)", async () => {
-            await sut.execute({ eventId: eventId, newStatus: "active" })
+            await sut.execute({ eventId: eventId, newStatus: "active" });
 
             await expect(
-                sut.execute({ eventId: eventId, newStatus: "active" })
+                sut.execute({ eventId: eventId, newStatus: "active" }),
             ).rejects.toBeInstanceOf(InvalidEventStatusTransitionError);
         });
     });

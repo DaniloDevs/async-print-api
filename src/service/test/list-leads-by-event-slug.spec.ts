@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type { Event } from './../../repository/event';
+import type { Event } from "./../../repository/event";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
@@ -12,7 +12,7 @@ describe("List Leads By Event Slug - Service", () => {
     let eventRepository: IEventRepository;
     let leadsRepository: ILeadRepository;
 
-    let event: Event
+    let event: Event;
 
     beforeEach(async () => {
         eventRepository = new EventInMemoryRepository();

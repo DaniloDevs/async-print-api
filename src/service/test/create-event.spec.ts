@@ -3,7 +3,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EventAlreadyExistsError } from "../../_errors/event-already-exist-error";
 import { EventEndBeforeStartError } from "../../_errors/event-end-before-start-error";
 import { EventStartDateInPastError } from "../../_errors/event-start-date-in-past-error";
-import type { EventCreateInput, IEventRepository } from "../../repository/event";
+import type {
+    EventCreateInput,
+    IEventRepository,
+} from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { createSlug } from "../../utils/create-slug";
 import { CreateEventService } from "../create-event";
@@ -52,7 +55,10 @@ describe("Create Event - Service", () => {
         await sut.execute({ data: eventData });
 
         await expect(
-            Promise.all([sut.execute({ data: eventData }), sut.execute({ data: eventData })]),
+            Promise.all([
+                sut.execute({ data: eventData }),
+                sut.execute({ data: eventData }),
+            ]),
         ).rejects.toBeInstanceOf(EventAlreadyExistsError);
     });
 
@@ -97,7 +103,7 @@ describe("Create Event - Service", () => {
                     bannerKey: null,
                     startAt: start,
                     endsAt: start,
-                }
+                },
             }),
         ).rejects.toBeInstanceOf(EventEndBeforeStartError);
     });

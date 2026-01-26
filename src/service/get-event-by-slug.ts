@@ -8,14 +8,14 @@ interface RequestDate {
 interface ResponseDate {
     event: {
         bannerUrl: string | null;
-    } & Event
+    } & Event;
 }
 
 export class GetEventBySlugService {
     constructor(
         private readonly eventRepository: IEventRepository,
         private readonly storageProvider: IStorageProvider,
-    ) { }
+    ) {}
 
     async execute({ slug }: RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findBySlug(slug);
@@ -36,7 +36,7 @@ export class GetEventBySlugService {
                 ...event,
                 bannerKey: bannerUrl ? event.bannerKey : null,
                 bannerUrl,
-            }
-        }
+            },
+        };
     }
 }

@@ -8,6 +8,6 @@ export function setupPrinter(customPath?: string) {
     return printerPath;
 }
 
-export function getPrinter(path?: string) {
+export function getPrinter(_path?: string) {
     return createPrinter(printerPath);
 }
