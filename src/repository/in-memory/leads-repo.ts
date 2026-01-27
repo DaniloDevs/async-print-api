@@ -1,6 +1,8 @@
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import type { ILeadRepository, Lead, LeadCreateInput } from "../lead";
 
+dayjs.extend(utc);
 export class LeadInMemoryRepository implements ILeadRepository {
     public items: Lead[] = [];
 
@@ -14,7 +16,7 @@ export class LeadInMemoryRepository implements ILeadRepository {
             intendsToStudyNextYear: data.intendsToStudyNextYear,
             technicalInterest: data.technicalInterest,
             segmentInterest: data.segmentInterest,
-            createdAt: dayjs().toDate(),
+            createdAt: dayjs().utc().toDate(),
             eventId: data.eventId,
         };
 

@@ -38,9 +38,9 @@
     * [x] Garantir resposta determinística para o período solicitado
     * [ ] Otimizar para alto volume (pré-agregação)
     * [ ] Garantir latência dentro do limite definido no NFR
-- [] Deve ser possivel obter a media de captura de leads por evento
-    * [ ] Definir e documentar fórmula de cálculo
-    * [ ] Considerar apenas tempo ativo do evento
+- [x] Deve ser possivel obter a media de captura de leads por evento
+    * [x] Definir e documentar fórmula de cálculo
+    * [x] Considerar apenas tempo ativo do evento
 - [] Deve ser possivel obter um resumo consolidado do evento
     * [ ] Calcular total de leads no período do evento
     * [ ] Calcular leads na hora atual

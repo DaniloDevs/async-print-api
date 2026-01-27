@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs, { type Dayjs } from "dayjs";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IEventRepository } from "../repository/event";
 import type { ILeadRepository, Lead } from "../repository/lead";
@@ -7,11 +7,13 @@ interface RequestDate {
     eventId: string;
 }
 interface ResponseDate {
-    average: number;
-    message: string
+    average: number,
+    message: string,
+    status: string,
+    trend: string
 }
 
-export class GetAvarageLeadCaptureRate {
+export class GetAverageLeadCaptureRateService {
     constructor(
         private eventRepository: IEventRepository,
         private leadsRepository: ILeadRepository,
@@ -26,35 +28,87 @@ export class GetAvarageLeadCaptureRate {
                 resource: eventId,
             });
         }
+        
+        let currentDate: Dayjs
 
-        const currentDate = dayjs();
+        if(event.status === "finished") {
+            currentDate = dayjs(event.endsAt).utc();
+        }
+        
+        currentDate = dayjs().utc();
+
         const leads = await this.leadsRepository.findManyByEventId(eventId);
-
+        
         const leadsByPeriod = this.organizeLeadsByPeriod({
-            startEvent: dayjs(event.startAt),
+            startEvent: dayjs(event.startAt).utc(),
             endsEvent: currentDate,
             leads,
         });
-
         const average = this.calculateAverageTotals(leadsByPeriod)
-       
-        // alterador de mensagem com mmbase no average
+        
+        const { rate, message, status, trend } = this.performanceEvaluator(average.toFixed(2))
+
         return {
-            average,
-            message: `Good performance! Average of ${average.toFixed(2)}.`
+            average: rate,
+            message,
+            status,
+            trend
         };
     }
 
 
-    calculateAverageTotals(data: Array<{ hour: string; total: number }>): number {
-        if (data.length === 0) {
-            return 0;
+    performanceEvaluator(average: string) {
+        let status: "poor" | "average" | "strong";
+        let trend: "down" | "stable" | "up";
+        let message: string;
+
+        const rate = Number(average)
+
+        if (rate < 10) {
+            status = "poor";
+            trend = "down";
+            message = "Low lead capture rate. Immediate optimization required.";
+        }
+        else if (rate < 25) {
+            status = "average";
+            trend = "stable";
+            message = "Moderate performance. There is room for improvement.";
+        }
+        else {
+            status = "strong";
+            trend = "up";
+            message = "High lead capture rate. Strong event performance.";
         }
 
-        const totalLead = data.reduce((acc, item) => acc + item.total, 0);
-        const average = totalLead / data.length;
+        return {
+            status,
+            trend,
+            message,
+            rate
+        };
+    }
 
-        return average;
+    calculateAverageTotals(
+        data: Array<{ hour: string; total: number }>
+      ): number {
+        if (!data.length) {
+          return 0;
+        }
+      
+        const totalLeads = data.reduce(
+          (acc, item) => acc + item.total,
+          0
+        );
+      
+        const activeHours = data.filter(item => item.total > 0).length;
+      
+        if (activeHours === 0) {
+          return 0;
+        }
+      
+        const average = totalLeads / activeHours;
+      
+        return Math.round(average);
     }
 
     organizeLeadsByPeriod({
@@ -66,33 +120,32 @@ export class GetAvarageLeadCaptureRate {
         endsEvent: Dayjs;
         leads: Lead[];
     }) {
-        const buckets = new Map<string, number>();
-
-        let cursor = startEvent.startOf("hour");
-
-        while (cursor.isBefore(endsEvent)) {
-            buckets.set(cursor.toISOString(), 0);
-            cursor = cursor.add(1, "hour");
+        const start = startEvent.utc().startOf("hour");
+        const end = endsEvent.utc();
+        
+        const buckets = new Map<number, number>();
+        
+        for (
+            let cursor = start.clone();
+            cursor.isBefore(end);
+            cursor = cursor.add(1, "hour")
+        ) {
+            buckets.set(cursor.valueOf(), 0);
         }
-
+        
         for (const lead of leads) {
             const createdAt = dayjs.utc(lead.createdAt);
-
-            if (
-                !createdAt.isValid() ||
-                createdAt.isBefore(startEvent) ||
-                !createdAt.isBefore(endsEvent)
-            ) {
-                continue;
-            }
-
-            const hour = createdAt.startOf("hour").toISOString();
-            buckets.set(hour, (buckets.get(hour) ?? 0) + 1);
+            if (!createdAt.isValid()) continue;
+        
+            if (createdAt.isBefore(start) || !createdAt.isBefore(end)) continue;
+        
+            const key = createdAt.startOf("hour").valueOf();
+            buckets.set(key, (buckets.get(key) ?? 0) + 1);
         }
-
-        return Array.from(buckets.entries()).map(([hour, total]) => ({
-            hour,
+        
+        return [...buckets.entries()].map(([timestamp, total]) => ({
+            hour: dayjs.utc(timestamp).toISOString(),
             total,
-        }))
+        }));
     }
 }
