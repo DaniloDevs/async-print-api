@@ -60,47 +60,6 @@ A Async Print API fornece:
 - **Qualidade**: Biome (linter/formatter)
 
 
-## 📚 Estrutura do Projeto
-
-```
-src/
-├── routes/              # Endpoints HTTP
-│   ├── events/          # RF1-RF6 (CRUD events, criar/listar leads)
-│   ├── metrics/         # RF8-RF10 (leads por período, taxa média, resumo)
-│   └── printer/         # RF11-RF16 (fila, status, cancelar, reprocessar)
-├── service/             # Lógica de negócio (domínio)
-│   ├── create-event.ts
-│   ├── register-lead.ts
-│   ├── export-lead-by-event-slug.ts
-│   ├── update-banner-by-event-slug.ts
-│   ├── list-leads-by-event-slug.ts
-│   ├── get-event-by-slug.ts
-│   └── update-event-status.ts
-├── repository/          # Acesso a dados (persistência)
-│   ├── event.ts
-│   ├── lead.ts
-│   └── in-memory/       # Fallback para testes
-├── jobs/                # Workers (RF17-RF19)
-│   └── worker.ts
-├── connections/         # Integrações
-│   ├── prisma.ts        # PostgreSQL
-│   ├── queue.ts         # BullMQ
-│   ├── minio.ts         # MinIO
-│   ├── printer.ts       # Impressoras
-│   └── bull-board.ts    # Dashboard
-├── provider/            # Serviços externos
-│   ├── storage-provider.ts
-│   └── minio/
-├── _errors/             # Exceções customizadas
-│   ├── event-not-started-yet-error.ts
-│   ├── event-already-ended-error.ts
-│   ├── lead-already-registered-error.ts
-│   └── ... (mais 5)
-├── env/                 # Configuração
-└── utils/               # Auxiliares
-```
-
----
 
 ## ⚙️ Requisitos Não Funcionais
 
@@ -131,5 +90,5 @@ Veja [TO-DO.md](TO-DO.md) para detalhes de cada requisito funcional (RF1-RF19).
 
 ## 📄 Referências
 
-- [PRD.md](PRD.md) — Produto completo (regras, RF, NFR)
-- [TO-DO.md](TO-DO.md) — Checklist de implementação
+- [PRD.md](documentation/PRD.md) — Produto completo (regras, RF, NFR)
+- [TO-DO.md](documentation/TO-DO.md) — Checklist de implementação
