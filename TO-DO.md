@@ -34,7 +34,7 @@
 
 ### Metrics 
 - [x] Deve ser possivel listar os leads com base no periodo do evento
-    * [x] Implementar consulta de leads por janela de tempo
+    * [] Implementar consulta de leads por janela de tempo
     * [x] Garantir resposta determinística para o período solicitado
     * [ ] Otimizar para alto volume (pré-agregação)
     * [ ] Garantir latência dentro do limite definido no NFR
