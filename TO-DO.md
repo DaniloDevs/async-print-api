@@ -1,31 +1,31 @@
 ## TODO List
 
 ### Event 
-- [] Deve ser possivel criar um evento
-    * [] Validar data/hora de início e fim (início < fim)
-    * [] Gerar slug único e imutável
-    * [] Rejeitar criação inválida com erro apropriado
-- [] Deve ser Possivel buscar um evento pelo Slug
-    * [] Garantir slug imutável após criação
-- [] Deve Ser possivel atualizar o banner do evento
+- [x] Deve ser possivel criar um evento
+    * [x] Validar data/hora de início e fim (início < fim)
+    * [x] Gerar slug único e imutável
+    * [x] Rejeitar criação inválida com erro apropriado
+- [x] Deve ser Possivel buscar um evento pelo Slug
+    * [ ] Garantir slug imutável após criação
+- [x] Deve Ser possivel atualizar o banner do evento
     * [ ] Verificar se evento está ativo ou no futuro
     * [ ] Bloquear atualização se evento estiver encerrado
-- [] Deve ser possivel atualizar o status de um evento
-    * [ ] Implementar operação administrativa de status
+- [x] Deve ser possivel atualizar o status de um evento
+    * [x] Implementar operação administrativa de status
     * [ ] Validar consistência com regra temporal
 
 
 ### Lead 
-- [] Deve ser possivel criar um lead
-    * [ ] Verificar se evento está ativo no momento da criação
+- [x] Deve ser possivel criar um lead
+    * [x] Verificar se evento está ativo no momento da criação
     * [ ] Garantir operação atômica
-- [] Deve ser possivel listar leads de um evento
+- [x] Deve ser possivel listar leads de um evento
     * [ ] Implementar listagem de leads por eventId
     * [ ] Adicionar paginação configurável
     * [ ] Implementar filtros por período
     * [ ] Ordenar resultados por timestamp
     * [ ] Garantir retorno paginado consistente
-- [] Deve ser possivel exportar leads de um evento
+- [x] Deve ser possivel exportar leads de um evento
     * [ ] Rejeitar exportação se evento não tiver leads
     * [ ] Garantir que exportação não bloqueie UI
     * [ ] Implementar criação de job assíncrono de exportação
@@ -33,9 +33,9 @@
 
 
 ### Metrics 
-- [] Deve ser possivel listar os leads com base no periodo do evento
-    * [ ] Implementar consulta de leads por janela de tempo
-    * [ ] Garantir resposta determinística para o período solicitado
+- [x] Deve ser possivel listar os leads com base no periodo do evento
+    * [x] Implementar consulta de leads por janela de tempo
+    * [x] Garantir resposta determinística para o período solicitado
     * [ ] Otimizar para alto volume (pré-agregação)
     * [ ] Garantir latência dentro do limite definido no NFR
 - [] Deve ser possivel obter a media de captura de leads por evento
