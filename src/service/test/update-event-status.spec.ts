@@ -6,7 +6,7 @@ import type { EventStatus, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { UpdateEventStatusService } from "../update-event-status";
 
-describe("UpdateEventStatusService", () => {
+describe("Update Event Status - Service", () => {
     let eventRepository: IEventRepository;
     let sut: UpdateEventStatusService;
     let eventId: string;

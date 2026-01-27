@@ -1,15 +1,15 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type { Event } from "./../../repository/event";
+import type { Event } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
-import { ExportLeadByEventSlugService } from "../export-lead-by-event-slug";
+import { ExportLeadService } from "../export-lead";
 
-describe("Export Lead by Event Slug - Service", () => {
+describe("Export Lead - Service", () => {
     let eventRepository: EventInMemoryRepository;
     let leadRepository: LeadInMemoryRepository;
-    let service: ExportLeadByEventSlugService;
+    let service: ExportLeadService;
 
     let event: Event;
 
@@ -22,10 +22,7 @@ describe("Export Lead by Event Slug - Service", () => {
 
         vi.spyOn(leadRepository, "findManyByEventId");
 
-        service = new ExportLeadByEventSlugService(
-            eventRepository,
-            leadRepository,
-        );
+        service = new ExportLeadService(eventRepository, leadRepository);
 
         event = await eventRepository.create({
             title: "Event Test",

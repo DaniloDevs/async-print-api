@@ -6,7 +6,7 @@ import type {
     Event,
     EventCreateInput,
     IEventRepository,
-} from "../repository/events";
+} from "../repository/event";
 import { createSlug } from "../utils/create-slug";
 
 interface RequestDate {

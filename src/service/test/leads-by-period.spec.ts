@@ -6,10 +6,10 @@ import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
-import { LeadsByPeriod } from "../leads-by-period";
+import { LeadsByPeriodService } from "../leads-by-period";
 
-describe("LeadsByPeriod - Service", () => {
-    let service: LeadsByPeriod;
+describe("Leads By Period - Service", () => {
+    let service: LeadsByPeriodService;
     let eventRepository: IEventRepository;
     let leadsRepository: ILeadRepository;
     let event: Event;
@@ -21,7 +21,7 @@ describe("LeadsByPeriod - Service", () => {
         eventRepository = new EventInMemoryRepository();
         leadsRepository = new LeadInMemoryRepository();
 
-        service = new LeadsByPeriod(eventRepository, leadsRepository);
+        service = new LeadsByPeriodService(eventRepository, leadsRepository);
 
         event = await eventRepository.create({
             title: "Event Test",

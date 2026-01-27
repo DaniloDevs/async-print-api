@@ -2,14 +2,14 @@ import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../../provider/storage-provider";
-import type { Event, IEventRepository } from "./../../repository/event";
+import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
-import { GetEventBySlugService } from "../get-event-by-slug";
+import { GetEventService } from "../get-event";
 
-describe("Get Event By Slug - Service", () => {
+describe("Get Event - Service", () => {
     let eventRepository: IEventRepository;
     let storageProvider: IStorageProvider;
-    let service: GetEventBySlugService;
+    let service: GetEventService;
 
     let event: Event;
 
@@ -24,7 +24,7 @@ describe("Get Event By Slug - Service", () => {
             getPublicUrl: vi.fn(),
         };
 
-        service = new GetEventBySlugService(eventRepository, storageProvider);
+        service = new GetEventService(eventRepository, storageProvider);
 
         event = await eventRepository.create({
             title: "Event Test",

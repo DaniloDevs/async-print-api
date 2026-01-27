@@ -1,10 +1,6 @@
 import { InvalidEventStatusTransitionError } from "../_errors/invalid-event-status-transitions-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import type {
-    Event,
-    EventStatus,
-    IEventRepository,
-} from "../repository/events";
+import type { Event, EventStatus, IEventRepository } from "../repository/event";
 import { allowedTransitions } from "../utils/transitions-events-status";
 
 interface RequestDate {

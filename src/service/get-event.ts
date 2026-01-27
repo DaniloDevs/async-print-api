@@ -11,7 +11,7 @@ interface ResponseDate {
     } & Event;
 }
 
-export class GetEventBySlugService {
+export class GetEventService {
     constructor(
         private readonly eventRepository: IEventRepository,
         private readonly storageProvider: IStorageProvider,

@@ -4,7 +4,7 @@ import { EventNotActiveError } from "../_errors/event-not-active-error";
 import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
 import { LeadAlreadyRegisteredError } from "../_errors/lead-already-registered-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import type { IEventRepository } from "../repository/events";
+import type { IEventRepository } from "../repository/event";
 import type {
     ILeadRepository,
     Lead,
@@ -20,7 +20,7 @@ interface ResponseDate {
     lead: Lead;
 }
 
-export class RegisterLeadService {
+export class CreateLeadService {
     constructor(
         private eventRepository: IEventRepository,
         private leadRepository: ILeadRepository,

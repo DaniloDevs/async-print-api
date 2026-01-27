@@ -7,12 +7,12 @@ import type { IStorageProvider } from "../../provider/storage-provider";
 import type { Event } from "./../../repository/event";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
-import { UpdateBannerByEventSlugService } from "../update-banner-by-event-slug";
+import { UpdateBannerService } from "../update-banner";
 
-describe("Update Banner by Event Slug - Service", () => {
+describe("Update Banner - Service", () => {
     let eventRepository: IEventRepository;
     let storageProvider: IStorageProvider;
-    let service: UpdateBannerByEventSlugService;
+    let service: UpdateBannerService;
 
     let Event: Event;
 
@@ -27,10 +27,7 @@ describe("Update Banner by Event Slug - Service", () => {
             getPublicUrl: vi.fn(),
         };
 
-        service = new UpdateBannerByEventSlugService(
-            eventRepository,
-            storageProvider,
-        );
+        service = new UpdateBannerService(eventRepository, storageProvider);
 
         Event = await eventRepository.create({
             title: "Event Test",

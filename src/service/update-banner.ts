@@ -2,7 +2,7 @@ import path from "node:path";
 import { InvalidFileTypeError } from "../_errors/invalid-file-type-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../provider/storage-provider";
-import type { IEventRepository } from "../repository/events";
+import type { IEventRepository } from "../repository/event";
 
 interface RequestDate {
     eventId: string;
@@ -14,7 +14,7 @@ interface RequestDate {
 }
 // interface ResponseDate {}
 
-export class UpdateBannerByEventSlugService {
+export class UpdateBannerService {
     constructor(
         private eventRepository: IEventRepository,
         private storageProvider: IStorageProvider,

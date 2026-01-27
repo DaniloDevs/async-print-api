@@ -12,12 +12,12 @@ import type {
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository, LeadCreateInput } from "../../repository/lead";
-import { RegisterLeadService } from "../register-lead";
+import { CreateLeadService } from "../create-lead";
 
-describe("Register Lead - Service", () => {
+describe("Create Lead - Service", () => {
     let eventRepository: IEventRepository;
     let leadRepository: ILeadRepository;
-    let service: RegisterLeadService;
+    let service: CreateLeadService;
 
     const eventInput: EventCreateInput = {
         title: "Event Test",
@@ -44,7 +44,7 @@ describe("Register Lead - Service", () => {
 
         eventRepository = new EventInMemoryRepository();
         leadRepository = new LeadInMemoryRepository();
-        service = new RegisterLeadService(eventRepository, leadRepository);
+        service = new CreateLeadService(eventRepository, leadRepository);
     });
 
     afterEach(() => {

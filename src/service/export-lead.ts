@@ -1,5 +1,5 @@
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import type { IEventRepository } from "../repository/events";
+import type { IEventRepository } from "../repository/event";
 import type { ILeadRepository, Lead } from "../repository/lead";
 
 interface RequestDate {
@@ -12,7 +12,7 @@ interface ResponseDate {
     leads: Lead[];
 }
 
-export class ExportLeadByEventSlugService {
+export class ExportLeadService {
     constructor(
         private readonly eventRepository: IEventRepository,
         private readonly leadRepository: ILeadRepository,
