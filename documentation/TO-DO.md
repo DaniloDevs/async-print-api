@@ -41,10 +41,10 @@
 - [x] Deve ser possivel obter a media de captura de leads por evento
     * [x] Definir e documentar fórmula de cálculo
     * [x] Considerar apenas tempo ativo do evento
-- [] Deve ser possivel obter um resumo consolidado do evento
-    * [ ] Calcular total de leads no período do evento
-    * [ ] Calcular leads na hora atual
-    * [ ] Calcular status do evento (ativo/encerrado)
+- [x] Deve ser possivel obter um resumo consolidado do evento
+    * [x] Calcular total de leads no período do evento
+    * [x] Calcular leads na hora atual
+    * [x] Calcular status do evento (ativo/encerrado)
 - [] Deve ser possivel listar o total de leads agrupados por origem
     * [ ] Retornar contagem total de leads por origem
     * [ ] Adicionar paginação configurável
@@ -88,7 +88,7 @@
 ### JOB
 - [] Deve ser possivel fazer o processamento de jobs por um workers
     * [ ] Implementar workers assíncronos
-    * [ ] Controlar concorrência por tipo de job
+    * [ ] Controlar concorrência por tipo de jobu
     * [ ] Tornar limite configurável
     * [ ] Expor métricas de sucesso e falha
 - [] Deve ser possivel pausar / retormar Jobs
