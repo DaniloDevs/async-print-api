@@ -10,7 +10,6 @@ import type {
     Lead,
     LeadCreateInput,
 } from "../repository/lead";
-import { normalizePhoneToDDNumber } from "../utils/normalize-phone-to-ddnumber";
 
 interface RequestDate {
     eventId: string;
@@ -24,7 +23,7 @@ export class CreateLeadService {
     constructor(
         private eventRepository: IEventRepository,
         private leadRepository: ILeadRepository,
-    ) {}
+    ) { }
 
     async execute({ data, eventId }: RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findById(eventId);
@@ -60,7 +59,7 @@ export class CreateLeadService {
             throw new LeadAlreadyRegisteredError(data.email, eventId);
         }
 
-        const formattedPhoneNumber = normalizePhoneToDDNumber(data.phone);
+        const formattedPhoneNumber = this.normalizePhoneNumber(data.phone);
 
         const lead = await this.leadRepository.create({
             ...data,
@@ -69,5 +68,32 @@ export class CreateLeadService {
         });
 
         return { lead };
+    }
+
+    normalizePhoneNumber(phone: string): string {
+        // Remove tudo que não for número
+        const digits = phone.replace(/\D/g, "");
+
+        // Valida tamanho (10 para fixo, 11 para celular)
+        if (digits.length < 10 || digits.length > 11) {
+            throw new Error("Telefone deve ter 10 ou 11 dígitos");
+        }
+
+        // Valida DDD
+        const ddd = digits.slice(0, 2);
+        const dddNumber = Number(ddd);
+        if (dddNumber < 11 || dddNumber > 99) {
+            throw new Error("DDD inválido");
+        }
+
+        const number = digits.slice(2);
+
+        // Valida celular com 9 dígitos (deve começar com 9)
+        if (number.length === 9 && number[0] !== "9") {
+            throw new Error("Celular deve começar com 9");
+        }
+
+        // Retorna no formato internacional
+        return `+55${ddd}${number}`;
     }
 }

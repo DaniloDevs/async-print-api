@@ -44,6 +44,7 @@ export class GetLeadCaptureMetricsService {
             endsEvent: currentDate,
             leads,
         });
+        
         const average = this.calculateAverageTotals(leadsByPeriod)
         
         const { rate, message, status, trend } = this.performanceEvaluator(average.toFixed(2))

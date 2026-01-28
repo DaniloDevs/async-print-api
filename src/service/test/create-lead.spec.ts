@@ -12,7 +12,6 @@ import type {
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository, LeadCreateInput } from "../../repository/lead";
-import { normalizePhoneToDDNumber } from "../../utils/normalize-phone-to-ddnumber";
 import { CreateLeadService } from "../create-lead";
 
 
@@ -77,7 +76,7 @@ describe("Create Lead (Service)", () => {
                 eventId: event.id,
             });
 
-            const normalizedPhoneNumber = normalizePhoneToDDNumber(leadInput.phone)
+            const normalizedPhoneNumber = sut.normalizePhoneNumber(leadInput.phone)
 
             expect(lead.phone).toBe(normalizedPhoneNumber);
         });

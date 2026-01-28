@@ -1,8 +1,8 @@
-import dayjs from "dayjs";
+import dayjs, { type Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IEventRepository } from "../repository/event";
-import type { ILeadRepository } from "../repository/lead";
+import type { ILeadRepository, Lead } from "../repository/lead";
 
 dayjs.extend(utc);
 
@@ -20,7 +20,7 @@ export class ListEventLeadsByPeriodService {
     constructor(
         private eventRepository: IEventRepository,
         private leadsRepository: ILeadRepository,
-    ) {}
+    ) { }
 
     async execute({ eventId }: RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findById(eventId);
@@ -37,37 +37,54 @@ export class ListEventLeadsByPeriodService {
 
         const leads = await this.leadsRepository.findManyByEventId(eventId);
 
-        //Começo
-        const buckets = new Map<string, number>();
+        const leadsByPeriod = this.organizeLeadsByPeriod({
+            startEvent,
+            endsEvent,
+            leads
+        });
 
-        let cursor = startEvent.startOf("hour");
 
-        while (cursor.isBefore(endsEvent)) {
-            buckets.set(cursor.toISOString(), 0);
-            cursor = cursor.add(1, "hour");
+        return {
+            leads: leadsByPeriod
+        }
+    }
+
+
+    organizeLeadsByPeriod({
+        startEvent,
+        endsEvent,
+        leads,
+    }: {
+        startEvent: Dayjs;
+        endsEvent: Dayjs;
+        leads: Lead[];
+    }) {
+        const start = startEvent.utc().startOf("hour");
+        const end = endsEvent.utc();
+
+        const buckets = new Map<number, number>();
+
+        for (
+            let cursor = start.clone();
+            cursor.isBefore(end);
+            cursor = cursor.add(1, "hour")
+        ) {
+            buckets.set(cursor.valueOf(), 0);
         }
 
         for (const lead of leads) {
             const createdAt = dayjs.utc(lead.createdAt);
+            if (!createdAt.isValid()) continue;
 
-            if (
-                !createdAt.isValid() ||
-                createdAt.isBefore(startEvent) ||
-                !createdAt.isBefore(endsEvent)
-            ) {
-                continue;
-            }
+            if (createdAt.isBefore(start) || !createdAt.isBefore(end)) continue;
 
-            const hour = createdAt.startOf("hour").toISOString();
-            buckets.set(hour, (buckets.get(hour) ?? 0) + 1);
+            const key = createdAt.startOf("hour").valueOf();
+            buckets.set(key, (buckets.get(key) ?? 0) + 1);
         }
 
-        // 3. saída ordenada e explícita
-        return {
-            leads: Array.from(buckets.entries()).map(([hour, total]) => ({
-                hour,
-                total,
-            })),
-        };
+        return [...buckets.entries()].map(([timestamp, total]) => ({
+            hour: dayjs.utc(timestamp).toISOString(),
+            total,
+        }));
     }
 }
