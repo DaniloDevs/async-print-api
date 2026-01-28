@@ -15,7 +15,7 @@ describe("Update event Banner (Service)", () => {
     let sut: UpdateEventBannerService;
     let Event: Event;
 
-    const NOW = dayjs('2024-01-01T12:00:00Z');
+    const NOW = dayjs("2024-01-01T12:00:00Z");
 
     beforeEach(async () => {
         vi.useFakeTimers();
@@ -34,7 +34,7 @@ describe("Update event Banner (Service)", () => {
             bannerKey: null,
             status: "active",
             startAt: NOW.toDate(),
-            endsAt: NOW.add(10, 'hour').toDate(),
+            endsAt: NOW.add(10, "hour").toDate(),
         });
     });
 
@@ -59,7 +59,7 @@ describe("Update event Banner (Service)", () => {
                 buffer: Buffer.from("fake-image"),
                 filename: "banner.png",
                 mimetype: "image/png",
-            }
+            };
 
             await sut.execute({
                 eventId: event?.id as string,

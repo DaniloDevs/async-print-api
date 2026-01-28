@@ -12,7 +12,7 @@ describe("Export event Lead (Service)", () => {
     let sut: ExportEventLeadsService;
     let event: Event;
 
-    const NOW = dayjs('2024-01-01T12:00:00Z');
+    const NOW = dayjs("2024-01-01T12:00:00Z");
 
     beforeEach(async () => {
         vi.useFakeTimers();
@@ -36,11 +36,10 @@ describe("Export event Lead (Service)", () => {
         vi.useRealTimers();
     });
 
-
     describe("Successful cases", () => {
         it(" should be possible to export leads from an event.", async () => {
             const leadsCount = 5;
-    
+
             for (let i = 0; i < leadsCount; i++) {
                 await leadRepository.create({
                     name: `Lead ${i}`,
@@ -53,23 +52,23 @@ describe("Export event Lead (Service)", () => {
                     eventId: event.id,
                 });
             }
-    
+
             const result = await sut.execute({ slug: event.slug });
-    
+
             expect(result.leads).toHaveLength(leadsCount);
         });
 
         it("should be possible to return an empty list of leads from an event.", async () => {
             const result = await sut.execute({ slug: event.slug });
-    
+
             expect(result.leads).toEqual([]);
         });
-    })
+    });
     describe("Error cases", () => {
         it("should not be possible to export leads from an non-existent event.", async () => {
             await expect(
                 sut.execute({ slug: "non-exist" }),
             ).rejects.toBeInstanceOf(ResourceNotFoundError);
         });
-    })
+    });
 });

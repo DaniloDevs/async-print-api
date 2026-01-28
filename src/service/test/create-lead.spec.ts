@@ -14,21 +14,19 @@ import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository, LeadCreateInput } from "../../repository/lead";
 import { CreateLeadService } from "../create-lead";
 
-
-
 describe("Create Lead (Service)", () => {
     let eventRepository: IEventRepository;
     let leadRepository: ILeadRepository;
     let sut: CreateLeadService;
 
-    const NOW = dayjs('2024-01-01T12:00:00Z');
+    const NOW = dayjs("2024-01-01T12:00:00Z");
 
     const eventInput: EventCreateInput = {
         title: "Event Test",
         bannerKey: null,
         status: "active",
         startAt: NOW.toDate(),
-        endsAt: NOW.add(10, 'hour').toDate(),
+        endsAt: NOW.add(10, "hour").toDate(),
     };
 
     const leadInput: LeadCreateInput = {
@@ -55,7 +53,6 @@ describe("Create Lead (Service)", () => {
         vi.useRealTimers();
     });
 
-
     describe("Successful cases", () => {
         it("should be able create lead", async () => {
             const event = await eventRepository.create(eventInput);
@@ -76,11 +73,13 @@ describe("Create Lead (Service)", () => {
                 eventId: event.id,
             });
 
-            const normalizedPhoneNumber = sut.normalizePhoneNumber(leadInput.phone)
+            const normalizedPhoneNumber = sut.normalizePhoneNumber(
+                leadInput.phone,
+            );
 
             expect(lead.phone).toBe(normalizedPhoneNumber);
         });
-    })
+    });
 
     describe("Error cases", () => {
         it("should not be possible to create a lead for an event that doesn't exist.", async () => {
@@ -110,7 +109,7 @@ describe("Create Lead (Service)", () => {
                 ...eventInput,
             });
 
-            vi.setSystemTime(NOW.subtract(2, 'day').toDate());
+            vi.setSystemTime(NOW.subtract(2, "day").toDate());
             await expect(() =>
                 sut.execute({
                     data: { ...leadInput, eventId: event.id },
@@ -122,7 +121,7 @@ describe("Create Lead (Service)", () => {
         it("should not be possible to create a lead in an event that has ended.", async () => {
             const event = await eventRepository.create(eventInput);
 
-            vi.setSystemTime(NOW.add(2, 'day').toDate());
+            vi.setSystemTime(NOW.add(2, "day").toDate());
             await expect(() =>
                 sut.execute({
                     data: { ...leadInput, eventId: event.id },
@@ -145,8 +144,8 @@ describe("Create Lead (Service)", () => {
                         data: { ...leadInput, eventId: event.id },
                         eventId: event.id,
                     }),
-                ])
+                ]),
             ).rejects.toBeInstanceOf(LeadAlreadyRegisteredError);
         });
-    })
+    });
 });

@@ -11,7 +11,7 @@ describe("Update Event Status (Service)", () => {
     let sut: UpdateEventStatusService;
     let eventId: string;
 
-    const NOW = dayjs('2024-01-01T12:00:00Z');
+    const NOW = dayjs("2024-01-01T12:00:00Z");
 
     beforeEach(async () => {
         vi.useFakeTimers();
@@ -25,7 +25,7 @@ describe("Update Event Status (Service)", () => {
             status: "draft",
             bannerKey: null,
             startAt: NOW.toDate(),
-            endsAt: NOW.add(10,'hour').toDate(),
+            endsAt: NOW.add(10, "hour").toDate(),
         });
 
         eventId = event.id;
@@ -65,8 +65,7 @@ describe("Update Event Status (Service)", () => {
                 expect(persisted?.status).toBe(to);
             });
         });
-    })
-
+    });
 
     describe("error cases", () => {
         it.each<[from: EventStatus, to: EventStatus]>([

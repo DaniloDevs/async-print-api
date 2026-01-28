@@ -1,23 +1,23 @@
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { IEventRepository } from "../repository/event";
-import { ILeadRepository, Lead } from "../repository/lead";
+import type { IEventRepository } from "../repository/event";
+import type { ILeadRepository, Lead } from "../repository/lead";
 
 interface RequestDate {
     eventId: string;
 }
 interface ResponseDate {
     technical: {
-        technical: string,
-        total: number
-        interestNewyear: number
-    }[]
+        technical: string;
+        total: number;
+        interestNewyear: number;
+    }[];
 }
 
 export class GetLeadMetricsByTechnical {
     constructor(
         private eventRepository: IEventRepository,
         private leadsRepository: ILeadRepository,
-    ) { }
+    ) {}
 
     async execute({ eventId }: RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findById(eventId);
@@ -31,24 +31,28 @@ export class GetLeadMetricsByTechnical {
 
         const leads = await this.leadsRepository.findManyByEventId(eventId);
 
-        const metrics = this.calculateMetricsByTechnical(leads)
+        const metrics = this.calculateMetricsByTechnical(leads);
 
         return {
-            technical: metrics.map(metric => ({
-                technical: metric.technical,
-                total: metric.totalLeads,
-                interestNewyear: metric.leadsWithIntentNextYear,
-            })).sort((a, b) => b.total - a.total)
-        }
-
+            technical: metrics
+                .map((metric) => ({
+                    technical: metric.technical,
+                    total: metric.totalLeads,
+                    interestNewyear: metric.leadsWithIntentNextYear,
+                }))
+                .sort((a, b) => b.total - a.total),
+        };
     }
 
     calculateMetricsByTechnical(leads: Lead[]) {
-        const groups: Record<string, {
-            technical: string;
-            totalLeads: number;
-            leadsWithIntentNextYear: number;
-        }> = {};
+        const groups: Record<
+            string,
+            {
+                technical: string;
+                totalLeads: number;
+                leadsWithIntentNextYear: number;
+            }
+        > = {};
 
         for (const lead of leads) {
             const technical = lead.technicalInterest;
@@ -68,6 +72,6 @@ export class GetLeadMetricsByTechnical {
             }
         }
 
-        return Object.values(groups)
+        return Object.values(groups);
     }
 }

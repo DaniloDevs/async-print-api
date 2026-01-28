@@ -11,7 +11,7 @@ describe("Get Event (Service)", () => {
     let storageProvider: IStorageProvider;
     let sut: GetEventService;
 
-    const NOW = dayjs('2024-01-01T12:00:00Z');
+    const NOW = dayjs("2024-01-01T12:00:00Z");
 
     beforeEach(async () => {
         vi.useFakeTimers();
@@ -39,9 +39,8 @@ describe("Get Event (Service)", () => {
                 bannerKey: null,
                 status: "active",
                 startAt: NOW.toDate(),
-                endsAt: NOW.add(10, 'hour').toDate(),
+                endsAt: NOW.add(10, "hour").toDate(),
             });
-
 
             const { event } = await sut.execute({ slug: eventMock.slug });
 
@@ -59,7 +58,7 @@ describe("Get Event (Service)", () => {
                 bannerKey: "event-banner.png",
                 status: "active",
                 startAt: dayjs().toDate(),
-                endsAt: dayjs().add(10, 'hour').toDate(),
+                endsAt: dayjs().add(10, "hour").toDate(),
             });
 
             vi.spyOn(storageProvider, "getPublicUrl").mockResolvedValue(

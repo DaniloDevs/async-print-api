@@ -1,8 +1,7 @@
 import dayjs from "dayjs";
 import { beforeEach, describe, expect, it } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type { Event } from "../../repository/event";
-import type { IEventRepository } from "../../repository/event";
+import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
@@ -14,7 +13,7 @@ describe("List event leads (Service)", () => {
     let leadsRepository: ILeadRepository;
     let event: Event;
 
-    const NOW = dayjs('2024-01-01T12:00:00Z');
+    const NOW = dayjs("2024-01-01T12:00:00Z");
 
     beforeEach(async () => {
         eventRepository = new EventInMemoryRepository();
@@ -27,11 +26,11 @@ describe("List event leads (Service)", () => {
             bannerKey: null,
             status: "active",
             startAt: NOW.toDate(),
-            endsAt: NOW.add(10, 'hour').toDate(),
+            endsAt: NOW.add(10, "hour").toDate(),
         });
     });
 
-    describe('Successful cases', () => {
+    describe("Successful cases", () => {
         it("should be possible to list leads from an event.", async () => {
             const leadsCount = 5;
 
@@ -59,13 +58,13 @@ describe("List event leads (Service)", () => {
 
             expect(leads).toEqual([]);
         });
-    })
+    });
 
-    describe('Error cases', () => {
+    describe("Error cases", () => {
         it("should not be possible to list leads for an event that does not exist", async () => {
             await expect(
                 sut.execute({ slug: "non-existent-slug" }),
             ).rejects.toBeInstanceOf(ResourceNotFoundError);
         });
-    })
+    });
 });

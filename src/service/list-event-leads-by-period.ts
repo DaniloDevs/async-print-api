@@ -20,7 +20,7 @@ export class ListEventLeadsByPeriodService {
     constructor(
         private eventRepository: IEventRepository,
         private leadsRepository: ILeadRepository,
-    ) { }
+    ) {}
 
     async execute({ eventId }: RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findById(eventId);
@@ -40,15 +40,13 @@ export class ListEventLeadsByPeriodService {
         const leadsByPeriod = this.organizeLeadsByPeriod({
             startEvent,
             endsEvent,
-            leads
+            leads,
         });
 
-
         return {
-            leads: leadsByPeriod
-        }
+            leads: leadsByPeriod,
+        };
     }
-
 
     organizeLeadsByPeriod({
         startEvent,

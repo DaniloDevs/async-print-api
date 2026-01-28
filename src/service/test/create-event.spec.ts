@@ -15,7 +15,7 @@ describe("Create Event (Service)", () => {
     let eventRepository: IEventRepository;
     let sut: CreateEventService;
 
-    const NOW = dayjs('2024-01-01T12:00:00Z');
+    const NOW = dayjs("2024-01-01T12:00:00Z");
 
     beforeEach(() => {
         vi.useFakeTimers();
@@ -29,7 +29,6 @@ describe("Create Event (Service)", () => {
         vi.useRealTimers();
     });
 
-
     describe("Successful cases", () => {
         it("should be able to create a new event", async () => {
             const eventData: EventCreateInput = {
@@ -37,7 +36,7 @@ describe("Create Event (Service)", () => {
                 status: "draft",
                 bannerKey: null,
                 startAt: NOW.toDate(),
-                endsAt: NOW.add(5, 'hour').toDate(),
+                endsAt: NOW.add(5, "hour").toDate(),
             };
 
             const { event } = await sut.execute({ data: eventData });
@@ -68,7 +67,7 @@ describe("Create Event (Service)", () => {
                 status: "draft",
                 bannerKey: null,
                 startAt: NOW.toDate(),
-                endsAt: NOW.add(5, 'hour').toDate(),
+                endsAt: NOW.add(5, "hour").toDate(),
             };
 
             const { event } = await sut.execute({ data: eventData });
@@ -76,7 +75,7 @@ describe("Create Event (Service)", () => {
             expect(event.id).toEqual(expect.any(String));
             expect(event.startAt).toEqual(eventData.startAt);
         });
-    })
+    });
 
     describe("Error cases", () => {
         it("should not be able to create an event with duplicated slug", async () => {
@@ -104,9 +103,9 @@ describe("Create Event (Service)", () => {
                 endsAt: dayjs().add(1, "day").toDate(),
             };
 
-            await expect(sut.execute({ data: eventData })).rejects.toBeInstanceOf(
-                EventStartDateInPastError,
-            );
+            await expect(
+                sut.execute({ data: eventData }),
+            ).rejects.toBeInstanceOf(EventStartDateInPastError);
         });
 
         it("should not be able to create an event that ends before it starts", async () => {
@@ -117,12 +116,12 @@ describe("Create Event (Service)", () => {
                 status: "draft",
                 bannerKey: null,
                 startAt: startDate.toDate(),
-                endsAt: NOW.subtract(5, 'hour').toDate(),
+                endsAt: NOW.subtract(5, "hour").toDate(),
             };
 
-            await expect(sut.execute({ data: eventData })).rejects.toBeInstanceOf(
-                EventEndBeforeStartError,
-            );
+            await expect(
+                sut.execute({ data: eventData }),
+            ).rejects.toBeInstanceOf(EventEndBeforeStartError);
         });
 
         it("should not allow end date equal to start date", async () => {
@@ -138,6 +137,5 @@ describe("Create Event (Service)", () => {
                 }),
             ).rejects.toBeInstanceOf(EventEndBeforeStartError);
         });
-    })
-
+    });
 });

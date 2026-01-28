@@ -7,17 +7,17 @@ interface RequestDate {
 }
 interface ResponseDate {
     segments: {
-        segment: string,
-        total: number
-        interestNewyear: number
-    }[]
+        segment: string;
+        total: number;
+        interestNewyear: number;
+    }[];
 }
 
 export class GetLeadMetricsBySegment {
     constructor(
         private eventRepository: IEventRepository,
         private leadsRepository: ILeadRepository,
-    ) { }
+    ) {}
 
     async execute({ eventId }: RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findById(eventId);
@@ -31,24 +31,28 @@ export class GetLeadMetricsBySegment {
 
         const leads = await this.leadsRepository.findManyByEventId(eventId);
 
-        const metrics = this.calculateMetricsBySegment(leads)
+        const metrics = this.calculateMetricsBySegment(leads);
 
         return {
-            segments: metrics.map(metric => ({
-                segment: metric.segment,
-                total: metric.totalLeads,
-                interestNewyear: metric.leadsWithIntentNextYear,
-            })).sort((a, b) => b.total - a.total)
-        }
-
+            segments: metrics
+                .map((metric) => ({
+                    segment: metric.segment,
+                    total: metric.totalLeads,
+                    interestNewyear: metric.leadsWithIntentNextYear,
+                }))
+                .sort((a, b) => b.total - a.total),
+        };
     }
 
     calculateMetricsBySegment(leads: Lead[]) {
-        const groups: Record<string, {
-            segment: string;
-            totalLeads: number;
-            leadsWithIntentNextYear: number;
-        }> = {};
+        const groups: Record<
+            string,
+            {
+                segment: string;
+                totalLeads: number;
+                leadsWithIntentNextYear: number;
+            }
+        > = {};
 
         for (const lead of leads) {
             const segment = lead.segmentInterest;
@@ -68,6 +72,6 @@ export class GetLeadMetricsBySegment {
             }
         }
 
-        return Object.values(groups)
+        return Object.values(groups);
     }
 }
