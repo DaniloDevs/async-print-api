@@ -2,20 +2,20 @@ import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../../provider/storage-provider";
-import type { Event, IEventRepository } from "../../repository/event";
+import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { GetEventService } from "../get-event";
 
-describe("Get Event - Service", () => {
+describe("Get Event (Service)", () => {
     let eventRepository: IEventRepository;
     let storageProvider: IStorageProvider;
-    let service: GetEventService;
+    let sut: GetEventService;
 
-    let event: Event;
+    const NOW = dayjs('2024-01-01T12:00:00Z');
 
     beforeEach(async () => {
         vi.useFakeTimers();
-        vi.setSystemTime(dayjs("2021-01-25").toDate());
+        vi.setSystemTime(NOW.toDate());
 
         eventRepository = new EventInMemoryRepository();
 
@@ -24,15 +24,7 @@ describe("Get Event - Service", () => {
             getPublicUrl: vi.fn(),
         };
 
-        service = new GetEventService(eventRepository, storageProvider);
-
-        event = await eventRepository.create({
-            title: "Event Test",
-            bannerKey: null,
-            status: "active",
-            startAt: dayjs("2021-01-25").toDate(),
-            endsAt: dayjs("2021-01-25").add(3, "day").toDate(),
-        });
+        sut = new GetEventService(eventRepository, storageProvider);
     });
 
     afterEach(() => {
@@ -40,49 +32,62 @@ describe("Get Event - Service", () => {
         vi.clearAllMocks();
     });
 
-    it("should be able to get an event by slug without banner", async () => {
-        const { event: getEvent } = await service.execute({ slug: event.slug });
+    describe("Successful cases", () => {
+        it("should be possible to catch an event without banner key.", async () => {
+            const eventMock = await eventRepository.create({
+                title: "Event Test",
+                bannerKey: null,
+                status: "active",
+                startAt: NOW.toDate(),
+                endsAt: NOW.add(10, 'hour').toDate(),
+            });
 
-        expect(storageProvider.getPublicUrl).not.toHaveBeenCalled();
-        expect(getEvent).toEqual({
-            ...event,
-            bannerUrl: null,
-            bannerKey: null,
+
+            const { event } = await sut.execute({ slug: eventMock.slug });
+
+            expect(storageProvider.getPublicUrl).not.toHaveBeenCalled();
+            expect(event).toEqual({
+                ...eventMock,
+                bannerUrl: null,
+                bannerKey: null,
+            });
+        });
+
+        it("should be possible to capture an event with bannerKey.", async () => {
+            const eventMock = await eventRepository.create({
+                title: "Event Test",
+                bannerKey: "event-banner.png",
+                status: "active",
+                startAt: dayjs().toDate(),
+                endsAt: dayjs().add(10, 'hour').toDate(),
+            });
+
+            vi.spyOn(storageProvider, "getPublicUrl").mockResolvedValue(
+                "https://storage.example.com/event-banner.png",
+            );
+
+            const { event } = await sut.execute({
+                slug: eventMock.slug,
+            });
+
+            expect(storageProvider.getPublicUrl).toHaveBeenCalledTimes(1);
+            expect(storageProvider.getPublicUrl).toHaveBeenCalledWith(
+                "event-banner.png",
+            );
+
+            expect(event).toEqual({
+                ...eventMock,
+                bannerUrl: "https://storage.example.com/event-banner.png",
+                bannerKey: "event-banner.png",
+            });
         });
     });
 
-    it("should return resolved bannerUrl when event has bannerKey", async () => {
-        const eventWithBanner = await eventRepository.create({
-            title: "Event With Banner",
-            bannerKey: "event-banner.png",
-            status: "active",
-            startAt: dayjs("2021-01-25").toDate(),
-            endsAt: dayjs("2021-01-25").add(3, "day").toDate(),
+    describe("Error cases", () => {
+        it("hould not be possible to catch an event that does not exist.", async () => {
+            await expect(
+                sut.execute({ slug: "non-existent-slug" }),
+            ).rejects.instanceOf(ResourceNotFoundError);
         });
-
-        vi.spyOn(storageProvider, "getPublicUrl").mockResolvedValue(
-            "https://storage.example.com/event-banner.png",
-        );
-
-        const { event: getEvent } = await service.execute({
-            slug: eventWithBanner.slug,
-        });
-
-        expect(storageProvider.getPublicUrl).toHaveBeenCalledTimes(1);
-        expect(storageProvider.getPublicUrl).toHaveBeenCalledWith(
-            "event-banner.png",
-        );
-
-        expect(getEvent).toEqual({
-            ...eventWithBanner,
-            bannerUrl: "https://storage.example.com/event-banner.png",
-            bannerKey: "event-banner.png",
-        });
-    });
-
-    it("should throw ResourceNotFoundError when event does not exist", async () => {
-        await expect(
-            service.execute({ slug: "non-existent-slug" }),
-        ).rejects.instanceOf(ResourceNotFoundError);
     });
 });

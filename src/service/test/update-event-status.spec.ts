@@ -6,14 +6,16 @@ import type { EventStatus, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { UpdateEventStatusService } from "../update-event-status";
 
-describe("Update Event Status - Service", () => {
+describe("Update Event Status (Service)", () => {
     let eventRepository: IEventRepository;
     let sut: UpdateEventStatusService;
     let eventId: string;
 
+    const NOW = dayjs('2024-01-01T12:00:00Z');
+
     beforeEach(async () => {
         vi.useFakeTimers();
-        vi.setSystemTime(dayjs("2025-01-01T10:00:00Z").toDate());
+        vi.setSystemTime(NOW.toDate());
 
         eventRepository = new EventInMemoryRepository();
         sut = new UpdateEventStatusService(eventRepository);
@@ -22,8 +24,8 @@ describe("Update Event Status - Service", () => {
             title: "Evento Teste",
             status: "draft",
             bannerKey: null,
-            startAt: dayjs().add(7, "day").toDate(),
-            endsAt: dayjs().add(7, "day").add(10, "hour").toDate(),
+            startAt: NOW.toDate(),
+            endsAt: NOW.add(10,'hour').toDate(),
         });
 
         eventId = event.id;
@@ -32,39 +34,41 @@ describe("Update Event Status - Service", () => {
     afterEach(() => {
         vi.useRealTimers();
     });
+    describe("Successful cases", () => {
+        describe("valid status transitions", () => {
+            it.each<[from: EventStatus, to: EventStatus]>([
+                ["draft", "active"],
+                ["draft", "canceled"],
 
-    describe("valid status transitions", () => {
-        it.each<[from: EventStatus, to: EventStatus]>([
-            ["draft", "active"],
-            ["draft", "canceled"],
+                ["active", "finished"],
+                ["active", "canceled"],
+                ["active", "inactive"],
 
-            ["active", "finished"],
-            ["active", "canceled"],
-            ["active", "inactive"],
+                ["inactive", "active"],
+                ["inactive", "finished"],
+                ["inactive", "canceled"],
 
-            ["inactive", "active"],
-            ["inactive", "finished"],
-            ["inactive", "canceled"],
+                ["finished", "canceled"],
+            ])("should allow %s → %s", async (from, to) => {
+                if (from !== "draft") {
+                    await eventRepository.forceStatus(eventId, from);
+                }
 
-            ["finished", "canceled"],
-        ])("should allow %s → %s", async (from, to) => {
-            if (from !== "draft") {
-                await eventRepository.forceStatus(eventId, from);
-            }
+                const { event } = await sut.execute({
+                    eventId: eventId,
+                    newStatus: to,
+                });
 
-            const { event } = await sut.execute({
-                eventId: eventId,
-                newStatus: to,
+                expect(event.status).toBe(to);
+
+                const persisted = await eventRepository.findById(eventId);
+                expect(persisted?.status).toBe(to);
             });
-
-            expect(event.status).toBe(to);
-
-            const persisted = await eventRepository.findById(eventId);
-            expect(persisted?.status).toBe(to);
         });
-    });
+    })
 
-    describe("invalid status transitions", () => {
+
+    describe("error cases", () => {
         it.each<[from: EventStatus, to: EventStatus]>([
             ["draft", "inactive"],
             ["draft", "finished"],
@@ -90,9 +94,7 @@ describe("Update Event Status - Service", () => {
                 sut.execute({ eventId: eventId, newStatus: to }),
             ).rejects.toBeInstanceOf(InvalidEventStatusTransitionError);
         });
-    });
 
-    describe("error cases", () => {
         it("should throw ResourceNotFoundError if event does not exist", async () => {
             await expect(
                 sut.execute({

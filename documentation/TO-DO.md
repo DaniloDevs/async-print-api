@@ -5,6 +5,7 @@
     * [x] Validar data/hora de início e fim (início < fim)
     * [x] Gerar slug único e imutável
     * [x] Rejeitar criação inválida com erro apropriado
+    * [ ] Bloquear a criação de eventos muitos curtos
 - [x] Deve ser Possivel buscar um evento pelo Slug
     * [ ] Garantir slug imutável após criação
 - [x] Deve Ser possivel atualizar o banner do evento

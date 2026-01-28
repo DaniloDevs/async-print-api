@@ -8,27 +8,29 @@ import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
 import { LeadsByPeriodService } from "../leads-by-period";
 
-describe("Leads By Period - Service", () => {
-    let service: LeadsByPeriodService;
+describe("Leads By Period (Service)", () => {
+    let sut: LeadsByPeriodService;
     let eventRepository: IEventRepository;
     let leadsRepository: ILeadRepository;
     let event: Event;
 
+    const NOW = dayjs('2024-01-01T12:00:00Z');
+
     beforeEach(async () => {
         vi.useFakeTimers();
-        vi.setSystemTime(dayjs("2021-01-25").toDate());
+        vi.setSystemTime(NOW.toDate());
 
         eventRepository = new EventInMemoryRepository();
         leadsRepository = new LeadInMemoryRepository();
 
-        service = new LeadsByPeriodService(eventRepository, leadsRepository);
+        sut = new LeadsByPeriodService(eventRepository, leadsRepository);
 
         event = await eventRepository.create({
             title: "Event Test",
             bannerKey: null,
             status: "active",
-            startAt: new Date("2021-01-25T10:00:00Z"),
-            endsAt: new Date("2021-01-25T13:00:00Z"),
+            startAt: NOW.toDate(),
+            endsAt: NOW.add(3, 'hour').toDate(),
         });
 
         afterEach(() => {
@@ -36,67 +38,51 @@ describe("Leads By Period - Service", () => {
         });
     });
 
-    it("should group leads by hour within the event period", async () => {
-        vi.setSystemTime(new Date("2021-01-25T10:10:00Z"));
-        await leadsRepository.create({
-            name: "Lead 1",
-            phone: "21900000001",
-            email: "lead1@email.com",
-            isStudent: true,
-            intendsToStudyNextYear: true,
-            technicalInterest: "INF",
-            segmentInterest: "ANO_1_MEDIO",
-            eventId: event.id,
+    describe("Successful cases", () => {
+        it("should be possible to calculate the number of leads per period.", async () => {
+            for (let ii = 0; ii < 3; ii++) {
+                vi.setSystemTime(NOW.add(ii, 'h').toDate());
+
+                for (let i = 0; i < 3; i++) {
+                    await leadsRepository.create({
+                        name: `Lead ${i}`,
+                        phone: `217000000${i}`,
+                        email: `leads${i}@email.com`,
+                        isStudent: true,
+                        intendsToStudyNextYear: true,
+                        technicalInterest: "INF",
+                        segmentInterest: "ANO_1_MEDIO",
+                        eventId: event.id,
+                    });
+                }
+            }
+
+            const result = await sut.execute({ eventId: event.id });
+
+            expect(result.leads).toEqual([
+                { hour: "2024-01-01T12:00:00.000Z", total: 3 },
+                { hour: "2024-01-01T13:00:00.000Z", total: 3 },
+                { hour: "2024-01-01T14:00:00.000Z", total: 3 },
+            ]);
         });
 
-        // Lead 2 - 10:40
-        vi.setSystemTime(new Date("2021-01-25T10:40:00Z"));
-        await leadsRepository.create({
-            name: "Lead 2",
-            phone: "21900000002",
-            email: "lead2@email.com",
-            isStudent: true,
-            intendsToStudyNextYear: true,
-            technicalInterest: "INF",
-            segmentInterest: "ANO_1_MEDIO",
-            eventId: event.id,
+        it("It should be possible to return zero when there are no metrics.", async () => {
+            const result = await sut.execute({ eventId: event.id });
+
+            expect(result.leads).toEqual([
+                { hour: "2024-01-01T12:00:00.000Z", total: 0 },
+                { hour: "2024-01-01T13:00:00.000Z", total: 0 },
+                { hour: "2024-01-01T14:00:00.000Z", total: 0 },
+            ]);
         });
-
-        // Lead 3 - 11:15
-        vi.setSystemTime(new Date("2021-01-25T11:15:00Z"));
-        await leadsRepository.create({
-            name: "Lead 3",
-            phone: "21900000003",
-            email: "lead3@email.com",
-            isStudent: true,
-            intendsToStudyNextYear: true,
-            technicalInterest: "INF",
-            segmentInterest: "ANO_1_MEDIO",
-            eventId: event.id,
-        });
-
-        const result = await service.execute({ eventId: event.id });
-
-        expect(result.leads).toEqual([
-            { hour: "2021-01-25T10:00:00.000Z", total: 2 },
-            { hour: "2021-01-25T11:00:00.000Z", total: 1 },
-            { hour: "2021-01-25T12:00:00.000Z", total: 0 },
-        ]);
     });
 
-    it("should return zeroed buckets when no leads exist", async () => {
-        const result = await service.execute({ eventId: event.id });
 
-        expect(result.leads).toEqual([
-            { hour: "2021-01-25T10:00:00.000Z", total: 0 },
-            { hour: "2021-01-25T11:00:00.000Z", total: 0 },
-            { hour: "2021-01-25T12:00:00.000Z", total: 0 },
-        ]);
-    });
-
-    it("should throw ResourceNotFoundError if event does not exist", async () => {
-        await expect(
-            service.execute({ eventId: "non-existent-id" }),
-        ).rejects.toBeInstanceOf(ResourceNotFoundError);
+    describe("Error cases", () => {
+        it("should not be possible to calculate metrics for an event that does not exist.", async () => {
+            await expect(
+                sut.execute({ eventId: "non-existent-id" }),
+            ).rejects.toBeInstanceOf(ResourceNotFoundError);
+        });
     });
 });

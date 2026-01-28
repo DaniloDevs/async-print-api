@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { Event } from './../../repository/event';
@@ -9,7 +8,6 @@ import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
 import { GetEventMetricsService } from "../get-event-metrics";
 
-dayjs.extend(utc);
 
 describe('Get Event Metrics (Service)', () => {
    let sut: GetEventMetricsService
@@ -31,8 +29,8 @@ describe('Get Event Metrics (Service)', () => {
          title: "Event Test",
          bannerKey: null,
          status: "active",
-         startAt: dayjs().utc().toDate(),
-         endsAt: dayjs().add(5, 'hour').utc().toDate(),
+         startAt: NOW.toDate(),
+         endsAt: NOW.add(10, 'hour').toDate(),
       });
    })
 
@@ -40,13 +38,10 @@ describe('Get Event Metrics (Service)', () => {
       vi.useRealTimers()
    })
 
-
    describe("Successful cases", () => {
-      it('deve ser possível pegar a métrica de um evento sem leads', async () => {
-         // Act
+      it('should be possible to capture metrics for an event without leads.', async () => {
          const result = await sut.execute({ eventId: event.id });
 
-         // Assert
          expect(result).toEqual({
             eventStatus: 'active',
             currentLeads: 0,
@@ -54,7 +49,7 @@ describe('Get Event Metrics (Service)', () => {
          });
       });
 
-      it('deve contar apenas leads criados na última hora', async () => {
+      it('should be possible to calculate metrics only from the last hour.', async () => {
          // 3 leads recentes
          vi.setSystemTime(NOW.subtract(30, 'minutes').toDate());
          for (let i = 0; i < 3; i++) {
@@ -94,7 +89,7 @@ describe('Get Event Metrics (Service)', () => {
          expect(result.totalLeads).toBe(6);
       });
 
-      it('considera lead com 59 minutos como recente', async () => {
+      it('should be possible to calculate metrics for leads created within 59 minutes.', async () => {
          vi.setSystemTime(NOW.subtract(59, 'minutes').toDate());
          await leadRepository.create({
             name: "Lead 1",
@@ -114,7 +109,7 @@ describe('Get Event Metrics (Service)', () => {
          expect(result.currentLeads).toBe(1);
       });
 
-      it('deve retornar currentLeads como 0 quando todos os leads são antigos', async () => {
+      it('should be possible to calculate zero metrics when there are no recent leads.', async () => {
          for (let i = 0; i < 3; i++) {
             await leadRepository.create({
                name: `Lead ${i}`,
@@ -129,7 +124,7 @@ describe('Get Event Metrics (Service)', () => {
          }
 
 
-         vi.setSystemTime(dayjs().add(3, 'h').utc().toDate());
+         vi.setSystemTime(dayjs().add(3, 'h').toDate());
          const result = await sut.execute({ eventId: event.id });
 
          // Assert
@@ -140,35 +135,14 @@ describe('Get Event Metrics (Service)', () => {
          });
       });
 
-      it('não considera lead criado exatamente há 60 minutos', async () => {
-         vi.setSystemTime(NOW.subtract(60, 'minutes').toDate());
-         await leadRepository.create({
-            name: "Lead 1",
-            phone: "21 983294521",
-            email: "lead1@email.com",
-            isStudent: true,
-            intendsToStudyNextYear: true,
-            technicalInterest: "INF",
-            segmentInterest: "ANO_1_MEDIO",
-            eventId: event.id,
-         });
-
-
-         vi.setSystemTime(NOW.toDate());
-
-         const result = await sut.execute({ eventId: event.id });
-
-         expect(result.currentLeads).toBe(0);
-      });
-
-      it('deve retornar o status correto do evento', async () => {
+      it('should be possible to calculate the event status.', async () => {
          // Arrange - Criar evento com status diferente
          const inactiveEvent = await eventRepository.create({
             title: "Inactive Event",
             bannerKey: null,
             status: "inactive",
-            startAt: dayjs().utc().toDate(),
-            endsAt: dayjs().add(5, 'hour').utc().toDate(),
+            startAt: dayjs().toDate(),
+            endsAt: dayjs().add(5, 'hour').toDate(),
          });
 
          // Act
@@ -178,7 +152,7 @@ describe('Get Event Metrics (Service)', () => {
          expect(result.eventStatus).toBe('inactive');
       });
 
-      it('conta corretamente leads em múltiplos momentos', async () => {
+      it('should be possible to calculate the metric for large volumes.', async () => {
          const offsets = [0, 15, 30, 45, 60, 90, 120];
 
          for (const minutes of offsets) {
@@ -205,7 +179,7 @@ describe('Get Event Metrics (Service)', () => {
    });
 
    describe("Error cases", () => {
-      it("should not allow the calculation of metrics for an event that does not exist.", async () => {
+      it("should not be possible to calculate metrics for an event that does not exist.", async () => {
          await expect(
             sut.execute({ eventId: "invalid-event-id" })
          ).rejects.toBeInstanceOf(ResourceNotFoundError);

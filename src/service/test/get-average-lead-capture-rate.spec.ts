@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { Event } from './../../repository/event';
@@ -9,17 +8,18 @@ import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
 import { GetAverageLeadCaptureRateService } from "../get-average-lead-capture-rate";
 
-dayjs.extend(utc);
 
-describe('Get Average lead capture rate - Service', () => {
+describe('Get Average lead capture rate (Service)', () => {
    let sut: GetAverageLeadCaptureRateService
    let eventRepository: IEventRepository
    let leadRepository: ILeadRepository
    let event: Event
 
+   const NOW = dayjs('2024-01-01T12:00:00Z');
+
    beforeEach(async () => {
       vi.useFakeTimers();
-      vi.setSystemTime(dayjs("2021-01-27T08:00:00Z").utc().utc().toDate());
+      vi.setSystemTime(NOW.toDate());
 
       eventRepository = new EventInMemoryRepository()
       leadRepository = new LeadInMemoryRepository()
@@ -29,8 +29,8 @@ describe('Get Average lead capture rate - Service', () => {
          title: "Event Test",
          bannerKey: null,
          status: "active",
-         startAt: dayjs().utc().toDate(),
-         endsAt: dayjs().add(5, 'hour').utc().toDate(),
+         startAt: NOW.toDate(),
+         endsAt: NOW.add(10,'hour').toDate(),
       });
    })
 
@@ -40,10 +40,10 @@ describe('Get Average lead capture rate - Service', () => {
 
 
    describe("Successful cases", () => {
-      it("should be possible to calculate the average number of leads per hour for the event.", async () => {
-       
+      it("should be able to calculate the average number of leads per hour for the event.", async () => {
+
          for (let ii = 0; ii < 2; ii++) {
-            vi.setSystemTime(dayjs().add(ii,'h').utc().toDate());
+            vi.setSystemTime(NOW.add(ii, 'h').toDate());
 
             for (let i = 0; i < 5; i++) {
                await leadRepository.create({
@@ -55,10 +55,9 @@ describe('Get Average lead capture rate - Service', () => {
                   technicalInterest: "INF",
                   segmentInterest: "ANO_1_MEDIO",
                   eventId: event.id,
-              });
+               });
             }
          }
-
 
          const result = await sut.execute({ eventId: event.id });
 
@@ -67,9 +66,9 @@ describe('Get Average lead capture rate - Service', () => {
          expect(result.trend).toBe("down");
       });
 
-      it("You must correctly calculate the average after two days of the event.", async () => {
+      it("It should be able to calculate the average two days after the event.", async () => {
          for (let ii = 0; ii < 4; ii++) {
-            vi.setSystemTime(dayjs().add(ii,'h').utc().toDate());
+            vi.setSystemTime(NOW.add(ii, 'h').toDate());
 
             for (let i = 0; i < 2; i++) {
                await leadRepository.create({
@@ -81,22 +80,21 @@ describe('Get Average lead capture rate - Service', () => {
                   technicalInterest: "INF",
                   segmentInterest: "ANO_1_MEDIO",
                   eventId: event.id,
-              });
+               });
             }
          }
 
-         vi.setSystemTime(dayjs().add(1,'d').utc().toDate());
+         vi.setSystemTime(NOW.add(2, 'd').toDate());
 
          const result = await sut.execute({ eventId: event.id });
 
-         // 48 leads / 48 horas = 1
          expect(result.average).toBe(2);
          expect(result.status).toBe("poor");
       });
 
-      it("should return low metrics when the average is less than 10.", async () => {
+      it("should be able to return low metrics when the average is less than 10.", async () => {
          for (let ii = 0; ii < 4; ii++) {
-            vi.setSystemTime(dayjs().add(ii,'h').utc().toDate());
+            vi.setSystemTime(NOW.add(ii, 'h').toDate());
 
             for (let i = 0; i < Math.floor(5); i++) {
                await leadRepository.create({
@@ -108,7 +106,7 @@ describe('Get Average lead capture rate - Service', () => {
                   technicalInterest: "INF",
                   segmentInterest: "ANO_1_MEDIO",
                   eventId: event.id,
-              });
+               });
             }
          }
 
@@ -121,7 +119,7 @@ describe('Get Average lead capture rate - Service', () => {
       it("should return stable metrics when the average is between 10 and 25.", async () => {
 
          for (let ii = 0; ii < 4; ii++) {
-            vi.setSystemTime(dayjs().add(ii,'h').utc().toDate());
+            vi.setSystemTime(NOW.add(ii, 'h').toDate());
 
             for (let i = 0; i < Math.floor(10); i++) {
                await leadRepository.create({
@@ -133,7 +131,7 @@ describe('Get Average lead capture rate - Service', () => {
                   technicalInterest: "INF",
                   segmentInterest: "ANO_1_MEDIO",
                   eventId: event.id,
-              });
+               });
             }
          }
 
@@ -148,7 +146,7 @@ describe('Get Average lead capture rate - Service', () => {
       it("should return strong metrics when the average is greater than 25.", async () => {
 
          for (let ii = 0; ii < 4; ii++) {
-            vi.setSystemTime(dayjs().add(ii,'h').utc().toDate());
+            vi.setSystemTime(NOW.add(ii, 'h').toDate());
 
             for (let i = 0; i < Math.floor(25); i++) {
                await leadRepository.create({
@@ -160,7 +158,7 @@ describe('Get Average lead capture rate - Service', () => {
                   technicalInterest: "INF",
                   segmentInterest: "ANO_1_MEDIO",
                   eventId: event.id,
-              });
+               });
             }
          }
 
@@ -173,7 +171,7 @@ describe('Get Average lead capture rate - Service', () => {
    });
 
    describe("Error cases", () => {
-      it("should not allow the calculation of metrics for an event that does not exist.", async () => {
+      it("should not be possible to allow the calculation of metrics for an event that does not exist.", async () => {
          await expect(
             sut.execute({ eventId: "invalid-event-id" })
          ).rejects.toBeInstanceOf(ResourceNotFoundError);
