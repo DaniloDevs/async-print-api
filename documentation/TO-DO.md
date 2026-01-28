@@ -6,7 +6,6 @@
     * [x] Gerar slug único e imutável
     * [x] Rejeitar criação inválida com erro apropriado
 - [x] Deve ser Possivel buscar um evento pelo Slug
-    * [ ] Garantir slug imutável após criação
 - [x] Deve Ser possivel atualizar o banner do evento
     * [ ] Verificar se evento está ativo ou no futuro
     * [ ] Bloquear atualização se evento estiver encerrado
@@ -34,7 +33,7 @@
 
 
 ### Metrics 
-- [x] Deve ser possivel listar os leads com base no periodo do evento
+- [x] Deve ser possivel calcular o total de leads por hora
     * [] Implementar consulta de leads por janela de tempo
     * [x] Garantir resposta determinística para o período solicitado
     * [ ] Otimizar para alto volume (pré-agregação)
@@ -52,9 +51,9 @@
 - [x] Deve ser possivel calcular o total de leads agrupados por turma 
     * [x] Retornar contagem total de leads por turma
     * [x] Ordenar resultados por contagem (descendente)
-- [] Deve ser possivel calcular o total de leads agrupados por tecnico
-    * [ ] Retornar contagem total de leads por turma
-    * [ ] Ordenar resultados por contagem (descendente)
+- [x] Deve ser possivel calcular o total de leads agrupados por tecnico
+    * [x] Retornar contagem total de leads por turma
+    * [x] Ordenar resultados por contagem (descendente)
 
 
 ### Printer
