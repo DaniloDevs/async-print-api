@@ -7,7 +7,6 @@
     * [x] Rejeitar criação inválida com erro apropriado
     * [ ] Bloquear a criação de eventos muitos curtos
 - [x] Deve ser Possivel buscar um evento pelo Slug
-    * [ ] Garantir slug imutável após criação
 - [x] Deve Ser possivel atualizar o banner do evento
     * [ ] Verificar se evento está ativo ou no futuro
     * [ ] Bloquear atualização se evento estiver encerrado
@@ -25,6 +24,7 @@
     * [ ] Adicionar paginação configurável
     * [ ] Implementar filtros por período
     * [ ] Ordenar resultados por timestamp
+    * [ ] Ordenar resultados por interesse
     * [ ] Garantir retorno paginado consistente
 - [x] Deve ser possivel exportar leads de um evento
     * [ ] Rejeitar exportação se evento não tiver leads
@@ -34,7 +34,7 @@
 
 
 ### Metrics 
-- [x] Deve ser possivel listar os leads com base no periodo do evento
+- [x] Deve ser possivel calcular o total de leads por hora
     * [] Implementar consulta de leads por janela de tempo
     * [x] Garantir resposta determinística para o período solicitado
     * [ ] Otimizar para alto volume (pré-agregação)
@@ -48,14 +48,13 @@
     * [x] Calcular status do evento (ativo/encerrado)
 - [] Deve ser possivel listar o total de leads agrupados por origem
     * [ ] Retornar contagem total de leads por origem
-    * [ ] Adicionar paginação configurável
-    * [ ] Suportar filtros por período (data inicial/final)
     * [ ] Ordenar resultados por contagem (descendente)
-- [] Deve ser possivel listar o total de leads agrupados por turma de interesse
-    * [ ] Retornar contagem total de leads por turma
-    * [ ] Adicionar paginação configurável
-    * [ ] Suportar filtros por período (data inicial/final)
-    * [ ] Ordenar resultados por contagem (descendente)
+- [x] Deve ser possivel calcular o total de leads agrupados por turma 
+    * [x] Retornar contagem total de leads por turma
+    * [x] Ordenar resultados por contagem (descendente)
+- [x] Deve ser possivel calcular o total de leads agrupados por tecnico
+    * [x] Retornar contagem total de leads por turma
+    * [x] Ordenar resultados por contagem (descendente)
 
 
 ### Printer
