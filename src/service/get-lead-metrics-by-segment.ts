@@ -1,6 +1,6 @@
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { IEventRepository } from "../repository/event";
-import { ILeadRepository, Lead, SegmentInterest } from "../repository/lead";
+import type { IEventRepository } from "../repository/event";
+import type { ILeadRepository, Lead } from "../repository/lead";
 
 interface RequestDate {
     eventId: string;

@@ -66,7 +66,7 @@ const leadCreateInput = lead.omit({
 export type Lead = z.infer<typeof lead>;
 export type LeadCreateInput = z.infer<typeof leadCreateInput>;
 export type SegmentInterest = z.infer<typeof segmentInterest>;
-export type TechnicalInterestEnum = z.infer<typeof technicalInterestEnum>;
+export type TechnicalInterest = z.infer<typeof technicalInterestEnum>;
 
 export interface ILeadRepository {
     create(data: LeadCreateInput): Promise<Lead>;
