@@ -24,6 +24,7 @@
     * [ ] Adicionar paginação configurável
     * [ ] Implementar filtros por período
     * [ ] Ordenar resultados por timestamp
+    * [ ] Ordenar resultados por interesse
     * [ ] Garantir retorno paginado consistente
 - [x] Deve ser possivel exportar leads de um evento
     * [ ] Rejeitar exportação se evento não tiver leads
@@ -45,15 +46,14 @@
     * [ ] Calcular total de leads no período do evento
     * [ ] Calcular leads na hora atual
     * [ ] Calcular status do evento (ativo/encerrado)
-- [] Deve ser possivel listar o total de leads agrupados por origem
+- [] Deve ser possivel calcular o total de leads agrupados por origem
     * [ ] Retornar contagem total de leads por origem
-    * [ ] Adicionar paginação configurável
-    * [ ] Suportar filtros por período (data inicial/final)
     * [ ] Ordenar resultados por contagem (descendente)
-- [] Deve ser possivel listar o total de leads agrupados por turma de interesse
+- [x] Deve ser possivel calcular o total de leads agrupados por turma 
+    * [x] Retornar contagem total de leads por turma
+    * [x] Ordenar resultados por contagem (descendente)
+- [] Deve ser possivel calcular o total de leads agrupados por tecnico
     * [ ] Retornar contagem total de leads por turma
-    * [ ] Adicionar paginação configurável
-    * [ ] Suportar filtros por período (data inicial/final)
     * [ ] Ordenar resultados por contagem (descendente)
 
 
