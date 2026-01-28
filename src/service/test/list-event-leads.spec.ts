@@ -1,15 +1,15 @@
 import dayjs from "dayjs";
 import { beforeEach, describe, expect, it } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type { Event } from "./../../repository/event";
+import type { Event } from "../../repository/event";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
-import { ListLeadsService } from "../list-leads";
+import { ListEventLeadsService } from "../list-event-leads";
 
-describe("List Leads (Service)", () => {
-    let sut: ListLeadsService;
+describe("List event leads (Service)", () => {
+    let sut: ListEventLeadsService;
     let eventRepository: IEventRepository;
     let leadsRepository: ILeadRepository;
     let event: Event;
@@ -20,7 +20,7 @@ describe("List Leads (Service)", () => {
         eventRepository = new EventInMemoryRepository();
         leadsRepository = new LeadInMemoryRepository();
 
-        sut = new ListLeadsService(eventRepository, leadsRepository);
+        sut = new ListEventLeadsService(eventRepository, leadsRepository);
 
         event = await eventRepository.create({
             title: "Event Test",

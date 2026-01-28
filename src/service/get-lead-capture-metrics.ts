@@ -13,7 +13,7 @@ interface ResponseDate {
     trend: string
 }
 
-export class GetAverageLeadCaptureRateService {
+export class GetLeadCaptureMetricsService {
     constructor(
         private eventRepository: IEventRepository,
         private leadsRepository: ILeadRepository,

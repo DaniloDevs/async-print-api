@@ -4,12 +4,12 @@ import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { Event } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
-import { ExportLeadService } from "../export-lead";
+import { ExportEventLeadsService } from "../export-event-leads";
 
-describe("Export Lead (Service)", () => {
+describe("Export event Lead (Service)", () => {
     let eventRepository: EventInMemoryRepository;
     let leadRepository: LeadInMemoryRepository;
-    let sut: ExportLeadService;
+    let sut: ExportEventLeadsService;
     let event: Event;
 
     const NOW = dayjs('2024-01-01T12:00:00Z');
@@ -21,7 +21,7 @@ describe("Export Lead (Service)", () => {
         eventRepository = new EventInMemoryRepository();
         leadRepository = new LeadInMemoryRepository();
 
-        sut = new ExportLeadService(eventRepository, leadRepository);
+        sut = new ExportEventLeadsService(eventRepository, leadRepository);
 
         event = await eventRepository.create({
             title: "Event Test",

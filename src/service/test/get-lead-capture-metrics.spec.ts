@@ -1,16 +1,16 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type { Event } from './../../repository/event';
+import type { Event } from '../../repository/event';
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
-import { GetAverageLeadCaptureRateService } from "../get-average-lead-capture-rate";
+import { GetLeadCaptureMetricsService } from "../get-lead-capture-metrics";
 
 
-describe('Get Average lead capture rate (Service)', () => {
-   let sut: GetAverageLeadCaptureRateService
+describe('Get lead capture metrics (Service)', () => {
+   let sut: GetLeadCaptureMetricsService
    let eventRepository: IEventRepository
    let leadRepository: ILeadRepository
    let event: Event
@@ -23,7 +23,7 @@ describe('Get Average lead capture rate (Service)', () => {
 
       eventRepository = new EventInMemoryRepository()
       leadRepository = new LeadInMemoryRepository()
-      sut = new GetAverageLeadCaptureRateService(eventRepository, leadRepository)
+      sut = new GetLeadCaptureMetricsService(eventRepository, leadRepository)
 
       event = await eventRepository.create({
          title: "Event Test",

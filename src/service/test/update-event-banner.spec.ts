@@ -7,12 +7,12 @@ import type { IStorageProvider } from "../../provider/storage-provider";
 import type { Event } from "./../../repository/event";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
-import { UpdateBannerService } from "../update-banner";
+import { UpdateEventBannerService } from "../update-event-banner";
 
-describe("Update Banner (Service)", () => {
+describe("Update event Banner (Service)", () => {
     let eventRepository: IEventRepository;
     let storageProvider: IStorageProvider;
-    let sut: UpdateBannerService;
+    let sut: UpdateEventBannerService;
     let Event: Event;
 
     const NOW = dayjs('2024-01-01T12:00:00Z');
@@ -27,7 +27,7 @@ describe("Update Banner (Service)", () => {
             getPublicUrl: vi.fn(),
         };
 
-        sut = new UpdateBannerService(eventRepository, storageProvider);
+        sut = new UpdateEventBannerService(eventRepository, storageProvider);
 
         Event = await eventRepository.create({
             title: "Event Test",

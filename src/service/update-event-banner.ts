@@ -12,9 +12,8 @@ interface RequestDate {
         mimetype: string;
     };
 }
-// interface ResponseDate {}
 
-export class UpdateBannerService {
+export class UpdateEventBannerService {
     constructor(
         private eventRepository: IEventRepository,
         private storageProvider: IStorageProvider,

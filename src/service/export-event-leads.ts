@@ -12,7 +12,7 @@ interface ResponseDate {
     leads: Lead[];
 }
 
-export class ExportLeadService {
+export class ExportEventLeadsService {
     constructor(
         private readonly eventRepository: IEventRepository,
         private readonly leadRepository: ILeadRepository,

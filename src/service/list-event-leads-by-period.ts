@@ -16,7 +16,7 @@ interface ResponseDate {
     }[];
 }
 
-export class LeadsByPeriodService {
+export class ListEventLeadsByPeriodService {
     constructor(
         private eventRepository: IEventRepository,
         private leadsRepository: ILeadRepository,
