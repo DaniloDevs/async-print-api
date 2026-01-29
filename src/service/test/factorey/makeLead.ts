@@ -18,7 +18,7 @@ type MakeLeadOverrides = Partial<{
 
 export function makeLead(overrides: MakeLeadOverrides = {}) {
     return {
-        name: "Lead",
+        name: "Danilo Ribeiro Pinho",
         phone: "21999999999",
         email: "lead@email.com",
         isStudent: true,

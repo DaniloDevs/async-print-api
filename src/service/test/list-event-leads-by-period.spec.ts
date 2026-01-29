@@ -6,6 +6,8 @@ import { EventInMemoryRepository } from "../../repository/in-memory/events-repo"
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
 import { ListEventLeadsByPeriodService } from "../list-event-leads-by-period";
+import { makeEvent } from "./factorey/makeEvent";
+import { makeLead } from "./factorey/makeLead";
 
 describe("List event leads by period (Service)", () => {
     let sut: ListEventLeadsByPeriodService;
@@ -27,13 +29,10 @@ describe("List event leads by period (Service)", () => {
             leadsRepository,
         );
 
-        event = await eventRepository.create({
-            title: "Event Test",
-            bannerKey: null,
-            status: "active",
+        event = await eventRepository.create(makeEvent({
             startAt: NOW.toDate(),
             endsAt: NOW.add(3, "hour").toDate(),
-        });
+        }));
 
         afterEach(() => {
             vi.useRealTimers();
@@ -46,17 +45,12 @@ describe("List event leads by period (Service)", () => {
                 vi.setSystemTime(NOW.add(ii, "h").toDate());
 
                 for (let i = 0; i < 3; i++) {
-                    await leadsRepository.create({
+                    await leadsRepository.create(makeLead({
                         name: `Lead ${i}`,
                         phone: `217000000${i}`,
                         email: `leads${i}@email.com`,
-                        isStudent: true,
-                        intendsToStudyNextYear: true,
-                        technicalInterest: "INF",
-                        segmentInterest: "ANO_1_MEDIO",
                         eventId: event.id,
-                          origen: "manual"
-                    });
+                    }));
                 }
             }
 

@@ -13,6 +13,8 @@ import { EventInMemoryRepository } from "../../repository/in-memory/events-repo"
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository, LeadCreateInput } from "../../repository/lead";
 import { CreateLeadService } from "../create-lead";
+import { makeEvent } from "./factorey/makeEvent";
+import { makeLead } from "./factorey/makeLead";
 
 describe("Create Lead (Service)", () => {
     let eventRepository: IEventRepository;
@@ -21,25 +23,8 @@ describe("Create Lead (Service)", () => {
 
     const NOW = dayjs("2024-01-01T12:00:00Z");
 
-    const eventInput: EventCreateInput = {
-        title: "Event Test",
-        bannerKey: null,
-        status: "active",
-        startAt: NOW.toDate(),
-        endsAt: NOW.add(10, "hour").toDate(),
-    };
-
-    const leadInput: LeadCreateInput = {
-        name: "Danilo Ribeiro Pinho",
-        phone: "21 983294521",
-        email: "yuri.sena@loidecriativo.com.br",
-        isStudent: true,
-        intendsToStudyNextYear: true,
-        technicalInterest: "INF",
-        segmentInterest: "ANO_1_MEDIO",
-              origen: "manual",
-        eventId: "",
-    };
+const eventInput = makeEvent()
+const leadInput = makeLead()
 
     beforeEach(() => {
         vi.useFakeTimers();

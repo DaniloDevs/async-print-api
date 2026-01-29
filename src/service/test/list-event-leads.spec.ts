@@ -6,6 +6,8 @@ import { EventInMemoryRepository } from "../../repository/in-memory/events-repo"
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
 import { ListEventLeadsService } from "../list-event-leads";
+import { makeEvent } from "./factorey/makeEvent";
+import { makeLead } from "./factorey/makeLead";
 
 describe("List event leads (Service)", () => {
     let sut: ListEventLeadsService;
@@ -21,13 +23,10 @@ describe("List event leads (Service)", () => {
 
         sut = new ListEventLeadsService(eventRepository, leadsRepository);
 
-        event = await eventRepository.create({
-            title: "Event Test",
-            bannerKey: null,
-            status: "active",
+        event = await eventRepository.create(makeEvent({
             startAt: NOW.toDate(),
             endsAt: NOW.add(10, "hour").toDate(),
-        });
+        }));
     });
 
     describe("Successful cases", () => {
@@ -35,17 +34,12 @@ describe("List event leads (Service)", () => {
             const leadsCount = 5;
 
             for (let i = 0; i < leadsCount; i++) {
-                await leadsRepository.create({
+                await leadsRepository.create(makeLead({
                     name: `Lead ${i}`,
                     phone: `2190000000${i}`,
                     email: `lead${i}@email.com`,
-                    isStudent: true,
-                    intendsToStudyNextYear: true,
-                    technicalInterest: "INF",
-                    segmentInterest: "ANO_1_MEDIO",
                     eventId: event.id,
-                    origen: "manual"
-                });
+                }));
             }
 
             const { leads } = await sut.execute({ slug: event.slug });
