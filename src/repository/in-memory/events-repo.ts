@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { createSlug } from "../../utils/create-slug";
 import type {
     Event,
     EventCreateInput,
@@ -14,7 +13,7 @@ export class EventInMemoryRepository implements IEventRepository {
         const event: Event = {
             id: crypto.randomUUID(),
             title: data.title,
-            slug: createSlug(data.title),
+            slug: generateSlug(data.title),
             startAt: dayjs(data.startAt).toDate(),
             endsAt: dayjs(data.endsAt).toDate(),
             bannerKey: data.bannerKey,
@@ -61,3 +60,14 @@ export class EventInMemoryRepository implements IEventRepository {
         event.status = status;
     }
 }
+
+function generateSlug(title: string): string {
+
+    return title
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+}
+

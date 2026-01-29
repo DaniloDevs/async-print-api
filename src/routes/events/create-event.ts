@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
 import { prisma } from "../../connections/prisma";
-import { createSlug } from "../../utils/create-slug";
+import { sut.generateSlug } from "../../utils/create-slug";
 
 export async function CreateEvent(app: FastifyInstance) {
     app.withTypeProvider<ZodTypeProvider>().post(
@@ -33,7 +33,7 @@ export async function CreateEvent(app: FastifyInstance) {
             const event = await prisma.events.create({
                 data: {
                     title,
-                    slug: createSlug(title),
+                    slug: sut.generateSlug(title),
                     active,
                     createdAt: new Date(),
                     startIn: new Date(startIn),
