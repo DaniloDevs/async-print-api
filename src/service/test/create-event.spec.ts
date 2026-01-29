@@ -3,10 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EventAlreadyExistsError } from "../../_errors/event-already-exist-error";
 import { EventEndBeforeStartError } from "../../_errors/event-end-before-start-error";
 import { EventStartDateInPastError } from "../../_errors/event-start-date-in-past-error";
-import type {
-    EventCreateInput,
-    IEventRepository,
-} from "../../repository/event";
+import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { createSlug } from "../../utils/create-slug";
 import { CreateEventService } from "../create-event";
@@ -35,7 +32,7 @@ describe("Create Event (Service)", () => {
             const eventData = makeEvent({
                 startAt: NOW.toDate(),
                 endsAt: NOW.add(5, "hour").toDate(),
-            })
+            });
 
             const { event } = await sut.execute({ data: eventData });
 
@@ -48,7 +45,7 @@ describe("Create Event (Service)", () => {
             const eventData = makeEvent({
                 startAt: NOW.toDate(),
                 endsAt: NOW.add(1, "minute").toDate(),
-            })
+            });
 
             const { event } = await sut.execute({ data: eventData });
 
@@ -60,7 +57,7 @@ describe("Create Event (Service)", () => {
             const eventData = makeEvent({
                 startAt: NOW.toDate(),
                 endsAt: NOW.add(5, "hour").toDate(),
-            })
+            });
 
             const { event } = await sut.execute({ data: eventData });
 
@@ -74,7 +71,7 @@ describe("Create Event (Service)", () => {
             const eventData = makeEvent({
                 startAt: NOW.toDate(),
                 endsAt: NOW.add(5, "hour").toDate(),
-            })
+            });
 
             await sut.execute({ data: eventData });
 
@@ -87,7 +84,7 @@ describe("Create Event (Service)", () => {
             const eventData = makeEvent({
                 startAt: NOW.subtract(1, "day").toDate(),
                 endsAt: NOW.add(1, "day").toDate(),
-            })
+            });
 
             await expect(
                 sut.execute({ data: eventData }),
@@ -97,8 +94,8 @@ describe("Create Event (Service)", () => {
         it("should not be able to create an event that ends before it starts", async () => {
             const eventData = makeEvent({
                 startAt: NOW.add(5, "day").toDate(),
-                endsAt: NOW.subtract(5, "hour").toDate()
-            })
+                endsAt: NOW.subtract(5, "hour").toDate(),
+            });
 
             await expect(
                 sut.execute({ data: eventData }),
@@ -110,8 +107,8 @@ describe("Create Event (Service)", () => {
                 sut.execute({
                     data: makeEvent({
                         startAt: NOW.toDate(),
-                        endsAt: NOW.toDate()
-                    })
+                        endsAt: NOW.toDate(),
+                    }),
                 }),
             ).rejects.toBeInstanceOf(EventEndBeforeStartError);
         });

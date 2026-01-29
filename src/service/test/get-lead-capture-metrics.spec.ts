@@ -25,10 +25,12 @@ describe("Get lead capture metrics (Service)", () => {
         leadRepository = new LeadInMemoryRepository();
         sut = new GetLeadCaptureMetricsService(eventRepository, leadRepository);
 
-        event = await eventRepository.create(makeEvent({
-            startAt: NOW.toDate(),
-            endsAt: NOW.add(10, "hour").toDate(),
-        }));
+        event = await eventRepository.create(
+            makeEvent({
+                startAt: NOW.toDate(),
+                endsAt: NOW.add(10, "hour").toDate(),
+            }),
+        );
     });
 
     afterEach(() => {
@@ -41,12 +43,14 @@ describe("Get lead capture metrics (Service)", () => {
                 vi.setSystemTime(NOW.add(ii, "h").toDate());
 
                 for (let i = 0; i < 5; i++) {
-                    await leadRepository.create(makeLead({
-                        name: `Lead ${i}`,
-                        phone: `217000000${i}`,
-                        email: `leads${i}@email.com`,
-                        eventId: event.id,
-                    }));
+                    await leadRepository.create(
+                        makeLead({
+                            name: `Lead ${i}`,
+                            phone: `217000000${i}`,
+                            email: `leads${i}@email.com`,
+                            eventId: event.id,
+                        }),
+                    );
                 }
             }
 
@@ -62,12 +66,14 @@ describe("Get lead capture metrics (Service)", () => {
                 vi.setSystemTime(NOW.add(ii, "h").toDate());
 
                 for (let i = 0; i < 2; i++) {
-                    await leadRepository.create(makeLead({
-                        name: `Lead ${i}`,
-                        phone: `217000000${i}`,
-                        email: `leads${i}@email.com`,
-                        eventId: event.id,
-                    }));
+                    await leadRepository.create(
+                        makeLead({
+                            name: `Lead ${i}`,
+                            phone: `217000000${i}`,
+                            email: `leads${i}@email.com`,
+                            eventId: event.id,
+                        }),
+                    );
                 }
             }
 
@@ -84,12 +90,14 @@ describe("Get lead capture metrics (Service)", () => {
                 vi.setSystemTime(NOW.add(ii, "h").toDate());
 
                 for (let i = 0; i < Math.floor(5); i++) {
-                    await leadRepository.create(makeLead({
-                        name: `Lead ${i}`,
-                        phone: `217000000${i}`,
-                        email: `leads${i}@email.com`,
-                        eventId: event.id,
-                    }));
+                    await leadRepository.create(
+                        makeLead({
+                            name: `Lead ${i}`,
+                            phone: `217000000${i}`,
+                            email: `leads${i}@email.com`,
+                            eventId: event.id,
+                        }),
+                    );
                 }
             }
 
@@ -104,12 +112,14 @@ describe("Get lead capture metrics (Service)", () => {
                 vi.setSystemTime(NOW.add(ii, "h").toDate());
 
                 for (let i = 0; i < Math.floor(10); i++) {
-                    await leadRepository.create(makeLead({
-                        name: `Lead ${i}`,
-                        phone: `217000000${i}`,
-                        email: `leads${i}@email.com`,
-                        eventId: event.id,
-                    }));
+                    await leadRepository.create(
+                        makeLead({
+                            name: `Lead ${i}`,
+                            phone: `217000000${i}`,
+                            email: `leads${i}@email.com`,
+                            eventId: event.id,
+                        }),
+                    );
                 }
             }
 
@@ -125,12 +135,14 @@ describe("Get lead capture metrics (Service)", () => {
                 vi.setSystemTime(NOW.add(ii, "h").toDate());
 
                 for (let i = 0; i < Math.floor(25); i++) {
-                    await leadRepository.create(makeLead({
-                        name: `Lead ${i}`,
-                        phone: `217000000${i}`,
-                        email: `leads${i}@email.com`,
-                        eventId: event.id,
-                    }));
+                    await leadRepository.create(
+                        makeLead({
+                            name: `Lead ${i}`,
+                            phone: `217000000${i}`,
+                            email: `leads${i}@email.com`,
+                            eventId: event.id,
+                        }),
+                    );
                 }
             }
 

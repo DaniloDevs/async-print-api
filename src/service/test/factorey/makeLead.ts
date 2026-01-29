@@ -12,7 +12,7 @@ type MakeLeadOverrides = Partial<{
     intendsToStudyNextYear: boolean;
     technicalInterest: TechnicalInterest;
     segmentInterest: SegmentInterest;
-    origen: OrigenLead
+    origen: OrigenLead;
     eventId: string;
 }>;
 

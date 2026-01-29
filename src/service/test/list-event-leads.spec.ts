@@ -23,10 +23,12 @@ describe("List event leads (Service)", () => {
 
         sut = new ListEventLeadsService(eventRepository, leadsRepository);
 
-        event = await eventRepository.create(makeEvent({
-            startAt: NOW.toDate(),
-            endsAt: NOW.add(10, "hour").toDate(),
-        }));
+        event = await eventRepository.create(
+            makeEvent({
+                startAt: NOW.toDate(),
+                endsAt: NOW.add(10, "hour").toDate(),
+            }),
+        );
     });
 
     describe("Successful cases", () => {
@@ -34,12 +36,14 @@ describe("List event leads (Service)", () => {
             const leadsCount = 5;
 
             for (let i = 0; i < leadsCount; i++) {
-                await leadsRepository.create(makeLead({
-                    name: `Lead ${i}`,
-                    phone: `2190000000${i}`,
-                    email: `lead${i}@email.com`,
-                    eventId: event.id,
-                }));
+                await leadsRepository.create(
+                    makeLead({
+                        name: `Lead ${i}`,
+                        phone: `2190000000${i}`,
+                        email: `lead${i}@email.com`,
+                        eventId: event.id,
+                    }),
+                );
             }
 
             const { leads } = await sut.execute({ slug: event.slug });

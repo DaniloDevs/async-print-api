@@ -1,14 +1,13 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type { Event } from "../../repository/event";
-import type { IEventRepository } from "../../repository/event";
+import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository, OrigenLead } from "../../repository/lead";
+import { GetLeadMetricsByOrigen } from "../get-lead-metrics-by-origen";
 import { makeEvent } from "./factorey/makeEvent";
 import { makeLead } from "./factorey/makeLead";
-import { GetLeadMetricsByOrigen } from "../get-lead-metrics-by-origen";
 
 describe("Get leads metrics by origen (Service)", () => {
     let sut: GetLeadMetricsByOrigen;
@@ -52,8 +51,8 @@ describe("Get leads metrics by origen (Service)", () => {
 
             const result = await sut.execute({ eventId: event.id });
             expect(result.origen).toEqual([
-                { origen: "manual", total: 2,  },
-                { origen: "qrcode", total: 1,  },
+                { origen: "manual", total: 2 },
+                { origen: "qrcode", total: 1 },
             ]);
         });
 
@@ -101,7 +100,6 @@ describe("Get leads metrics by origen (Service)", () => {
             expect(result.origen[0]).toEqual({
                 origen: "manual",
                 total: 2,
-                
             });
         });
 

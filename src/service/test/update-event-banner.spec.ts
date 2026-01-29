@@ -30,10 +30,12 @@ describe("Update event Banner (Service)", () => {
 
         sut = new UpdateEventBannerService(eventRepository, storageProvider);
 
-        Event = await eventRepository.create(makeEvent({
-            startAt: NOW.toDate(),
-            endsAt: NOW.add(10, "hour").toDate(),
-        }));
+        Event = await eventRepository.create(
+            makeEvent({
+                startAt: NOW.toDate(),
+                endsAt: NOW.add(10, "hour").toDate(),
+            }),
+        );
     });
 
     afterEach(() => {

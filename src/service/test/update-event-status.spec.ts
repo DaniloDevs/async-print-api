@@ -21,12 +21,14 @@ describe("Update Event Status (Service)", () => {
         eventRepository = new EventInMemoryRepository();
         sut = new UpdateEventStatusService(eventRepository);
 
-        const event = await eventRepository.create(makeEvent({
-            title: "Evento Teste",
-            status: "draft",
-            startAt: NOW.toDate(),
-            endsAt: NOW.add(10, "hour").toDate(),
-        }));
+        const event = await eventRepository.create(
+            makeEvent({
+                title: "Evento Teste",
+                status: "draft",
+                startAt: NOW.toDate(),
+                endsAt: NOW.add(10, "hour").toDate(),
+            }),
+        );
 
         eventId = event.id;
     });

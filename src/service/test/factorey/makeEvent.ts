@@ -9,7 +9,7 @@ type MakeEventOverrides = Partial<{
     endsAt: Date;
 }>;
 
- const NOW = dayjs("2024-01-01T12:00:00Z");
+const NOW = dayjs("2024-01-01T12:00:00Z");
 
 export function makeEvent(overrides: MakeEventOverrides = {}) {
     return {
@@ -17,7 +17,7 @@ export function makeEvent(overrides: MakeEventOverrides = {}) {
         bannerKey: null,
         status: "active" as EventStatus,
         startAt: NOW.toDate(),
-        endsAt: NOW.add(5, 'hour').toDate(),
+        endsAt: NOW.add(5, "hour").toDate(),
         ...overrides,
     };
 }

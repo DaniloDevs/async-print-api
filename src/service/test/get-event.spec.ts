@@ -35,11 +35,13 @@ describe("Get Event (Service)", () => {
 
     describe("Successful cases", () => {
         it("should be possible to catch an event without banner key.", async () => {
-            const eventMock = await eventRepository.create(makeEvent({
-                bannerKey: null,
-                startAt: NOW.toDate(),
-                endsAt: NOW.add(10, "hour").toDate(),
-            }));
+            const eventMock = await eventRepository.create(
+                makeEvent({
+                    bannerKey: null,
+                    startAt: NOW.toDate(),
+                    endsAt: NOW.add(10, "hour").toDate(),
+                }),
+            );
 
             const { event } = await sut.execute({ slug: eventMock.slug });
 
@@ -52,11 +54,13 @@ describe("Get Event (Service)", () => {
         });
 
         it("should be possible to capture an event with bannerKey.", async () => {
-            const eventMock = await eventRepository.create(makeEvent({
-                bannerKey: "event-banner.png",
-                startAt: dayjs().toDate(),
-                endsAt: dayjs().add(10, "hour").toDate(),
-            }));
+            const eventMock = await eventRepository.create(
+                makeEvent({
+                    bannerKey: "event-banner.png",
+                    startAt: dayjs().toDate(),
+                    endsAt: dayjs().add(10, "hour").toDate(),
+                }),
+            );
 
             vi.spyOn(storageProvider, "getPublicUrl").mockResolvedValue(
                 "https://storage.example.com/event-banner.png",

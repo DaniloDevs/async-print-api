@@ -29,10 +29,12 @@ describe("List event leads by period (Service)", () => {
             leadsRepository,
         );
 
-        event = await eventRepository.create(makeEvent({
-            startAt: NOW.toDate(),
-            endsAt: NOW.add(3, "hour").toDate(),
-        }));
+        event = await eventRepository.create(
+            makeEvent({
+                startAt: NOW.toDate(),
+                endsAt: NOW.add(3, "hour").toDate(),
+            }),
+        );
 
         afterEach(() => {
             vi.useRealTimers();
@@ -45,12 +47,14 @@ describe("List event leads by period (Service)", () => {
                 vi.setSystemTime(NOW.add(ii, "h").toDate());
 
                 for (let i = 0; i < 3; i++) {
-                    await leadsRepository.create(makeLead({
-                        name: `Lead ${i}`,
-                        phone: `217000000${i}`,
-                        email: `leads${i}@email.com`,
-                        eventId: event.id,
-                    }));
+                    await leadsRepository.create(
+                        makeLead({
+                            name: `Lead ${i}`,
+                            phone: `217000000${i}`,
+                            email: `leads${i}@email.com`,
+                            eventId: event.id,
+                        }),
+                    );
                 }
             }
 

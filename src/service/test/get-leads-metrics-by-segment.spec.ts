@@ -1,14 +1,13 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type { Event } from "../../repository/event";
-import type { IEventRepository } from "../../repository/event";
+import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository, SegmentInterest } from "../../repository/lead";
+import { GetLeadMetricsBySegment } from "../get-lead-metrics-by-segment";
 import { makeEvent } from "./factorey/makeEvent";
 import { makeLead } from "./factorey/makeLead";
-import { GetLeadMetricsBySegment } from "../get-lead-metrics-by-segment";
 
 describe("Get leads metrics by segment (Service)", () => {
     let sut: GetLeadMetricsBySegment;
@@ -107,7 +106,11 @@ describe("Get leads metrics by segment (Service)", () => {
         });
 
         it("should return all segment interests present in leads", async () => {
-            const segments: SegmentInterest[] = ["ANO_1_MEDIO", "ANO_2_MEDIO", "ANO_3_MEDIO"];
+            const segments: SegmentInterest[] = [
+                "ANO_1_MEDIO",
+                "ANO_2_MEDIO",
+                "ANO_3_MEDIO",
+            ];
 
             for (const segment of segments) {
                 await leadRepository.create(

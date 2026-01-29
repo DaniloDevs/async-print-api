@@ -5,13 +5,10 @@ import { EventNotActiveError } from "../../_errors/event-not-active-error";
 import { EventNotStartedYetError } from "../../_errors/event-not-started-yet-error";
 import { LeadAlreadyRegisteredError } from "../../_errors/lead-already-registered-error";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type {
-    EventCreateInput,
-    IEventRepository,
-} from "../../repository/event";
+import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
-import type { ILeadRepository, LeadCreateInput } from "../../repository/lead";
+import type { ILeadRepository } from "../../repository/lead";
 import { CreateLeadService } from "../create-lead";
 import { makeEvent } from "./factorey/makeEvent";
 import { makeLead } from "./factorey/makeLead";
@@ -23,8 +20,8 @@ describe("Create Lead (Service)", () => {
 
     const NOW = dayjs("2024-01-01T12:00:00Z");
 
-const eventInput = makeEvent()
-const leadInput = makeLead()
+    const eventInput = makeEvent();
+    const leadInput = makeLead();
 
     beforeEach(() => {
         vi.useFakeTimers();

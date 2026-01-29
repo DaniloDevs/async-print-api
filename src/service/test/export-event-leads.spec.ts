@@ -42,9 +42,9 @@ describe("Export event Lead (Service)", () => {
                         name: `Lead ${i}`,
                         phone: `21 90000000${i}`,
                         email: `lead${i}@email.com`,
-                        eventId: event.id
-                    })
-                )
+                        eventId: event.id,
+                    }),
+                );
             }
 
             const result = await sut.execute({ slug: event.slug });
