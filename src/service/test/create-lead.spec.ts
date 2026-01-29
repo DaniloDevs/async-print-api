@@ -37,6 +37,7 @@ describe("Create Lead (Service)", () => {
         intendsToStudyNextYear: true,
         technicalInterest: "INF",
         segmentInterest: "ANO_1_MEDIO",
+              origen: "manual",
         eventId: "",
     };
 

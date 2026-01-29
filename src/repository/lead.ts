@@ -2,6 +2,8 @@ import z from "zod";
 
 const technicalInterestEnum = z.enum(["ENF", "INF", "ADM", "NONE"]);
 
+const origenEnum = z.enum(["qrcode", "instagram", "manual"]);
+
 const segmentInterest = z.enum([
     "NONE",
     "JARDIM_1",
@@ -23,35 +25,11 @@ const segmentInterest = z.enum([
 const lead = z.object({
     id: z.string(),
     name: z.string(),
-    phone: z
-        .string()
-        .transform((val) => val.replace(/\D/g, ""))
-        .refine((val) => val.length === 10 || val.length === 11, {
-            message: "Telefone deve ter 10 ou 11 dígitos",
-        })
-        .refine(
-            (val) => {
-                const ddd = Number(val.slice(0, 2));
-                return ddd >= 11 && ddd <= 99;
-            },
-            {
-                message: "DDD inválido",
-            },
-        )
-        .refine(
-            (val) => {
-                if (val.length === 11) {
-                    return val[2] === "9";
-                }
-                return true;
-            },
-            {
-                message: "Celular deve começar com 9",
-            },
-        ),
+    phone: z.string(),
     email: z.string(),
     isStudent: z.boolean(),
     intendsToStudyNextYear: z.boolean().default(false),
+    origen: z.enum(origenEnum.options).default("manual"),
     technicalInterest: z.enum(technicalInterestEnum.options).default("NONE"),
     segmentInterest: z.enum(segmentInterest.options).default("NONE"),
     createdAt: z.date(),
@@ -67,6 +45,7 @@ export type Lead = z.infer<typeof lead>;
 export type LeadCreateInput = z.infer<typeof leadCreateInput>;
 export type SegmentInterest = z.infer<typeof segmentInterest>;
 export type TechnicalInterest = z.infer<typeof technicalInterestEnum>;
+export type OrigenLead = z.infer<typeof origenEnum>;
 
 export interface ILeadRepository {
     create(data: LeadCreateInput): Promise<Lead>;

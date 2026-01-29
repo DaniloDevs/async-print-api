@@ -55,6 +55,7 @@ describe("List event leads by period (Service)", () => {
                         technicalInterest: "INF",
                         segmentInterest: "ANO_1_MEDIO",
                         eventId: event.id,
+                          origen: "manual"
                     });
                 }
             }

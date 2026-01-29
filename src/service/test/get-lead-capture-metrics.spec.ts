@@ -51,6 +51,7 @@ describe("Get lead capture metrics (Service)", () => {
                         technicalInterest: "INF",
                         segmentInterest: "ANO_1_MEDIO",
                         eventId: event.id,
+                         origen: "manual"
                     });
                 }
             }
@@ -76,6 +77,9 @@ describe("Get lead capture metrics (Service)", () => {
                         technicalInterest: "INF",
                         segmentInterest: "ANO_1_MEDIO",
                         eventId: event.id,
+                   origen: "manual"
+
+                        
                     });
                 }
             }
@@ -102,6 +106,7 @@ describe("Get lead capture metrics (Service)", () => {
                         technicalInterest: "INF",
                         segmentInterest: "ANO_1_MEDIO",
                         eventId: event.id,
+                              origen: "manual"
                     });
                 }
             }
@@ -126,6 +131,7 @@ describe("Get lead capture metrics (Service)", () => {
                         technicalInterest: "INF",
                         segmentInterest: "ANO_1_MEDIO",
                         eventId: event.id,
+                              origen: "manual"
                     });
                 }
             }
@@ -151,6 +157,7 @@ describe("Get lead capture metrics (Service)", () => {
                         technicalInterest: "INF",
                         segmentInterest: "ANO_1_MEDIO",
                         eventId: event.id,
+                              origen: "manual"
                     });
                 }
             }

@@ -61,6 +61,7 @@ describe("Get Event Metrics (Service)", () => {
                     technicalInterest: "INF",
                     segmentInterest: "ANO_1_MEDIO",
                     eventId: event.id,
+                          origen: "manual"
                 });
             }
 
@@ -76,6 +77,7 @@ describe("Get Event Metrics (Service)", () => {
                     technicalInterest: "INF",
                     segmentInterest: "ANO_1_MEDIO",
                     eventId: event.id,
+                          origen: "manual"
                 });
             }
 
@@ -99,6 +101,7 @@ describe("Get Event Metrics (Service)", () => {
                 technicalInterest: "INF",
                 segmentInterest: "ANO_1_MEDIO",
                 eventId: event.id,
+                      origen: "manual"
             });
 
             vi.setSystemTime(NOW.toDate());
@@ -119,6 +122,7 @@ describe("Get Event Metrics (Service)", () => {
                     technicalInterest: "INF",
                     segmentInterest: "ANO_1_MEDIO",
                     eventId: event.id,
+                          origen: "manual"
                 });
             }
 
@@ -164,6 +168,7 @@ describe("Get Event Metrics (Service)", () => {
                     technicalInterest: "INF",
                     segmentInterest: "ANO_1_MEDIO",
                     eventId: event.id,
+                          origen: "manual"
                 });
             }
 

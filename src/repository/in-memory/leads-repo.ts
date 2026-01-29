@@ -18,6 +18,7 @@ export class LeadInMemoryRepository implements ILeadRepository {
             segmentInterest: data.segmentInterest,
             createdAt: dayjs().utc().toDate(),
             eventId: data.eventId,
+            origen: data.origen
         };
 
         this.items.push(leads);

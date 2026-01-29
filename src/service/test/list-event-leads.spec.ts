@@ -44,6 +44,7 @@ describe("List event leads (Service)", () => {
                     technicalInterest: "INF",
                     segmentInterest: "ANO_1_MEDIO",
                     eventId: event.id,
+                    origen: "manual"
                 });
             }
 

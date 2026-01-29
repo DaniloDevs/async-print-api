@@ -1,17 +1,17 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
-import type { Event } from "./../../repository/event";
+import type { Event } from "../../repository/event";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
-import type { ILeadRepository, TechnicalInterest } from "../../repository/lead";
-import { GetLeadMetricsByTechnical } from "../get-lead-metrics-by-technial";
+import type { ILeadRepository, OrigenLead } from "../../repository/lead";
 import { makeEvent } from "./factorey/makeEvent";
 import { makeLead } from "./factorey/makeLead";
+import { GetLeadMetricsByOrigen } from "../get-lead-metrics-by-origen";
 
-describe("Get leads metrics by segment (Service)", () => {
-    let sut: GetLeadMetricsByTechnical;
+describe("Get leads metrics by origen (Service)", () => {
+    let sut: GetLeadMetricsByOrigen;
     let eventRepository: IEventRepository;
     let leadRepository: ILeadRepository;
     let event: Event;
@@ -24,7 +24,7 @@ describe("Get leads metrics by segment (Service)", () => {
 
         eventRepository = new EventInMemoryRepository();
         leadRepository = new LeadInMemoryRepository();
-        sut = new GetLeadMetricsByTechnical(eventRepository, leadRepository);
+        sut = new GetLeadMetricsByOrigen(eventRepository, leadRepository);
 
         event = await eventRepository.create(
             makeEvent({
@@ -39,59 +39,58 @@ describe("Get leads metrics by segment (Service)", () => {
     });
 
     describe("Successful cases", () => {
-        it("should group leads by technical interest correctly", async () => {
+        it("should group leads by origen interest correctly", async () => {
             await leadRepository.create(
-                makeLead({ technicalInterest: "INF", eventId: event.id }),
+                makeLead({ origen: "manual", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ technicalInterest: "INF", eventId: event.id }),
+                makeLead({ origen: "manual", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ technicalInterest: "ADM", eventId: event.id }),
+                makeLead({ origen: "qrcode", eventId: event.id }),
             );
 
             const result = await sut.execute({ eventId: event.id });
-
-            expect(result.technical).toEqual([
-                { technical: "INF", total: 2, interestNewyear: 2 },
-                { technical: "ADM", total: 1, interestNewyear: 1 },
+            expect(result.origen).toEqual([
+                { origen: "manual", total: 2,  },
+                { origen: "qrcode", total: 1,  },
             ]);
         });
 
-        it("should sort t.technical by total leads desc", async () => {
+        it("should sort t.origen by total leads desc", async () => {
             await leadRepository.create(
-                makeLead({ technicalInterest: "ADM", eventId: event.id }),
+                makeLead({ origen: "qrcode", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ technicalInterest: "INF", eventId: event.id }),
+                makeLead({ origen: "manual", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ technicalInterest: "INF", eventId: event.id }),
+                makeLead({ origen: "manual", eventId: event.id }),
             );
 
             const result = await sut.execute({ eventId: event.id });
 
-            expect(result.technical[0].technical).toBe("INF");
-            expect(result.technical[0].total).toBe(2);
-            expect(result.technical[1].technical).toBe("ADM");
+            expect(result.origen[0].origen).toBe("manual");
+            expect(result.origen[0].total).toBe(2);
+            expect(result.origen[1].origen).toBe("qrcode");
         });
-        it("should return empty t.technical array when event has no leads", async () => {
+        it("should return empty t.origen array when event has no leads", async () => {
             const result = await sut.execute({ eventId: event.id });
 
-            expect(result.technical).toEqual([]);
+            expect(result.origen).toEqual([]);
         });
 
-        it("should count only leads with intent to study next year per technical", async () => {
+        it("should count only leads with intent to study next year per origen", async () => {
             await leadRepository.create(
                 makeLead({
-                    technicalInterest: "INF",
+                    origen: "manual",
                     intendsToStudyNextYear: true,
                     eventId: event.id,
                 }),
             );
             await leadRepository.create(
                 makeLead({
-                    technicalInterest: "INF",
+                    origen: "manual",
                     intendsToStudyNextYear: false,
                     eventId: event.id,
                 }),
@@ -99,20 +98,20 @@ describe("Get leads metrics by segment (Service)", () => {
 
             const result = await sut.execute({ eventId: event.id });
 
-            expect(result.technical[0]).toEqual({
-                technical: "INF",
+            expect(result.origen[0]).toEqual({
+                origen: "manual",
                 total: 2,
-                interestNewyear: 1,
+                
             });
         });
 
-        it("should return all technical interests present in leads", async () => {
-            const technicals: TechnicalInterest[] = ["INF", "ADM", "ENF"];
+        it("should return all origen interests present in leads", async () => {
+            const origens: OrigenLead[] = ["manual", "qrcode", "instagram"];
 
-            for (const technical of technicals) {
+            for (const origen of origens) {
                 await leadRepository.create(
                     makeLead({
-                        technicalInterest: technical,
+                        origen: origen,
                         eventId: event.id,
                     }),
                 );
@@ -120,8 +119,8 @@ describe("Get leads metrics by segment (Service)", () => {
 
             const result = await sut.execute({ eventId: event.id });
 
-            expect(result.technical.map((t) => t.technical)).toEqual(
-                expect.arrayContaining(technicals),
+            expect(result.origen.map((t) => t.origen)).toEqual(
+                expect.arrayContaining(origens),
             );
         });
     });
