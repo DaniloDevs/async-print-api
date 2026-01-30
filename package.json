@@ -12,7 +12,8 @@
     "test:e2e": "vitest run --project e2e",
     "test:cover": "vitest run --coverage --project unit",
     "test:e2e:cover": "vitest run --coverage --project e2e",
-    "lint": "biome check --write --unsafe"
+    "lint": "biome check --write --unsafe",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
@@ -48,6 +49,7 @@
     "@types/node": "^24.10.9",
     "@types/pg": "^8.16.0",
     "@vitest/coverage-v8": "4.0.15",
+    "husky": "9.1.7",
     "prisma": "^7.3.0",
     "vite-tsconfig-paths": "6.0.5",
     "vitest": "4.0.15"
