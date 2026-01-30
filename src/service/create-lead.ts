@@ -4,7 +4,7 @@ import { EventNotActiveError } from "../_errors/event-not-active-error";
 import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
 import { LeadAlreadyRegisteredError } from "../_errors/lead-already-registered-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import type { IEventRepository } from "../repository/event";
+import type { IEventRepository, Event } from "../repository/event";
 import type {
     ILeadRepository,
     Lead,
@@ -23,7 +23,7 @@ export class CreateLeadService {
     constructor(
         private eventRepository: IEventRepository,
         private leadRepository: ILeadRepository,
-    ) {}
+    ) { }
 
     async execute({ data, eventId }: RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findById(eventId);
@@ -38,17 +38,7 @@ export class CreateLeadService {
             throw new EventNotActiveError(eventId);
         }
 
-        const startEventDate = dayjs(event.startAt);
-        const endEventDate = event.endsAt ? dayjs(event.endsAt) : null;
-        const now = dayjs();
-
-        if (now.isBefore(startEventDate)) {
-            throw new EventNotStartedYetError(event.startAt);
-        }
-
-        if (endEventDate && now.isAfter(endEventDate)) {
-            throw new EventAlreadyEndedError(event.endsAt);
-        }
+        this.isValidPeriod(event.startAt, event.endsAt);
 
         const existingLead = await this.leadRepository.findByEmailAndEventId(
             data.email,
@@ -61,13 +51,29 @@ export class CreateLeadService {
 
         const formattedPhoneNumber = this.normalizePhoneNumber(data.phone);
 
+    
         const lead = await this.leadRepository.create({
             ...data,
             eventId: event.id,
             phone: formattedPhoneNumber,
         });
+        
 
         return { lead };
+    }
+
+    isValidPeriod(from: Date, to: Date) {
+        const startEventDate = dayjs(from);
+        const endEventDate = to ? dayjs(to) : null;
+        const now = dayjs();
+
+        if (now.isBefore(startEventDate)) {
+            throw new EventNotStartedYetError(from);
+        }
+
+        if (endEventDate && now.isAfter(endEventDate)) {
+            throw new EventAlreadyEndedError(to);
+        }
     }
 
     normalizePhoneNumber(phone: string): string {
