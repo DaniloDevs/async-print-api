@@ -1,94 +1,84 @@
-# Async Print API
+# Async Print API - Version(0.13.17)
 
-Sistema completo para gestão de eventos, captura/exportação de leads e impressão assíncrona via filas. O domínio principal são *Events & Leads*; *Metrics* e *Printing & Jobs* são subdomínios conectados — cada um com invariantes e responsabilidades claras.
+Orquestrador de gestão de eventos presenciais, captura de participantes (leads) e impressão térmica assíncrona. Uma solução completa para eventos corporativos que necessitam de rastreabilidade, escalabilidade e tolerância a falhas.
 
-## 📋 Visão Geral
+## 📋 Sobre
 
-A Async Print API fornece:
+A **Async Print API** é uma plataforma de orquestração de eventos construída para gerenciar o fluxo completo de eventos presenciais, desde a configuração do evento até a emissão de comprovantes para sorteios. O projeto utiliza arquitetura baseada em **eventos e domínios** com três pilares principais:
 
-### **Events & Leads**
+### Principais Funcionalidades
+
+**📅 Gestão de Eventos & Leads**
 - Criar eventos com slug único e imutável
-- Buscar eventos por slug
-- Atualizar banner (apenas se evento ativo/futuro)
-- Capturar leads (registro histórico imutável e atômico)
-- Listar leads com paginação, filtros temporais e agrupamento (por origem, turma)
-- Exportar leads de forma assíncrona (gerando jobs)
+- Capturar participantes (leads) de forma imutável e atômica
+- Listar leads com paginação, filtros temporais e agrupamento
+- Exportar leads de forma assíncrona
+- Atualizar banner apenas enquanto evento está ativo/futuro
+- Status de evento derivado automaticamente do horário atual
 
-### **Metrics**
-- Leads por período (janelas temporais determinísticas)
-- Taxa média de captura por evento (considerando apenas tempo ativo)
-- Resumo consolidado (total, leads na hora atual, status calculado)
-- Agrupamento por origem e turma de interesse
+**📊 Análise de Métricas**
+- Leads capturados por período (janelas temporais determinísticas)
+- Taxa média de captura considerando apenas tempo ativo
+- Resumo consolidado com total de leads e status em tempo real
+- Agrupamento por origem e segmento de interesse
 
-### **Printer & Jobs de Impressão**
-- Enfileirar solicitações de impressão (assíncrona, 202 Accepted)
-- Consultar fila por impressora (com paginação)
-- Priorizar/reordenar jobs (operação atômica com auditoria)
-- Verificar status (pendente, processando, concluído, falho) com histórico de tentativas
-- Cancelar/reprocessar jobs manualmente
-- Bloquear envio para impressoras indisponíveis (tolerância a falhas)
-
-### **Workers Assíncronos**
-- Processamento de jobs em fila (FIFO + prioridade)
-- Controle de concorrência configurável por tipo
-- Métricas de sucesso/falha expostas
-- Pausa/retomada de filas e habilitar/desabilitar tipos de job
-
----
-
-## 🎯 Regras de Negócio (Invariantes)
-
-1. **Eventos**: Ativo apenas durante intervalo temporal; status derivado (não manual)
-2. **Leads**: Imutáveis, criáveis apenas se evento ativo, pertencem a exatamente um evento
-3. **Métricas**: Apenas leitura, não afetam operações de captura
-4. **Impressoras**: Offline não bloqueia captura; jobs rejeitados com razão clara
-5. **Jobs**: Idempotentes, vinculados à transação de origem, histórico de falhas preservado
-6. **Tolerância a falhas**: Falhas de impressão **nunca** impactam captura de leads
-7. **Auditoria**: Logs estruturados (JSON) com eventId, exportId, printerId, jobId, traceId
+**🖨️ Fila de Impressão & Jobs**
+- Enfileiramento assíncrono de solicitações de impressão
+- Processamento FIFO com suporte a priorização
+- Histórico de tentativas e tratamento de falhas
+- Tolerância a impressoras offline sem impacto na captura
+- Dashboard de monitoramento de filas (Bull Board)
+- Suporte a reprocessamento e cancelamento manual de jobs
 
 ---
 
 ## 🚀 Tecnologias
 
-- **Runtime**: Node.js + TypeScript
-- **Framework**: Fastify
-- **Banco de Dados**: PostgreSQL + Prisma ORM
-- **Filas**: BullMQ + Bull Board Dashboard
-- **Armazenamento**: MinIO (S3 compatible)
-- **Validação**: Zod
-- **Testes**: Vitest
-- **Qualidade**: Biome (linter/formatter)
+Este projeto foi desenvolvido com as seguintes tecnologias:
 
+- [Node.js 20+](https://nodejs.org/) - Runtime JavaScript/TypeScript
+- [TypeScript 5.9](https://www.typescriptlang.org/) - Tipagem estática e segurança
+- [Fastify 5](https://www.fastify.io/) - Framework web moderno e altamente performático
+- [PostgreSQL](https://www.postgresql.org/) - Banco de dados relacional
+- [Prisma 7](https://www.prisma.io/) - ORM type-safe para Node.js
+- [BullMQ](https://docs.bullmq.io/) - Fila de jobs em Redis para processamento assíncrono
+- [Bull Board](https://bull-board.js.org/) - Dashboard para monitoramento de filas
+- [MinIO](https://min.io/) - Armazenamento compatível com S3
+- [Zod](https://zod.dev/) - Validação de esquemas e tipos
+- [Vitest 4](https://vitest.dev/) - Framework de testes unitários e E2E
+- [Biome 2](https://biomejs.dev/) - Linter e formatter unificado
+- [Scalar](https://scalar.com/) - Documentação interativa de API
 
+---
+
+## 🎯 Regras de Negócio (Invariantes)
+
+1. **Eventos**: Status é derivado automaticamente do horário atual; não pode ser definido manualmente
+2. **Leads**: Imutáveis após criação; só podem ser capturados enquanto evento está ativo
+3. **Exportações**: Sempre assíncronas; requerem ≥1 lead no evento
+4. **Métricas**: Apenas leitura; nunca afetam operações de captura
+5. **Impressoras**: Offline não bloqueia o sistema; jobs são rejeitados com motivo claro
+6. **Jobs**: Idempotentes e vinculados à mesma transação de origem
+7. **Tolerância a Falhas**: Falhas de impressão nunca impactam a captura de leads
+8. **Auditoria**: Logs estruturados (JSON) obrigatórios para todas as operações
+
+---
 
 ## ⚙️ Requisitos Não Funcionais
 
-- **NFR1**: Criação/atualização de eventos e leads ≤ 300ms (pico normal)
-- **NFR2**: Paginação configurável (cursor/offset, default 20)
-- **NFR3**: Métricas P95 < 1s para ranges típicos
-- **NFR4**: Exportações/impressões sempre assíncronas
-- **NFR5**: Impressoras offline não degradam captura
-- **NFR6**: Logs estruturados (JSON) com rastreabilidade
-- **NFR7**: RBAC para operações críticas (export, reprocessar, cancelar)
-- **NFR8**: Alertas quando fila cresce além de threshold
+- **Performance**: Criação de evento/lead ≤ 300ms em carga normal
+- **Paginação**: Suporte a cursor/offset com default de 20 registros
+- **Processamento**: Todas as exportações/impressões são assíncronas (202 Accepted)
+- **Disponibilidade**: Sistema funciona com todas as impressoras offline
+- **Rastreabilidade**: Logs estruturados por eventId/printerId/jobId
+- **Segurança**: RBAC para operações críticas (export, reprocessar, cancelar)
+- **Observabilidade**: Alertas quando fila cresce além de threshold configurável
 
 ---
 
-## 🏗️ Status de Implementação
+## 📚 Documentação
 
-Veja [TO-DO.md](TO-DO.md) para detalhes de cada requisito funcional (RF1-RF19).
+- **Swagger/Scalar** — Documentação interativa em `/docs`
+- **Bull Board** — Dashboard de monitoramento de filas em `/dashboard/jobs`
 
-| Domínio | Status | Requisitos |
-|---------|--------|-----------|
-| **Events** | Em andamento | RF1-RF4 |
-| **Leads** | Em andamento | RF5-RF7 |
-| **Metrics** | Planejado | RF8-RF10 |
-| **Printer** | Planejado | RF11-RF16 |
-| **Jobs** | Planejado | RF17-RF19 |
 
----
-
-## 📄 Referências
-
-- [PRD.md](documentation/PRD.md) — Produto completo (regras, RF, NFR)
-- [TO-DO.md](documentation/TO-DO.md) — Checklist de implementação
