@@ -8,6 +8,7 @@ import type { Event } from "./../../repository/event";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { UpdateEventBannerService } from "../update-event-banner";
+import { makeEvent } from "./factorey/makeEvent";
 
 describe("Update event Banner (Service)", () => {
     let eventRepository: IEventRepository;
@@ -29,13 +30,12 @@ describe("Update event Banner (Service)", () => {
 
         sut = new UpdateEventBannerService(eventRepository, storageProvider);
 
-        Event = await eventRepository.create({
-            title: "Event Test",
-            bannerKey: null,
-            status: "active",
-            startAt: NOW.toDate(),
-            endsAt: NOW.add(10, "hour").toDate(),
-        });
+        Event = await eventRepository.create(
+            makeEvent({
+                startAt: NOW.toDate(),
+                endsAt: NOW.add(10, "hour").toDate(),
+            }),
+        );
     });
 
     afterEach(() => {

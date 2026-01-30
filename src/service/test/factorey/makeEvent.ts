@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import type { EventStatus } from "../../../repository/event";
 
 type MakeEventOverrides = Partial<{
@@ -8,13 +9,15 @@ type MakeEventOverrides = Partial<{
     endsAt: Date;
 }>;
 
+const NOW = dayjs("2024-01-01T12:00:00Z");
+
 export function makeEvent(overrides: MakeEventOverrides = {}) {
     return {
         title: "Event Test",
         bannerKey: null,
         status: "active" as EventStatus,
-        startAt: new Date(),
-        endsAt: new Date(),
+        startAt: NOW.toDate(),
+        endsAt: NOW.add(5, "hour").toDate(),
         ...overrides,
     };
 }

@@ -5,6 +5,8 @@ import type { Event } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import { ExportEventLeadsService } from "../export-event-leads";
+import { makeEvent } from "./factorey/makeEvent";
+import { makeLead } from "./factorey/makeLead";
 
 describe("Export event Lead (Service)", () => {
     let eventRepository: EventInMemoryRepository;
@@ -23,13 +25,7 @@ describe("Export event Lead (Service)", () => {
 
         sut = new ExportEventLeadsService(eventRepository, leadRepository);
 
-        event = await eventRepository.create({
-            title: "Event Test",
-            bannerKey: null,
-            status: "active",
-            startAt: NOW.toDate(),
-            endsAt: NOW.add(10, "hour").toDate(),
-        });
+        event = await eventRepository.create(makeEvent());
     });
 
     afterEach(() => {
@@ -41,20 +37,17 @@ describe("Export event Lead (Service)", () => {
             const leadsCount = 5;
 
             for (let i = 0; i < leadsCount; i++) {
-                await leadRepository.create({
-                    name: `Lead ${i}`,
-                    phone: `21 90000000${i}`,
-                    email: `lead${i}@email.com`,
-                    isStudent: true,
-                    intendsToStudyNextYear: true,
-                    technicalInterest: "INF",
-                    segmentInterest: "ANO_1_MEDIO",
-                    eventId: event.id,
-                });
+                await leadRepository.create(
+                    makeLead({
+                        name: `Lead ${i}`,
+                        phone: `21 90000000${i}`,
+                        email: `lead${i}@email.com`,
+                        eventId: event.id,
+                    }),
+                );
             }
 
             const result = await sut.execute({ slug: event.slug });
-
             expect(result.leads).toHaveLength(leadsCount);
         });
 

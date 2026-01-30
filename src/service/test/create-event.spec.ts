@@ -3,12 +3,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EventAlreadyExistsError } from "../../_errors/event-already-exist-error";
 import { EventEndBeforeStartError } from "../../_errors/event-end-before-start-error";
 import { EventStartDateInPastError } from "../../_errors/event-start-date-in-past-error";
-import type {
-    EventCreateInput,
-    IEventRepository,
-} from "../../repository/event";
+import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { CreateEventService } from "../create-event";
+import { makeEvent } from "./factorey/makeEvent";
 
 describe("Create Event (Service)", () => {
     let eventRepository: IEventRepository;
@@ -30,13 +28,10 @@ describe("Create Event (Service)", () => {
 
     describe("Successful cases", () => {
         it("should be able to create a new event", async () => {
-            const eventData: EventCreateInput = {
-                title: "Evento Teste Loide Maxima",
-                status: "draft",
-                bannerKey: null,
+            const eventData = makeEvent({
                 startAt: NOW.toDate(),
                 endsAt: NOW.add(5, "hour").toDate(),
-            };
+            });
 
             const { event } = await sut.execute({ data: eventData });
 
@@ -46,13 +41,10 @@ describe("Create Event (Service)", () => {
         });
 
         it("should be able create event with end date exactly 1 minute after start", async () => {
-            const eventData: EventCreateInput = {
-                title: "Evento Curto Válido",
-                status: "draft",
-                bannerKey: null,
+            const eventData = makeEvent({
                 startAt: NOW.toDate(),
                 endsAt: NOW.add(1, "minute").toDate(),
-            };
+            });
 
             const { event } = await sut.execute({ data: eventData });
 
@@ -61,13 +53,10 @@ describe("Create Event (Service)", () => {
         });
 
         it("should create event starting exactly now", async () => {
-            const eventData: EventCreateInput = {
-                title: "Evento Começando Agora",
-                status: "draft",
-                bannerKey: null,
+            const eventData = makeEvent({
                 startAt: NOW.toDate(),
                 endsAt: NOW.add(5, "hour").toDate(),
-            };
+            });
 
             const { event } = await sut.execute({ data: eventData });
 
@@ -78,13 +67,10 @@ describe("Create Event (Service)", () => {
 
     describe("Error cases", () => {
         it("should not be able to create an event with duplicated slug", async () => {
-            const eventData: EventCreateInput = {
-                title: "Evento Duplicado",
-                status: "draft",
-                bannerKey: null,
+            const eventData = makeEvent({
                 startAt: NOW.toDate(),
-                endsAt: NOW.add(1, "day").toDate(),
-            };
+                endsAt: NOW.add(5, "hour").toDate(),
+            });
 
             await sut.execute({ data: eventData });
 
@@ -94,13 +80,10 @@ describe("Create Event (Service)", () => {
         });
 
         it("should not be able to create an event with start date in the past", async () => {
-            const eventData: EventCreateInput = {
-                title: "Evento no Passado",
-                status: "draft",
-                bannerKey: null,
-                startAt: dayjs().subtract(1, "day").toDate(),
-                endsAt: dayjs().add(1, "day").toDate(),
-            };
+            const eventData = makeEvent({
+                startAt: NOW.subtract(1, "day").toDate(),
+                endsAt: NOW.add(1, "day").toDate(),
+            });
 
             await expect(
                 sut.execute({ data: eventData }),
@@ -108,15 +91,10 @@ describe("Create Event (Service)", () => {
         });
 
         it("should not be able to create an event that ends before it starts", async () => {
-            const startDate = dayjs().add(5, "day");
-
-            const eventData: EventCreateInput = {
-                title: "Evento com Data Final Inválida",
-                status: "draft",
-                bannerKey: null,
-                startAt: startDate.toDate(),
+            const eventData = makeEvent({
+                startAt: NOW.add(5, "day").toDate(),
                 endsAt: NOW.subtract(5, "hour").toDate(),
-            };
+            });
 
             await expect(
                 sut.execute({ data: eventData }),
@@ -126,13 +104,10 @@ describe("Create Event (Service)", () => {
         it("should not allow end date equal to start date", async () => {
             await expect(
                 sut.execute({
-                    data: {
-                        title: "Evento inválido",
-                        status: "draft",
-                        bannerKey: null,
+                    data: makeEvent({
                         startAt: NOW.toDate(),
                         endsAt: NOW.toDate(),
-                    },
+                    }),
                 }),
             ).rejects.toBeInstanceOf(EventEndBeforeStartError);
         });

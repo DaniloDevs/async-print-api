@@ -5,6 +5,7 @@ import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { EventStatus, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { UpdateEventStatusService } from "../update-event-status";
+import { makeEvent } from "./factorey/makeEvent";
 
 describe("Update Event Status (Service)", () => {
     let eventRepository: IEventRepository;
@@ -20,13 +21,14 @@ describe("Update Event Status (Service)", () => {
         eventRepository = new EventInMemoryRepository();
         sut = new UpdateEventStatusService(eventRepository);
 
-        const event = await eventRepository.create({
-            title: "Evento Teste",
-            status: "draft",
-            bannerKey: null,
-            startAt: NOW.toDate(),
-            endsAt: NOW.add(10, "hour").toDate(),
-        });
+        const event = await eventRepository.create(
+            makeEvent({
+                title: "Evento Teste",
+                status: "draft",
+                startAt: NOW.toDate(),
+                endsAt: NOW.add(10, "hour").toDate(),
+            }),
+        );
 
         eventId = event.id;
     });

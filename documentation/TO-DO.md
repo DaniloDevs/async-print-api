@@ -1,4 +1,4 @@
-## TODO List
+## TODO List - Version(0.13.17)
 
 ### Event 
 - [x] Deve ser possivel criar um evento
@@ -46,9 +46,9 @@
     * [x] Calcular total de leads no período do evento
     * [x] Calcular leads na hora atual
     * [x] Calcular status do evento (ativo/encerrado)
-- [] Deve ser possivel listar o total de leads agrupados por origem
-    * [ ] Retornar contagem total de leads por origem
-    * [ ] Ordenar resultados por contagem (descendente)
+- [x] Deve ser possivel listar o total de leads agrupados por origem
+    * [x] Retornar contagem total de leads por origem
+    * [x] Ordenar resultados por contagem (descendente)
 - [x] Deve ser possivel calcular o total de leads agrupados por turma 
     * [x] Retornar contagem total de leads por turma
     * [x] Ordenar resultados por contagem (descendente)

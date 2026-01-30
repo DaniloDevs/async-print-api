@@ -7,6 +7,8 @@ import { EventInMemoryRepository } from "../../repository/in-memory/events-repo"
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
 import { GetEventMetricsService } from "../get-event-metrics";
+import { makeEvent } from "./factorey/makeEvent";
+import { makeLead } from "./factorey/makeLead";
 
 describe("Get Event Metrics (Service)", () => {
     let sut: GetEventMetricsService;
@@ -24,13 +26,7 @@ describe("Get Event Metrics (Service)", () => {
         leadRepository = new LeadInMemoryRepository();
         sut = new GetEventMetricsService(eventRepository, leadRepository);
 
-        event = await eventRepository.create({
-            title: "Event Test",
-            bannerKey: null,
-            status: "active",
-            startAt: NOW.toDate(),
-            endsAt: NOW.add(10, "hour").toDate(),
-        });
+        event = await eventRepository.create(makeEvent());
     });
 
     afterEach(() => {
@@ -52,31 +48,27 @@ describe("Get Event Metrics (Service)", () => {
             // 3 leads recentes
             vi.setSystemTime(NOW.subtract(30, "minutes").toDate());
             for (let i = 0; i < 3; i++) {
-                await leadRepository.create({
-                    name: "Lead 1",
-                    phone: "21 983294521",
-                    email: "lead1@email.com",
-                    isStudent: true,
-                    intendsToStudyNextYear: true,
-                    technicalInterest: "INF",
-                    segmentInterest: "ANO_1_MEDIO",
-                    eventId: event.id,
-                });
+                await leadRepository.create(
+                    makeLead({
+                        name: `Lead ${i}`,
+                        phone: `21 90000000${i}`,
+                        email: `lead${i}@email.com`,
+                        eventId: event.id,
+                    }),
+                );
             }
 
             // 3 leads antigos
             vi.setSystemTime(NOW.subtract(2, "hours").toDate());
             for (let i = 0; i < 3; i++) {
-                await leadRepository.create({
-                    name: "Lead 1",
-                    phone: "21 983294521",
-                    email: "lead1@email.com",
-                    isStudent: true,
-                    intendsToStudyNextYear: true,
-                    technicalInterest: "INF",
-                    segmentInterest: "ANO_1_MEDIO",
-                    eventId: event.id,
-                });
+                await leadRepository.create(
+                    makeLead({
+                        name: `Lead ${i}`,
+                        phone: `21 90000000${i}`,
+                        email: `lead${i}@email.com`,
+                        eventId: event.id,
+                    }),
+                );
             }
 
             // agora atual
@@ -90,16 +82,14 @@ describe("Get Event Metrics (Service)", () => {
 
         it("should be possible to calculate metrics for leads created within 59 minutes.", async () => {
             vi.setSystemTime(NOW.subtract(59, "minutes").toDate());
-            await leadRepository.create({
-                name: "Lead 1",
-                phone: "21 983294521",
-                email: "lead1@email.com",
-                isStudent: true,
-                intendsToStudyNextYear: true,
-                technicalInterest: "INF",
-                segmentInterest: "ANO_1_MEDIO",
-                eventId: event.id,
-            });
+            await leadRepository.create(
+                makeLead({
+                    name: `Lead `,
+                    phone: `21 90000000`,
+                    email: `lead@email.com`,
+                    eventId: event.id,
+                }),
+            );
 
             vi.setSystemTime(NOW.toDate());
 
@@ -110,16 +100,14 @@ describe("Get Event Metrics (Service)", () => {
 
         it("should be possible to calculate zero metrics when there are no recent leads.", async () => {
             for (let i = 0; i < 3; i++) {
-                await leadRepository.create({
-                    name: `Lead ${i}`,
-                    phone: `217000000${i}`,
-                    email: `leads${i}@email.com`,
-                    isStudent: true,
-                    intendsToStudyNextYear: true,
-                    technicalInterest: "INF",
-                    segmentInterest: "ANO_1_MEDIO",
-                    eventId: event.id,
-                });
+                await leadRepository.create(
+                    makeLead({
+                        name: `Lead ${i}`,
+                        phone: `21 90000000${i}`,
+                        email: `lead${i}@email.com`,
+                        eventId: event.id,
+                    }),
+                );
             }
 
             vi.setSystemTime(dayjs().add(3, "h").toDate());
@@ -135,13 +123,9 @@ describe("Get Event Metrics (Service)", () => {
 
         it("should be possible to calculate the event status.", async () => {
             // Arrange - Criar evento com status diferente
-            const inactiveEvent = await eventRepository.create({
-                title: "Inactive Event",
-                bannerKey: null,
-                status: "inactive",
-                startAt: dayjs().toDate(),
-                endsAt: dayjs().add(5, "hour").toDate(),
-            });
+            const inactiveEvent = await eventRepository.create(
+                makeEvent({ status: "inactive" }),
+            );
 
             // Act
             const result = await sut.execute({ eventId: inactiveEvent.id });
@@ -155,16 +139,14 @@ describe("Get Event Metrics (Service)", () => {
 
             for (const minutes of offsets) {
                 vi.setSystemTime(NOW.subtract(minutes, "minutes").toDate());
-                await leadRepository.create({
-                    name: "Lead 1",
-                    phone: "21 983294521",
-                    email: "lead1@email.com",
-                    isStudent: true,
-                    intendsToStudyNextYear: true,
-                    technicalInterest: "INF",
-                    segmentInterest: "ANO_1_MEDIO",
-                    eventId: event.id,
-                });
+                await leadRepository.create(
+                    makeLead({
+                        name: `Lead`,
+                        phone: `21 90000040`,
+                        email: `lea@email.com`,
+                        eventId: event.id,
+                    }),
+                );
             }
 
             vi.setSystemTime(NOW.toDate());

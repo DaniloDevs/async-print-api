@@ -6,6 +6,8 @@ import { EventInMemoryRepository } from "../../repository/in-memory/events-repo"
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
 import { GetLeadCaptureMetricsService } from "../get-lead-capture-metrics";
+import { makeEvent } from "./factorey/makeEvent";
+import { makeLead } from "./factorey/makeLead";
 
 describe("Get lead capture metrics (Service)", () => {
     let sut: GetLeadCaptureMetricsService;
@@ -23,13 +25,12 @@ describe("Get lead capture metrics (Service)", () => {
         leadRepository = new LeadInMemoryRepository();
         sut = new GetLeadCaptureMetricsService(eventRepository, leadRepository);
 
-        event = await eventRepository.create({
-            title: "Event Test",
-            bannerKey: null,
-            status: "active",
-            startAt: NOW.toDate(),
-            endsAt: NOW.add(10, "hour").toDate(),
-        });
+        event = await eventRepository.create(
+            makeEvent({
+                startAt: NOW.toDate(),
+                endsAt: NOW.add(10, "hour").toDate(),
+            }),
+        );
     });
 
     afterEach(() => {
@@ -42,16 +43,14 @@ describe("Get lead capture metrics (Service)", () => {
                 vi.setSystemTime(NOW.add(ii, "h").toDate());
 
                 for (let i = 0; i < 5; i++) {
-                    await leadRepository.create({
-                        name: `Lead ${i}`,
-                        phone: `217000000${i}`,
-                        email: `leads${i}@email.com`,
-                        isStudent: true,
-                        intendsToStudyNextYear: true,
-                        technicalInterest: "INF",
-                        segmentInterest: "ANO_1_MEDIO",
-                        eventId: event.id,
-                    });
+                    await leadRepository.create(
+                        makeLead({
+                            name: `Lead ${i}`,
+                            phone: `217000000${i}`,
+                            email: `leads${i}@email.com`,
+                            eventId: event.id,
+                        }),
+                    );
                 }
             }
 
@@ -67,16 +66,14 @@ describe("Get lead capture metrics (Service)", () => {
                 vi.setSystemTime(NOW.add(ii, "h").toDate());
 
                 for (let i = 0; i < 2; i++) {
-                    await leadRepository.create({
-                        name: `Lead ${i}`,
-                        phone: `217000000${i}`,
-                        email: `leads${i}@email.com`,
-                        isStudent: true,
-                        intendsToStudyNextYear: true,
-                        technicalInterest: "INF",
-                        segmentInterest: "ANO_1_MEDIO",
-                        eventId: event.id,
-                    });
+                    await leadRepository.create(
+                        makeLead({
+                            name: `Lead ${i}`,
+                            phone: `217000000${i}`,
+                            email: `leads${i}@email.com`,
+                            eventId: event.id,
+                        }),
+                    );
                 }
             }
 
@@ -93,16 +90,14 @@ describe("Get lead capture metrics (Service)", () => {
                 vi.setSystemTime(NOW.add(ii, "h").toDate());
 
                 for (let i = 0; i < Math.floor(5); i++) {
-                    await leadRepository.create({
-                        name: `Lead ${i}`,
-                        phone: `217000000${i}`,
-                        email: `leads${i}@email.com`,
-                        isStudent: true,
-                        intendsToStudyNextYear: true,
-                        technicalInterest: "INF",
-                        segmentInterest: "ANO_1_MEDIO",
-                        eventId: event.id,
-                    });
+                    await leadRepository.create(
+                        makeLead({
+                            name: `Lead ${i}`,
+                            phone: `217000000${i}`,
+                            email: `leads${i}@email.com`,
+                            eventId: event.id,
+                        }),
+                    );
                 }
             }
 
@@ -117,16 +112,14 @@ describe("Get lead capture metrics (Service)", () => {
                 vi.setSystemTime(NOW.add(ii, "h").toDate());
 
                 for (let i = 0; i < Math.floor(10); i++) {
-                    await leadRepository.create({
-                        name: `Lead ${i}`,
-                        phone: `217000000${i}`,
-                        email: `leads${i}@email.com`,
-                        isStudent: true,
-                        intendsToStudyNextYear: true,
-                        technicalInterest: "INF",
-                        segmentInterest: "ANO_1_MEDIO",
-                        eventId: event.id,
-                    });
+                    await leadRepository.create(
+                        makeLead({
+                            name: `Lead ${i}`,
+                            phone: `217000000${i}`,
+                            email: `leads${i}@email.com`,
+                            eventId: event.id,
+                        }),
+                    );
                 }
             }
 
@@ -142,16 +135,14 @@ describe("Get lead capture metrics (Service)", () => {
                 vi.setSystemTime(NOW.add(ii, "h").toDate());
 
                 for (let i = 0; i < Math.floor(25); i++) {
-                    await leadRepository.create({
-                        name: `Lead ${i}`,
-                        phone: `217000000${i}`,
-                        email: `leads${i}@email.com`,
-                        isStudent: true,
-                        intendsToStudyNextYear: true,
-                        technicalInterest: "INF",
-                        segmentInterest: "ANO_1_MEDIO",
-                        eventId: event.id,
-                    });
+                    await leadRepository.create(
+                        makeLead({
+                            name: `Lead ${i}`,
+                            phone: `217000000${i}`,
+                            email: `leads${i}@email.com`,
+                            eventId: event.id,
+                        }),
+                    );
                 }
             }
 
