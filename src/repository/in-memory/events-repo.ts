@@ -62,7 +62,6 @@ export class EventInMemoryRepository implements IEventRepository {
 }
 
 function generateSlug(title: string): string {
-
     return title
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
@@ -70,4 +69,3 @@ function generateSlug(title: string): string {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");
 }
-

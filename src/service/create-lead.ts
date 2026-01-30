@@ -4,7 +4,7 @@ import { EventNotActiveError } from "../_errors/event-not-active-error";
 import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
 import { LeadAlreadyRegisteredError } from "../_errors/lead-already-registered-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import type { IEventRepository, Event } from "../repository/event";
+import type { IEventRepository } from "../repository/event";
 import type {
     ILeadRepository,
     Lead,
@@ -23,7 +23,7 @@ export class CreateLeadService {
     constructor(
         private eventRepository: IEventRepository,
         private leadRepository: ILeadRepository,
-    ) { }
+    ) {}
 
     async execute({ data, eventId }: RequestDate): Promise<ResponseDate> {
         const event = await this.eventRepository.findById(eventId);
@@ -51,13 +51,11 @@ export class CreateLeadService {
 
         const formattedPhoneNumber = this.normalizePhoneNumber(data.phone);
 
-    
         const lead = await this.leadRepository.create({
             ...data,
             eventId: event.id,
             phone: formattedPhoneNumber,
         });
-        
 
         return { lead };
     }
