@@ -74,11 +74,3 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 - **Segurança**: RBAC para operações críticas (export, reprocessar, cancelar)
 - **Observabilidade**: Alertas quando fila cresce além de threshold configurável
 
----
-
-## 📚 Documentação
-
-- **Swagger/Scalar** — Documentação interativa em `/docs`
-- **Bull Board** — Dashboard de monitoramento de filas em `/dashboard/jobs`
-
-
