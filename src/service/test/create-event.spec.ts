@@ -5,7 +5,6 @@ import { EventEndBeforeStartError } from "../../_errors/event-end-before-start-e
 import { EventStartDateInPastError } from "../../_errors/event-start-date-in-past-error";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
-import { createSlug } from "../../utils/create-slug";
 import { CreateEventService } from "../create-event";
 import { makeEvent } from "./factorey/makeEvent";
 
@@ -37,7 +36,7 @@ describe("Create Event (Service)", () => {
             const { event } = await sut.execute({ data: eventData });
 
             expect(event.id).toEqual(expect.any(String));
-            expect(event.slug).toBe(createSlug(eventData.title));
+            expect(event.slug).toBe(sut.generateSlug(eventData.title));
             expect(event.startAt.getTime()).toBe(eventData.startAt.getTime());
         });
 
