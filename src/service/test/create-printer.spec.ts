@@ -2,23 +2,29 @@ import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PrinterAlreadyExistsError } from "../../_errors/printer-already-exist-error";
 import type { IPrinterProvider } from "../../provider/Printer-provider";
+import type { IEventRepository } from "../../repository/event";
+import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { PrinterInMemoryRepository } from "../../repository/in-memory/printer-repo";
-import type { PrinterCreateInput } from "../../repository/printer";
 import { generateSlug } from "../../utils/generate-slug";
 import { CreatePrinterService } from "../create-printer";
+import { makeEvent } from "./factorey/makeEvent";
+import { makePrinter } from "./factorey/makePrinter";
 
 describe("Create Printer (Service)", () => {
     let printerRepository: PrinterInMemoryRepository;
+    let eventRepository: IEventRepository;
     let printerProvider: IPrinterProvider & { isAvailable: any };
     let sut: CreatePrinterService;
 
     const NOW = dayjs("2024-01-01T12:00:00Z");
+    const eventInput = makeEvent();
 
     beforeEach(() => {
         vi.useFakeTimers();
         vi.setSystemTime(NOW.toDate());
 
         printerRepository = new PrinterInMemoryRepository();
+        eventRepository = new EventInMemoryRepository();
         printerProvider = {
             isAvailable: vi.fn(),
         } as unknown as IPrinterProvider & { isAvailable: any };
@@ -33,13 +39,11 @@ describe("Create Printer (Service)", () => {
 
     describe("Successful cases", () => {
         it("should create a new printer with status 'connected' when available", async () => {
-            const printerData: PrinterCreateInput = {
-                name: "Impressora Principal",
-                path: "/dev/usb/lp0",
-                type: "network",
-                description: "Impressora da recepção",
+            const event = await eventRepository.create(eventInput);
+            const printerData = makePrinter({
                 status: "connected",
-            };
+                eventId: event.id,
+            });
 
             printerProvider.isAvailable.mockResolvedValue(true);
 
@@ -56,12 +60,11 @@ describe("Create Printer (Service)", () => {
         });
 
         it("should create a new printer with status 'disconnected' when not available", async () => {
-            const printerData: PrinterCreateInput = {
-                name: "Impressora Backup",
-                path: "/dev/usb/lp1",
-                type: "thermal",
+            const event = await eventRepository.create(eventInput);
+            const printerData = makePrinter({
                 status: "disconnected",
-            };
+                eventId: event.id,
+            });
 
             printerProvider.isAvailable.mockResolvedValue(false);
 
@@ -76,12 +79,11 @@ describe("Create Printer (Service)", () => {
         });
 
         it("should generate a slug removing accents and special characters", async () => {
-            const printerData: PrinterCreateInput = {
+            const event = await eventRepository.create(eventInput);
+            const printerData = makePrinter({
                 name: "Impressõra Áccênt",
-                path: "/dev/usb/lp2",
-                type: "laser",
-                status: "connected",
-            };
+                eventId: event.id,
+            });
 
             printerProvider.isAvailable.mockResolvedValue(true);
 
@@ -93,12 +95,11 @@ describe("Create Printer (Service)", () => {
 
     describe("Error cases", () => {
         it("should not allow creating a printer with duplicated slug", async () => {
-            const printerData: PrinterCreateInput = {
-                name: "Duplicada",
-                path: "/dev/usb/lp3",
-                type: "pdf",
-                status: "disconnected",
-            };
+            const event = await eventRepository.create(eventInput);
+            const printerData = makePrinter({
+                name: "Error case",
+                eventId: event.id,
+            });
 
             printerProvider.isAvailable.mockResolvedValue(true);
 

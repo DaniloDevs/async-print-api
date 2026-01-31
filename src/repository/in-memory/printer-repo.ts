@@ -18,6 +18,7 @@ export class PrinterInMemoryRepository implements IPrinterRepository {
             status: data.status,
             type: data.type,
             description: data.description ?? undefined,
+            eventId: data.eventId,
         };
 
         this.items.push(printer);
@@ -28,5 +29,11 @@ export class PrinterInMemoryRepository implements IPrinterRepository {
     async findBySlug(slug: string): Promise<Printer | null> {
         const printer = this.items.find((item) => item.slug === slug);
         return printer || null;
+    }
+
+    async findManyByEventId(eventId: string): Promise<Printer[]> {
+        const leads = this.items.filter((item) => item.eventId === eventId);
+
+        return leads;
     }
 }

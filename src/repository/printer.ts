@@ -23,6 +23,7 @@ const printer = z.object({
     type: printerTypeEnum,
     status: printerStatusEnum.default("disconnected"),
     createdAt: z.date(),
+    eventId: z.string(),
 });
 
 const printerCreateInput = printer.omit({
@@ -39,4 +40,5 @@ export type PrinterStatusEnum = z.infer<typeof printerStatusEnum>;
 export interface IPrinterRepository {
     create(data: PrinterCreateInput): Promise<Printer>;
     findBySlug(slug: string): Promise<Printer | null>;
+    findManyByEventId(eventId: string): Promise<Printer[]>;
 }

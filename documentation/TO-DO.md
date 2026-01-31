@@ -64,10 +64,10 @@
   * [x] Registrar impressora com identificador único (printerId)
   * [ ] Definir status inicial da impressora (online | offline)
   * [x] Persistir metadados básicos (nome, localização, tipo)
-- [ ] Deve ser possível listar impressoras
+- [x] Deve ser possível listar impressoras
   * [ ] Retornar lista paginada de impressoras
   * [ ] Permitir filtro por status (online/offline)
-  * [ ] Retornar total de registros
+  * [x] Retornar total de registros
 - [ ] Deve ser possível consultar a fila de impressão por impressora
   * [ ] Retornar jobs associados a um printerId
   * [ ] Filtrar por status do job (pending, processing, failed)
