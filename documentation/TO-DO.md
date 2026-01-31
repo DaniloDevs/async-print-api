@@ -60,10 +60,10 @@
 # RF — PRINTER (REESCRITO)
 
 ### Printer
-- [ ] Deve ser possível registrar uma impressora
-  * [ ] Registrar impressora com identificador único (printerId)
+- [x] Deve ser possível registrar uma impressora
+  * [x] Registrar impressora com identificador único (printerId)
   * [ ] Definir status inicial da impressora (online | offline)
-  * [ ] Persistir metadados básicos (nome, localização, tipo)
+  * [x] Persistir metadados básicos (nome, localização, tipo)
 - [ ] Deve ser possível listar impressoras
   * [ ] Retornar lista paginada de impressoras
   * [ ] Permitir filtro por status (online/offline)
