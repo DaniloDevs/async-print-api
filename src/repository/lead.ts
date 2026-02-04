@@ -41,14 +41,12 @@ const leadCreateInput = lead.omit({
     createdAt: true,
 });
 
-
 export const leadJobPayload = lead.pick({
     id: true,
     name: true,
     phone: true,
     email: true,
-})
-
+});
 
 export type Lead = z.infer<typeof lead>;
 export type LeadCreateInput = z.infer<typeof leadCreateInput>;

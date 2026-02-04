@@ -37,8 +37,13 @@ export class PrinterInMemoryRepository implements IPrinterRepository {
         return leads;
     }
 
-    async fidnByIdAndEventId(id: string, eventId: string): Promise<Printer | null> {
-        const printer = this.items.find((item) => item.id === id && item.eventId === eventId);
+    async fidnByIdAndEventId(
+        id: string,
+        eventId: string,
+    ): Promise<Printer | null> {
+        const printer = this.items.find(
+            (item) => item.id === id && item.eventId === eventId,
+        );
         return printer || null;
     }
 }

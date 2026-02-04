@@ -28,7 +28,11 @@ export class JobInMemoryRepository implements IJobRepository {
 
     async findPendingByPrinterId(printerId: string): Promise<Job[]> {
         const jobs = this.items
-            .filter((item) => item.status === "PENDING" && item.payload?.printerId === printerId)
+            .filter(
+                (item) =>
+                    item.status === "PENDING" &&
+                    item.payload?.printerId === printerId,
+            )
             .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
         return jobs;

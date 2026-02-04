@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
-import { PrinterInMemoryRepository } from "../../repository/in-memory/printer-repo";
 import { JobInMemoryRepository } from "../../repository/in-memory/job-repo";
+import { PrinterInMemoryRepository } from "../../repository/in-memory/printer-repo";
 import { GetPrinterQueue } from "../get-printer-queue";
 import { makeEvent } from "./factorey/makeEvent";
-import { makePrinter } from "./factorey/makePrinter";
 import { makeJob } from "./factorey/makeJob";
+import { makePrinter } from "./factorey/makePrinter";
 
 describe("Get printer queue (Service)", () => {
     let sut: GetPrinterQueue;
@@ -20,8 +20,7 @@ describe("Get printer queue (Service)", () => {
         jobsRepository = new JobInMemoryRepository();
 
         sut = new GetPrinterQueue(printersRepository, jobsRepository);
-    })
-
+    });
 
     describe("Successful cases", () => {
         it("should return pending jobs for a printer ordered by createdAt (oldest first)", async () => {
@@ -43,7 +42,10 @@ describe("Get printer queue (Service)", () => {
             );
 
             await jobsRepository.create(
-                makeJob({ name: "job-other", payload: { printerId: otherPrinter.id } }),
+                makeJob({
+                    name: "job-other",
+                    payload: { printerId: otherPrinter.id },
+                }),
             );
 
             const jobC = await jobsRepository.create(
@@ -52,22 +54,30 @@ describe("Get printer queue (Service)", () => {
 
             await jobsRepository.markAsProcessing(jobC.id);
 
-            const { jobs } = await sut.execute({ printerId: printer.id, eventId: event.id });
+            const { jobs } = await sut.execute({
+                printerId: printer.id,
+                eventId: event.id,
+            });
 
             expect(jobs).toHaveLength(2);
             expect(jobs[0].name).toBe(jobA.name);
             expect(jobs[1].name).toBe(jobB.name);
-            expect(jobs.every((j) => j.payload?.printerId === printer.id)).toBe(true);
+            expect(jobs.every((j) => j.payload?.printerId === printer.id)).toBe(
+                true,
+            );
         });
-    })
+    });
 
     describe("Error cases", () => {
         it("should throw ResourceNotFoundError when printer does not exist for the given event", async () => {
             const event = await eventRepository.create(makeEvent());
 
             await expect(
-                sut.execute({ printerId: "non-existent-id", eventId: event.id }),
+                sut.execute({
+                    printerId: "non-existent-id",
+                    eventId: event.id,
+                }),
             ).rejects.toBeInstanceOf(ResourceNotFoundError);
         });
-    })
+    });
 });

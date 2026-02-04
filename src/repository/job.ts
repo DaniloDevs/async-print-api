@@ -1,11 +1,6 @@
 import z from "zod";
 
-const JobStatus = z.enum([
-    "PENDING",
-    "PROCESSING",
-    "COMPLETED",
-    "FAILED"
-])
+const JobStatus = z.enum(["PENDING", "PROCESSING", "COMPLETED", "FAILED"]);
 
 const job = z.object({
     id: z.string(),
@@ -28,7 +23,7 @@ const jobCreateInput = job.omit({
     createdAt: true,
     processedAt: true,
     completedAt: true,
-    error: true
+    error: true,
 });
 
 export type Job = z.infer<typeof job>;
