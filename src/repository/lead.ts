@@ -41,11 +41,21 @@ const leadCreateInput = lead.omit({
     createdAt: true,
 });
 
+
+export const leadJobPayload = lead.pick({
+    id: true,
+    name: true,
+    phone: true,
+    email: true,
+})
+
+
 export type Lead = z.infer<typeof lead>;
 export type LeadCreateInput = z.infer<typeof leadCreateInput>;
 export type SegmentInterest = z.infer<typeof segmentInterest>;
 export type TechnicalInterest = z.infer<typeof technicalInterestEnum>;
 export type OrigenLead = z.infer<typeof origenEnum>;
+export type PrintJobPayload = z.infer<typeof leadJobPayload>;
 
 export interface ILeadRepository {
     create(data: LeadCreateInput): Promise<Lead>;

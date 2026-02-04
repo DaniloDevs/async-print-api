@@ -57,7 +57,7 @@
     * [x] Ordenar resultados por contagem (descendente)
 
 
-# RF — PRINTER (REESCRITO)
+# RF — PRINTER
 
 ### Printer
 - [x] Deve ser possível registrar uma impressora
@@ -68,14 +68,22 @@
   * [ ] Retornar lista paginada de impressoras
   * [ ] Permitir filtro por status (online/offline)
   * [x] Retornar total de registros
-- [ ] Deve ser possível consultar a fila de impressão por impressora
-  * [ ] Retornar jobs associados a um printerId
+- [x] Deve ser possível consultar a fila de impressão por impressora
+  * [x] Retornar jobs associados a um printerId
   * [ ] Filtrar por status do job (pending, processing, failed)
   * [ ] Implementar paginação configurável
   * [ ] Retornar contagem total de jobs por status
 
 
 ### JOB 
+- [ ] Deve ser possível obter métricas dos jobs de impressão
+    * [ ] Retornar contagem total de jobs
+    * [ ] Retornar contagem por status: pending, processing, failed, done
+    * [ ] Retornar contagem por printerId
+    * [ ] Retornar contagem por período (ex.: últimas 24h, 7d, intervalo customizável)
+    * [ ] Suportar filtros por status, printerId, eventId e intervalo de datas
+    * [ ] Suportar paginação e ordenação nos resultados
+    * [ ] Definir e documentar critérios de aceitação e SLAs de latência
 - [ ] Deve ser possível solicitar uma impressão de forma assíncrona
   * [ ] Validar existência da impressora
   * [ ] Validar payload de impressão (formato e tamanho)

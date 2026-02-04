@@ -40,5 +40,6 @@ export type PrinterStatusEnum = z.infer<typeof printerStatusEnum>;
 export interface IPrinterRepository {
     create(data: PrinterCreateInput): Promise<Printer>;
     findBySlug(slug: string): Promise<Printer | null>;
+    fidnByIdAndEventId(id: string, eventId: string): Promise<Printer | null>;
     findManyByEventId(eventId: string): Promise<Printer[]>;
 }
