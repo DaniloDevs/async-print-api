@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EventAlreadyExistsError } from "../../_errors/event-already-exist-error";
 import { EventEndBeforeStartError } from "../../_errors/event-end-before-start-error";
 import { EventStartDateInPastError } from "../../_errors/event-start-date-in-past-error";
+import { EventDurationTooShortError } from "../../_errors/event-duration-too-short-error";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { CreateEventService } from "../create-event";
@@ -40,17 +41,7 @@ describe("Create Event (Service)", () => {
             expect(event.startAt.getTime()).toBe(eventData.startAt.getTime());
         });
 
-        it("should be able create event with end date exactly 1 minute after start", async () => {
-            const eventData = makeEvent({
-                startAt: NOW.toDate(),
-                endsAt: NOW.add(1, "minute").toDate(),
-            });
-
-            const { event } = await sut.execute({ data: eventData });
-
-            expect(event.id).toEqual(expect.any(String));
-            expect(dayjs(event.endsAt).isAfter(event.startAt)).toBe(true);
-        });
+        // Note: minimum event duration validation exists — very short events are invalid.
 
         it("should create event starting exactly now", async () => {
             const eventData = makeEvent({
@@ -110,6 +101,17 @@ describe("Create Event (Service)", () => {
                     }),
                 }),
             ).rejects.toBeInstanceOf(EventEndBeforeStartError);
+        });
+
+        it("should not be able to create an event shorter than minimum duration", async () => {
+            const eventData = makeEvent({
+                startAt: NOW.toDate(),
+                endsAt: NOW.add(1, "minute").toDate(),
+            });
+
+            await expect(sut.execute({ data: eventData })).rejects.toBeInstanceOf(
+                EventDurationTooShortError,
+            );
         });
     });
 });
