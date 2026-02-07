@@ -5,7 +5,7 @@
     * [x] Validar data/hora de início e fim (início < fim)
     * [x] Gerar slug único e imutável
     * [x] Rejeitar criação inválida com erro apropriado
-    * [ ] Bloquear a criação de eventos muitos curtos
+    * [x] Bloquear a criação de eventos muitos curtos
 - [x] Deve ser Possivel buscar um evento pelo Slug
 - [x] Deve Ser possivel atualizar o banner do evento
     * [x] Verificar se evento está ativo ou no futuro
@@ -20,7 +20,6 @@
     * [x] Verificar se evento está ativo no momento da criação
     * [ ] Garantir operação atômica
 - [x] Deve ser possivel listar leads de um evento
-    * [ ] Implementar listagem de leads por eventId
     * [ ] Adicionar paginação configurável
     * [ ] Implementar filtros por período
     * [ ] Ordenar resultados por timestamp
