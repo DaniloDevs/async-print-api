@@ -8,8 +8,8 @@
     * [ ] Bloquear a criação de eventos muitos curtos
 - [x] Deve ser Possivel buscar um evento pelo Slug
 - [x] Deve Ser possivel atualizar o banner do evento
-    * [ ] Verificar se evento está ativo ou no futuro
-    * [ ] Bloquear atualização se evento estiver encerrado
+    * [x] Verificar se evento está ativo ou no futuro
+    * [x] Bloquear atualização se evento estiver encerrado
 - [x] Deve ser possivel atualizar o status de um evento
     * [x] Implementar operação administrativa de status
     * [ ] Validar consistência com regra temporal

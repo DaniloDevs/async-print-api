@@ -1,6 +1,8 @@
 import crypto from "node:crypto";
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { EventAlreadyEndedError } from "../../_errors/event-already-ended-error";
+import { EventNotStartedYetError } from "../../_errors/event-not-started-yet-error";
 import { InvalidFileTypeError } from "../../_errors/invalid-file-type-error";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../../provider/storage-provider";
@@ -32,8 +34,8 @@ describe("Update event Banner (Service)", () => {
 
         Event = await eventRepository.create(
             makeEvent({
-                startAt: NOW.toDate(),
-                endsAt: NOW.add(10, "hour").toDate(),
+                startAt: NOW.add(1, "hour").toDate(),
+                endsAt: NOW.add(11, "hour").toDate(),
             }),
         );
     });
@@ -147,6 +149,98 @@ describe("Update event Banner (Service)", () => {
                     file,
                 }),
             ).rejects.toBeInstanceOf(ResourceNotFoundError);
+        });
+
+        it("It should not be possible to update the banner of a finished event.", async () => {
+            const finishedEvent = await eventRepository.create(
+                makeEvent({
+                    startAt: NOW.subtract(2, "hour").toDate(),
+                    endsAt: NOW.subtract(1, "hour").toDate(),
+                    status: "finished",
+                }),
+            );
+
+            const file = {
+                buffer: Buffer.from("fake-image"),
+                filename: "banner.png",
+                mimetype: "image/png",
+            };
+
+            await expect(
+                sut.execute({
+                    eventId: finishedEvent.id,
+                    file,
+                }),
+            ).rejects.toBeInstanceOf(EventAlreadyEndedError);
+        });
+
+        it("It should not be possible to update the banner of a canceled event.", async () => {
+            const canceledEvent = await eventRepository.create(
+                makeEvent({
+                    startAt: NOW.add(5, "hour").toDate(),
+                    endsAt: NOW.add(10, "hour").toDate(),
+                    status: "canceled",
+                }),
+            );
+
+            const file = {
+                buffer: Buffer.from("fake-image"),
+                filename: "banner.png",
+                mimetype: "image/png",
+            };
+
+            await expect(
+                sut.execute({
+                    eventId: canceledEvent.id,
+                    file,
+                }),
+            ).rejects.toBeInstanceOf(EventAlreadyEndedError);
+        });
+
+        it("It should not be possible to update the banner when the event has already started.", async () => {
+            const runningEvent = await eventRepository.create(
+                makeEvent({
+                    startAt: NOW.subtract(1, "hour").toDate(),
+                    endsAt: NOW.add(5, "hour").toDate(),
+                    status: "active",
+                }),
+            );
+
+            const file = {
+                buffer: Buffer.from("fake-image"),
+                filename: "banner.png",
+                mimetype: "image/png",
+            };
+
+            await expect(
+                sut.execute({
+                    eventId: runningEvent.id,
+                    file,
+                }),
+            ).rejects.toBeInstanceOf(EventNotStartedYetError);
+        });
+
+        it("It should not be possible to update the banner at the exact moment the event starts.", async () => {
+            const startingEvent = await eventRepository.create(
+                makeEvent({
+                    startAt: NOW.toDate(),
+                    endsAt: NOW.add(10, "hour").toDate(),
+                    status: "active",
+                }),
+            );
+
+            const file = {
+                buffer: Buffer.from("fake-image"),
+                filename: "banner.png",
+                mimetype: "image/png",
+            };
+
+            await expect(
+                sut.execute({
+                    eventId: startingEvent.id,
+                    file,
+                }),
+            ).rejects.toBeInstanceOf(EventNotStartedYetError);
         });
     });
 });

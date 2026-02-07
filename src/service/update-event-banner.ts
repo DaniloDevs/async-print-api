@@ -1,4 +1,6 @@
 import path from "node:path";
+import { EventAlreadyEndedError } from "../_errors/event-already-ended-error";
+import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
 import { InvalidFileTypeError } from "../_errors/invalid-file-type-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../provider/storage-provider";
@@ -33,6 +35,17 @@ export class UpdateEventBannerService {
                 resourceType: "Event",
                 resource: eventId,
             });
+        }
+
+        // Validar se o evento já foi finalizado
+        if (event.status === "finished" || event.status === "canceled") {
+            throw new EventAlreadyEndedError(event.endsAt);
+        }
+
+        // Validar se o evento já está acontecendo
+        const now = new Date();
+        if (event.startAt <= now) {
+            throw new EventNotStartedYetError(event.startAt);
         }
 
         const ext = path.extname(file.filename);
