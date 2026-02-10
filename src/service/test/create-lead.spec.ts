@@ -7,7 +7,9 @@ import { LeadAlreadyRegisteredError } from "../../_errors/lead-already-registere
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
+import { JobInMemoryRepository } from "../../repository/in-memory/job-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
+import type { IJobRepository } from "../../repository/job";
 import type { ILeadRepository } from "../../repository/lead";
 import { CreateLeadService } from "../create-lead";
 import { makeEvent } from "./factorey/makeEvent";
@@ -16,6 +18,7 @@ import { makeLead } from "./factorey/makeLead";
 describe("Create Lead (Service)", () => {
     let eventRepository: IEventRepository;
     let leadRepository: ILeadRepository;
+    let jobRepository: IJobRepository;
     let sut: CreateLeadService;
 
     const NOW = dayjs("2024-01-01T12:00:00Z");
@@ -29,7 +32,12 @@ describe("Create Lead (Service)", () => {
 
         eventRepository = new EventInMemoryRepository();
         leadRepository = new LeadInMemoryRepository();
-        sut = new CreateLeadService(eventRepository, leadRepository);
+        jobRepository = new JobInMemoryRepository();
+        sut = new CreateLeadService(
+            eventRepository,
+            leadRepository,
+            jobRepository,
+        );
     });
 
     afterEach(() => {
@@ -61,6 +69,35 @@ describe("Create Lead (Service)", () => {
             );
 
             expect(lead.phone).toBe(normalizedPhoneNumber);
+        });
+
+        it("should create a job when a lead is created", async () => {
+            const event = await eventRepository.create(eventInput);
+
+            const createSpy = vi.spyOn(jobRepository, "create");
+
+            const { lead } = await sut.execute({
+                data: { ...leadInput, eventId: event.id },
+                eventId: event.id,
+            });
+
+            expect(createSpy).toHaveBeenCalledTimes(1);
+
+            const expectedPhoneSuffix = lead.phone.slice(-4);
+
+            expect(createSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    name: `JOB - ${lead.id} - ${lead.name}`,
+                    payload: {
+                        id: lead.id,
+                        name: lead.name,
+                        phone: expectedPhoneSuffix,
+                    },
+                    maxAttempts: 1,
+                }),
+            );
+
+            createSpy.mockRestore();
         });
     });
 

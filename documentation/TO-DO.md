@@ -2,58 +2,58 @@
 
 ### Event 
 - [x] Deve ser possivel criar um evento
-    * [x] Validar data/hora de início e fim (início < fim)
-    * [x] Gerar slug único e imutável
-    * [x] Rejeitar criação inválida com erro apropriado
-    * [x] Bloquear a criação de eventos muitos curtos
+  * [x] Validar data/hora de início e fim (início < fim)
+  * [x] Gerar slug único e imutável
+  * [x] Rejeitar criação inválida com erro apropriado
+  * [x] Bloquear a criação de eventos muitos curtos
 - [x] Deve ser Possivel buscar um evento pelo Slug
 - [x] Deve Ser possivel atualizar o banner do evento
-    * [x] Verificar se evento está ativo ou no futuro
-    * [x] Bloquear atualização se evento estiver encerrado
+  * [x] Verificar se evento está ativo ou no futuro
+  * [x] Bloquear atualização se evento estiver encerrado
 - [x] Deve ser possivel atualizar o status de um evento
-    * [x] Implementar operação administrativa de status
-    * [ ] Validar consistência com regra temporal
+  * [x] Implementar operação administrativa de status
+  * [ ] Validar consistência com regra temporal
 
 
 ### Lead 
 - [x] Deve ser possivel criar um lead
-    * [x] Verificar se evento está ativo no momento da criação
-    * [ ] Garantir operação atômica
+  * [x] Verificar se evento está ativo no momento da criação
+  * [ ] Garantir operação atômica
 - [x] Deve ser possivel listar leads de um evento
-    * [ ] Adicionar paginação configurável
-    * [ ] Implementar filtros por período
-    * [ ] Ordenar resultados por timestamp
-    * [ ] Ordenar resultados por interesse
-    * [ ] Garantir retorno paginado consistente
+  * [ ] Adicionar paginação configurável
+  * [ ] Implementar filtros por período
+  * [ ] Ordenar resultados por timestamp
+  * [ ] Ordenar resultados por interesse
+  * [ ] Garantir retorno paginado consistente
 - [x] Deve ser possivel exportar leads de um evento
-    * [ ] Rejeitar exportação se evento não tiver leads
-    * [ ] Garantir que exportação não bloqueie UI
-    * [ ] Implementar criação de job assíncrono de exportação
-    * [ ] Vincular job ao eventId
+  * [ ] Rejeitar exportação se evento não tiver leads
+  * [ ] Garantir que exportação não bloqueie UI
+  * [ ] Implementar criação de job assíncrono de exportação
+  * [ ] Vincular job ao eventId
 
 
 ### Metrics 
 - [x] Deve ser possivel calcular o total de leads por hora
-    * [] Implementar consulta de leads por janela de tempo
-    * [x] Garantir resposta determinística para o período solicitado
-    * [ ] Otimizar para alto volume (pré-agregação)
-    * [ ] Garantir latência dentro do limite definido no NFR
+  * [] Implementar consulta de leads por janela de tempo
+  * [x] Garantir resposta determinística para o período solicitado
+  * [ ] Otimizar para alto volume (pré-agregação)
+  * [ ] Garantir latência dentro do limite definido no NFR
 - [x] Deve ser possivel obter a media de captura de leads por evento
-    * [x] Definir e documentar fórmula de cálculo
-    * [x] Considerar apenas tempo ativo do evento
+  * [x] Definir e documentar fórmula de cálculo
+  * [x] Considerar apenas tempo ativo do evento
 - [x] Deve ser possivel obter um resumo consolidado do evento
-    * [x] Calcular total de leads no período do evento
-    * [x] Calcular leads na hora atual
-    * [x] Calcular status do evento (ativo/encerrado)
+  * [x] Calcular total de leads no período do evento
+  * [x] Calcular leads na hora atual
+  * [x] Calcular status do evento (ativo/encerrado)
 - [x] Deve ser possivel listar o total de leads agrupados por origem
-    * [x] Retornar contagem total de leads por origem
-    * [x] Ordenar resultados por contagem (descendente)
+  * [x] Retornar contagem total de leads por origem
+  * [x] Ordenar resultados por contagem (descendente)
 - [x] Deve ser possivel calcular o total de leads agrupados por turma 
-    * [x] Retornar contagem total de leads por turma
-    * [x] Ordenar resultados por contagem (descendente)
+  * [x] Retornar contagem total de leads por turma
+  * [x] Ordenar resultados por contagem (descendente)
 - [x] Deve ser possivel calcular o total de leads agrupados por tecnico
-    * [x] Retornar contagem total de leads por turma
-    * [x] Ordenar resultados por contagem (descendente)
+  * [x] Retornar contagem total de leads por turma
+  * [x] Ordenar resultados por contagem (descendente)
 
 
 # RF — PRINTER
@@ -76,13 +76,13 @@
 
 ### JOB 
 - [ ] Deve ser possível obter métricas dos jobs de impressão
-    * [ ] Retornar contagem total de jobs
-    * [ ] Retornar contagem por status: pending, processing, failed, done
-    * [ ] Retornar contagem por printerId
-    * [ ] Retornar contagem por período (ex.: últimas 24h, 7d, intervalo customizável)
-    * [ ] Suportar filtros por status, printerId, eventId e intervalo de datas
-    * [ ] Suportar paginação e ordenação nos resultados
-    * [ ] Definir e documentar critérios de aceitação e SLAs de latência
+  * [ ] Retornar contagem total de jobs
+  * [ ] Retornar contagem por status: pending, processing, failed, done
+  * [ ] Retornar contagem por printerId
+  * [ ] Retornar contagem por período (ex.: últimas 24h, 7d, intervalo customizável)
+  * [ ] Suportar filtros por status, printerId, eventId e intervalo de datas
+  * [ ] Suportar paginação e ordenação nos resultados
+  * [ ] Definir e documentar critérios de aceitação e SLAs de latência
 - [ ] Deve ser possível solicitar uma impressão de forma assíncrona
   * [ ] Validar existência da impressora
   * [ ] Validar payload de impressão (formato e tamanho)

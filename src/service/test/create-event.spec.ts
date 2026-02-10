@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EventAlreadyExistsError } from "../../_errors/event-already-exist-error";
+import { EventDurationTooShortError } from "../../_errors/event-duration-too-short-error";
 import { EventEndBeforeStartError } from "../../_errors/event-end-before-start-error";
 import { EventStartDateInPastError } from "../../_errors/event-start-date-in-past-error";
-import { EventDurationTooShortError } from "../../_errors/event-duration-too-short-error";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { CreateEventService } from "../create-event";
@@ -109,9 +109,9 @@ describe("Create Event (Service)", () => {
                 endsAt: NOW.add(1, "minute").toDate(),
             });
 
-            await expect(sut.execute({ data: eventData })).rejects.toBeInstanceOf(
-                EventDurationTooShortError,
-            );
+            await expect(
+                sut.execute({ data: eventData }),
+            ).rejects.toBeInstanceOf(EventDurationTooShortError);
         });
     });
 });
