@@ -7,6 +7,7 @@ import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import { ExportEventLeadsService } from "../export-event-leads";
 import { makeEvent } from "./factorey/makeEvent";
 import { makeLead } from "./factorey/makeLead";
+import { LeadsNotFoundError } from "../../_errors/leads-not-found-error";
 
 describe("Export event Lead (Service)", () => {
     let eventRepository: EventInMemoryRepository;
@@ -51,13 +52,14 @@ describe("Export event Lead (Service)", () => {
             expect(result.leads).toHaveLength(leadsCount);
         });
 
-        it("should be possible to return an empty list of leads from an event.", async () => {
-            const result = await sut.execute({ slug: event.slug });
-
-            expect(result.leads).toEqual([]);
-        });
     });
     describe("Error cases", () => {
+        it("should be possible to return an empty list of leads from an event.", async () => {
+            await expect(
+                sut.execute({ slug: event.slug })
+            ).rejects.toBeInstanceOf(LeadsNotFoundError);
+        });
+
         it("should not be possible to export leads from an non-existent event.", async () => {
             await expect(
                 sut.execute({ slug: "non-exist" }),

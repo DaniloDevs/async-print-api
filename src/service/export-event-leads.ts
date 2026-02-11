@@ -1,3 +1,4 @@
+import { LeadsNotFoundError } from "../_errors/leads-not-found-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IEventRepository } from "../repository/event";
 import type { ILeadRepository, Lead } from "../repository/lead";
@@ -29,6 +30,12 @@ export class ExportEventLeadsService {
         }
 
         const leads = await this.leadRepository.findManyByEventId(event.id);
+
+        if (leads.length === 0) {
+            throw new LeadsNotFoundError({
+                resource: event.id
+            })
+        }
 
         return {
             eventId: event.id,

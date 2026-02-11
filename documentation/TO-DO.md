@@ -26,7 +26,7 @@
   * [ ] Ordenar resultados por interesse
   * [ ] Garantir retorno paginado consistente
 - [x] Deve ser possivel exportar leads de um evento
-  * [ ] Rejeitar exportação se evento não tiver leads
+  * [x] Rejeitar exportação se evento não tiver leads
   * [ ] Garantir que exportação não bloqueie UI
   * [ ] Implementar criação de job assíncrono de exportação
   * [ ] Vincular job ao eventId
