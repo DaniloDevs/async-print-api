@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
+import { ResourceNotFoundError } from "./_errors/resource-not-found-error";
 import type { IEventRepository } from "../repository/event";
 import type { ILeadRepository } from "../repository/lead";
 

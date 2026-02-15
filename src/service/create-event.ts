@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
-import { EventAlreadyExistsError } from "../_errors/event-already-exist-error";
-import { EventDurationTooShortError } from "../_errors/event-duration-too-short-error";
-import { EventEndBeforeStartError } from "../_errors/event-end-before-start-error";
-import { EventStartDateInPastError } from "../_errors/event-start-date-in-past-error";
+import { EventAlreadyExistsError } from "./_errors/event-already-exist-error";
+import { EventDurationTooShortError } from "./_errors/event-duration-too-short-error";
+import { EventEndBeforeStartError } from "./_errors/event-end-before-start-error";
+import { EventStartDateInPastError } from "./_errors/event-start-date-in-past-error";
 import type {
     Event,
     EventCreateInput,

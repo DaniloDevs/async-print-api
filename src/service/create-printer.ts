@@ -1,4 +1,4 @@
-import { PrinterAlreadyExistsError } from "../_errors/printer-already-exist-error";
+import { PrinterAlreadyExistsError } from "./_errors/printer-already-exist-error";
 import type { IPrinterProvider } from "../provider/Printer-provider";
 import type {
     IPrinterRepository,

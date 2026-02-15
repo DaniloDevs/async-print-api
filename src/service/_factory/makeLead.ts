@@ -2,7 +2,7 @@ import type {
     OrigenLead,
     SegmentInterest,
     TechnicalInterest,
-} from "../../../repository/lead";
+} from "../../repository/lead";
 
 type MakeLeadOverrides = Partial<{
     name: string;

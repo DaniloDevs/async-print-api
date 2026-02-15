@@ -6,7 +6,7 @@ import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error"
 import { InvalidFileTypeError } from "../_errors/invalid-file-type-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IStorageProvider } from "../../provider/storage-provider";
-import type { Event } from "./../../repository/event";
+import type { Event } from "../../repository/event";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { UpdateEventBannerService } from "../update-event-banner";

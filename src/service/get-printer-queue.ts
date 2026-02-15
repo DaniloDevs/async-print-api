@@ -1,4 +1,4 @@
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
+import { ResourceNotFoundError } from "./_errors/resource-not-found-error";
 import type { IJobRepository, Job } from "../repository/job";
 import type { IPrinterRepository } from "../repository/printer";
 

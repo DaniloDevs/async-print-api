@@ -1,4 +1,4 @@
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
+import { ResourceNotFoundError } from "./_errors/resource-not-found-error";
 import type { IStorageProvider } from "../provider/storage-provider";
 import type { Event, IEventRepository } from "../repository/event";
 

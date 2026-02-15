@@ -1,10 +1,10 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { EventAlreadyEndedError } from "../../_errors/event-already-ended-error";
-import { EventNotActiveError } from "../../_errors/event-not-active-error";
-import { EventNotStartedYetError } from "../../_errors/event-not-started-yet-error";
-import { LeadAlreadyRegisteredError } from "../../_errors/lead-already-registered-error";
-import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
+import { EventAlreadyEndedError } from "../_errors/event-already-ended-error";
+import { EventNotActiveError } from "../_errors/event-not-active-error";
+import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
+import { LeadAlreadyRegisteredError } from "../_errors/lead-already-registered-error";
+import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { JobInMemoryRepository } from "../../repository/in-memory/job-repo";
@@ -12,8 +12,8 @@ import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { IJobRepository } from "../../repository/job";
 import type { ILeadRepository } from "../../repository/lead";
 import { CreateLeadService } from "../create-lead";
-import { makeEvent } from "./factorey/makeEvent";
-import { makeLead } from "./factorey/makeLead";
+import { makeEvent } from "../_factory/makeEvent";
+import { makeLead } from "../_factory/makeLead";
 
 describe("Create Lead (Service)", () => {
     let eventRepository: IEventRepository;
