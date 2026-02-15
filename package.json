@@ -32,6 +32,7 @@
     "@prisma/client": "^7.3.0",
     "@scalar/fastify-api-reference": "^1.43.15",
     "axios": "1.13.2",
+    "bcryptjs": "3.0.3",
     "bullMQAdapter": "link:@bull-board/api/bullMQAdapter",
     "bullmq": "^5.67.1",
     "dayjs": "1.11.19",
