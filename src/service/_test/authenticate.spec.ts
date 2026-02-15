@@ -1,54 +1,53 @@
+import { hash } from "bcryptjs";
+import { beforeEach, describe, expect, it } from "vitest";
+import { UserInMemoryRepository } from "../../repository/in-memory/user";
+import { InvalidCredentilsError } from "../_errors/invalid-credentials";
+import { AuthenticateService } from "../authenticate";
 
-import { hash } from 'bcryptjs'
-import { beforeEach, describe, expect, it } from 'vitest'
-import { UserInMemoryRepository } from '../../repository/in-memory/user'
-import { AuthenticateService } from '../authenticate'
-import { InvalidCredentilsError } from '../_errors/invalid-credentials'
+describe("Authenticate Services", () => {
+    let repository: UserInMemoryRepository;
+    let service: AuthenticateService;
 
-describe('Authenticate Services', () => {
-   let repository: UserInMemoryRepository
-   let service: AuthenticateService
+    beforeEach(() => {
+        repository = new UserInMemoryRepository();
+        service = new AuthenticateService(repository);
+    });
+    it("should be able to register ", async () => {
+        repository.create({
+            name: "John Doe",
+            email: "jhon@exemple.com",
+            passwordHash: await hash("123456", 6),
+        });
 
-   beforeEach(() => {
-      repository = new UserInMemoryRepository()
-      service = new AuthenticateService(repository)
-   })
-   it('should be able to register ', async () => {
-      repository.create({
-         name: 'John Doe',
-         email: 'jhon@exemple.com',
-         passwordHash: await hash('123456', 6),
-      })
+        const { user } = await service.execute({
+            email: "jhon@exemple.com",
+            password: "123456",
+        });
 
-      const { user } = await service.execute({
-         email: 'jhon@exemple.com',
-         password: '123456',
-      })
+        expect(user.id).toEqual(expect.any(String));
+    });
 
-      expect(user.id).toEqual(expect.any(String))
-   })
+    it("should not be albe authenticate with wrong email ", async () => {
+        await expect(
+            service.execute({
+                email: "jhon@exemple.com",
+                password: "123456",
+            }),
+        ).rejects.toBeInstanceOf(InvalidCredentilsError);
+    });
 
-   it('should not be albe authenticate with wrong email ', async () => {
-      await expect(
-         service.execute({
-            email: 'jhon@exemple.com',
-            password: '123456',
-         }),
-      ).rejects.toBeInstanceOf(InvalidCredentilsError)
-   })
+    it("should be able to register ", async () => {
+        repository.create({
+            name: "John Doe",
+            email: "jhon@exemple.com",
+            passwordHash: await hash("123456", 6),
+        });
 
-   it('should be able to register ', async () => {
-      repository.create({
-         name: 'John Doe',
-         email: 'jhon@exemple.com',
-         passwordHash: await hash('123456', 6),
-      })
-
-      await expect(
-         service.execute({
-            email: 'jhon@exemple.com',
-            password: '124578',
-         }),
-      ).rejects.toBeInstanceOf(InvalidCredentilsError)
-   })
-})
+        await expect(
+            service.execute({
+                email: "jhon@exemple.com",
+                password: "124578",
+            }),
+        ).rejects.toBeInstanceOf(InvalidCredentilsError);
+    });
+});
