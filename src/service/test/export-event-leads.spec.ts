@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { LeadsNotFoundError } from "../../_errors/leads-not-found-error";
 import { ResourceNotFoundError } from "../../_errors/resource-not-found-error";
 import type { Event } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
@@ -7,7 +8,6 @@ import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import { ExportEventLeadsService } from "../export-event-leads";
 import { makeEvent } from "./factorey/makeEvent";
 import { makeLead } from "./factorey/makeLead";
-import { LeadsNotFoundError } from "../../_errors/leads-not-found-error";
 
 describe("Export event Lead (Service)", () => {
     let eventRepository: EventInMemoryRepository;
@@ -51,12 +51,11 @@ describe("Export event Lead (Service)", () => {
             const result = await sut.execute({ slug: event.slug });
             expect(result.leads).toHaveLength(leadsCount);
         });
-
     });
     describe("Error cases", () => {
         it("should be possible to return an empty list of leads from an event.", async () => {
             await expect(
-                sut.execute({ slug: event.slug })
+                sut.execute({ slug: event.slug }),
             ).rejects.toBeInstanceOf(LeadsNotFoundError);
         });
 

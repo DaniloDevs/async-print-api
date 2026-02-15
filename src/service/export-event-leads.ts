@@ -33,8 +33,8 @@ export class ExportEventLeadsService {
 
         if (leads.length === 0) {
             throw new LeadsNotFoundError({
-                resource: event.id
-            })
+                resource: event.id,
+            });
         }
 
         return {
