@@ -79,10 +79,6 @@
   * [ ] Retornar contagem total de jobs
   * [ ] Retornar contagem por status: pending, processing, failed, done
   * [ ] Retornar contagem por printerId
-  * [ ] Retornar contagem por período (ex.: últimas 24h, 7d, intervalo customizável)
-  * [ ] Suportar filtros por status, printerId, eventId e intervalo de datas
-  * [ ] Suportar paginação e ordenação nos resultados
-  * [ ] Definir e documentar critérios de aceitação e SLAs de latência
 - [ ] Deve ser possível solicitar uma impressão de forma assíncrona
   * [ ] Validar existência da impressora
   * [ ] Validar payload de impressão (formato e tamanho)
