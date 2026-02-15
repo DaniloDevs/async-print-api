@@ -1,12 +1,12 @@
 import dayjs from "dayjs";
 import { beforeEach, describe, expect, it } from "vitest";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { PrinterInMemoryRepository } from "../../repository/in-memory/printer-repo";
-import { ListPrinterLeadsService } from "../list-event-printers";
+import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/makeEvent";
 import { makePrinter } from "../_factory/makePrinter";
+import { ListPrinterLeadsService } from "../list-event-printers";
 
 describe("List event printers (Service)", () => {
     let sut: ListPrinterLeadsService;

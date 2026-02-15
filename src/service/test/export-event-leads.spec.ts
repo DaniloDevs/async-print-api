@@ -1,13 +1,13 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { LeadsNotFoundError } from "../_errors/leads-not-found-error";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { Event } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
-import { ExportEventLeadsService } from "../export-event-leads";
+import { LeadsNotFoundError } from "../_errors/leads-not-found-error";
+import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/makeEvent";
 import { makeLead } from "../_factory/makeLead";
+import { ExportEventLeadsService } from "../export-event-leads";
 
 describe("Export event Lead (Service)", () => {
     let eventRepository: EventInMemoryRepository;

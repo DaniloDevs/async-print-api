@@ -1,7 +1,7 @@
 import dayjs, { type Dayjs } from "dayjs";
-import { ResourceNotFoundError } from "./_errors/resource-not-found-error";
 import type { IEventRepository } from "../repository/event";
 import type { ILeadRepository, Lead } from "../repository/lead";
+import { ResourceNotFoundError } from "./_errors/resource-not-found-error";
 
 interface RequestDate {
     eventId: string;

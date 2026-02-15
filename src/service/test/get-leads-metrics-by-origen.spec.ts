@@ -1,13 +1,13 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository, OrigenLead } from "../../repository/lead";
-import { GetLeadMetricsByOrigen } from "../get-lead-metrics-by-origen";
+import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/makeEvent";
 import { makeLead } from "../_factory/makeLead";
+import { GetLeadMetricsByOrigen } from "../get-lead-metrics-by-origen";
 
 describe("Get leads metrics by origen (Service)", () => {
     let sut: GetLeadMetricsByOrigen;

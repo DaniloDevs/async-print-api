@@ -1,4 +1,3 @@
-import { PrinterAlreadyExistsError } from "./_errors/printer-already-exist-error";
 import type { IPrinterProvider } from "../provider/Printer-provider";
 import type {
     IPrinterRepository,
@@ -6,6 +5,7 @@ import type {
     PrinterCreateInput,
 } from "../repository/printer";
 import { generateSlug } from "../utils/generate-slug";
+import { PrinterAlreadyExistsError } from "./_errors/printer-already-exist-error";
 
 interface RequestDate {
     data: PrinterCreateInput;

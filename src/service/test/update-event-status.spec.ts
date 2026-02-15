@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { InvalidEventStatusTransitionError } from "../_errors/invalid-event-status-transitions-error";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import type { EventStatus, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
-import { UpdateEventStatusService } from "../update-event-status";
+import { InvalidEventStatusTransitionError } from "../_errors/invalid-event-status-transitions-error";
+import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/makeEvent";
+import { UpdateEventStatusService } from "../update-event-status";
 
 describe("Update Event Status (Service)", () => {
     let eventRepository: IEventRepository;

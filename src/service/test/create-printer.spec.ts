@@ -1,14 +1,14 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { PrinterAlreadyExistsError } from "../_errors/printer-already-exist-error";
 import type { IPrinterProvider } from "../../provider/Printer-provider";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { PrinterInMemoryRepository } from "../../repository/in-memory/printer-repo";
 import { generateSlug } from "../../utils/generate-slug";
-import { CreatePrinterService } from "../create-printer";
+import { PrinterAlreadyExistsError } from "../_errors/printer-already-exist-error";
 import { makeEvent } from "../_factory/makeEvent";
 import { makePrinter } from "../_factory/makePrinter";
+import { CreatePrinterService } from "../create-printer";
 
 describe("Create Printer (Service)", () => {
     let printerRepository: PrinterInMemoryRepository;

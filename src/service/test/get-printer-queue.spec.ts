@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { JobInMemoryRepository } from "../../repository/in-memory/job-repo";
 import { PrinterInMemoryRepository } from "../../repository/in-memory/printer-repo";
-import { GetPrinterQueue } from "../get-printer-queue";
+import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/makeEvent";
 import { makeJob } from "../_factory/makeJob";
 import { makePrinter } from "../_factory/makePrinter";
+import { GetPrinterQueue } from "../get-printer-queue";
 
 describe("Get printer queue (Service)", () => {
     let sut: GetPrinterQueue;
