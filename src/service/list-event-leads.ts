@@ -12,7 +12,7 @@ interface ResponseDate {
         name: string;
         email: string;
         intendsToStudyNextYear: boolean;
-        segmentInterest: string;
+        segment: string;
     }[];
 }
 
@@ -41,7 +41,7 @@ export class ListEventLeadsService {
                 name: lead.name,
                 email: lead.email,
                 intendsToStudyNextYear: lead.intendsToStudyNextYear,
-                segmentInterest: lead.segmentInterest,
+                segment: lead.segment,
             })),
         };
     }

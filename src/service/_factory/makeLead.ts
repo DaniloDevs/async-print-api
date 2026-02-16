@@ -1,7 +1,7 @@
 import type {
     OrigenLead,
-    SegmentInterest,
-    TechnicalInterest,
+    segment,
+    technical,
 } from "../../repository/lead";
 
 type MakeLeadOverrides = Partial<{
@@ -10,8 +10,8 @@ type MakeLeadOverrides = Partial<{
     email: string;
     isStudent: boolean;
     intendsToStudyNextYear: boolean;
-    technicalInterest: TechnicalInterest;
-    segmentInterest: SegmentInterest;
+    technical: technical;
+    segment: segment;
     origen: OrigenLead;
     eventId: string;
 }>;
@@ -23,8 +23,8 @@ export function makeLead(overrides: MakeLeadOverrides = {}) {
         email: "lead@email.com",
         isStudent: true,
         intendsToStudyNextYear: true,
-        technicalInterest: "NONE" as TechnicalInterest,
-        segmentInterest: "ANO_1_MEDIO" as SegmentInterest,
+        technical: "NONE" as technical,
+        segment: "ANO_1_MEDIO" as segment,
         eventId: "",
         origen: "manual" as OrigenLead,
         ...overrides,

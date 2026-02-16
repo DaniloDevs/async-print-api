@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
-import type { ILeadRepository, TechnicalInterest } from "../../repository/lead";
+import type { ILeadRepository, technical } from "../../repository/lead";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/makeEvent";
 import { makeLead } from "../_factory/makeLead";
@@ -40,13 +40,13 @@ describe("Get leads metrics by technical (Service)", () => {
     describe("Successful cases", () => {
         it("should group leads by technical interest correctly", async () => {
             await leadRepository.create(
-                makeLead({ technicalInterest: "INF", eventId: event.id }),
+                makeLead({ technical: "INF", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ technicalInterest: "INF", eventId: event.id }),
+                makeLead({ technical: "INF", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ technicalInterest: "ADM", eventId: event.id }),
+                makeLead({ technical: "ADM", eventId: event.id }),
             );
 
             const result = await sut.execute({ eventId: event.id });
@@ -59,13 +59,13 @@ describe("Get leads metrics by technical (Service)", () => {
 
         it("should sort t.technical by total leads desc", async () => {
             await leadRepository.create(
-                makeLead({ technicalInterest: "ADM", eventId: event.id }),
+                makeLead({ technical: "ADM", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ technicalInterest: "INF", eventId: event.id }),
+                makeLead({ technical: "INF", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ technicalInterest: "INF", eventId: event.id }),
+                makeLead({ technical: "INF", eventId: event.id }),
             );
 
             const result = await sut.execute({ eventId: event.id });
@@ -83,14 +83,14 @@ describe("Get leads metrics by technical (Service)", () => {
         it("should count only leads with intent to study next year per technical", async () => {
             await leadRepository.create(
                 makeLead({
-                    technicalInterest: "INF",
+                    technical: "INF",
                     intendsToStudyNextYear: true,
                     eventId: event.id,
                 }),
             );
             await leadRepository.create(
                 makeLead({
-                    technicalInterest: "INF",
+                    technical: "INF",
                     intendsToStudyNextYear: false,
                     eventId: event.id,
                 }),
@@ -106,12 +106,12 @@ describe("Get leads metrics by technical (Service)", () => {
         });
 
         it("should return all technical interests present in leads", async () => {
-            const technicals: TechnicalInterest[] = ["INF", "ADM", "ENF"];
+            const technicals: technical[] = ["INF", "ADM", "ENF"];
 
             for (const technical of technicals) {
                 await leadRepository.create(
                     makeLead({
-                        technicalInterest: technical,
+                        technical: technical,
                         eventId: event.id,
                     }),
                 );

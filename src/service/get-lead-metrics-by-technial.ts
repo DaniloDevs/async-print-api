@@ -55,7 +55,7 @@ export class GetLeadMetricsByTechnical {
         > = {};
 
         for (const lead of leads) {
-            const technical = lead.technicalInterest;
+            const technical = lead.technical;
 
             if (!groups[technical]) {
                 groups[technical] = {

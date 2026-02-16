@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
-import type { ILeadRepository, SegmentInterest } from "../../repository/lead";
+import type { ILeadRepository, segment } from "../../repository/lead";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/makeEvent";
 import { makeLead } from "../_factory/makeLead";
@@ -40,13 +40,13 @@ describe("Get leads metrics by segment (Service)", () => {
     describe("Successful cases", () => {
         it("should group leads by segment interest correctly", async () => {
             await leadRepository.create(
-                makeLead({ segmentInterest: "ANO_1_MEDIO", eventId: event.id }),
+                makeLead({ segment: "ANO_1_MEDIO", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ segmentInterest: "ANO_1_MEDIO", eventId: event.id }),
+                makeLead({ segment: "ANO_1_MEDIO", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ segmentInterest: "ANO_2_MEDIO", eventId: event.id }),
+                makeLead({ segment: "ANO_2_MEDIO", eventId: event.id }),
             );
 
             const result = await sut.execute({ eventId: event.id });
@@ -59,13 +59,13 @@ describe("Get leads metrics by segment (Service)", () => {
 
         it("should sort t.segment by total leads desc", async () => {
             await leadRepository.create(
-                makeLead({ segmentInterest: "ANO_2_MEDIO", eventId: event.id }),
+                makeLead({ segment: "ANO_2_MEDIO", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ segmentInterest: "ANO_1_MEDIO", eventId: event.id }),
+                makeLead({ segment: "ANO_1_MEDIO", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ segmentInterest: "ANO_1_MEDIO", eventId: event.id }),
+                makeLead({ segment: "ANO_1_MEDIO", eventId: event.id }),
             );
 
             const result = await sut.execute({ eventId: event.id });
@@ -83,14 +83,14 @@ describe("Get leads metrics by segment (Service)", () => {
         it("should count only leads with intent to study next year per segment", async () => {
             await leadRepository.create(
                 makeLead({
-                    segmentInterest: "ANO_1_MEDIO",
+                    segment: "ANO_1_MEDIO",
                     intendsToStudyNextYear: true,
                     eventId: event.id,
                 }),
             );
             await leadRepository.create(
                 makeLead({
-                    segmentInterest: "ANO_1_MEDIO",
+                    segment: "ANO_1_MEDIO",
                     intendsToStudyNextYear: false,
                     eventId: event.id,
                 }),
@@ -106,7 +106,7 @@ describe("Get leads metrics by segment (Service)", () => {
         });
 
         it("should return all segment interests present in leads", async () => {
-            const segments: SegmentInterest[] = [
+            const segments: segment[] = [
                 "ANO_1_MEDIO",
                 "ANO_2_MEDIO",
                 "ANO_3_MEDIO",
@@ -115,7 +115,7 @@ describe("Get leads metrics by segment (Service)", () => {
             for (const segment of segments) {
                 await leadRepository.create(
                     makeLead({
-                        segmentInterest: segment,
+                        segment: segment,
                         eventId: event.id,
                     }),
                 );

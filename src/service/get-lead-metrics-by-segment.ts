@@ -55,7 +55,7 @@ export class GetLeadMetricsBySegment {
         > = {};
 
         for (const lead of leads) {
-            const segment = lead.segmentInterest;
+            const segment = lead.segment;
 
             if (!groups[segment]) {
                 groups[segment] = {
