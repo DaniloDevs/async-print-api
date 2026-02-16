@@ -1,110 +1,98 @@
 version: "3.9"
 
 services:
-  redis:
-    image: redis:7-alpine
-    container_name: dev-redis-jobs
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-      - ./redis:/usr/local/etc/redis/redis.conf
-    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-    networks:
-      - dev-net
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: dev-redis-jobs
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #     - ./redis:/usr/local/etc/redis/redis.conf
+  #   command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+  #   networks:
+  #     - dev-net
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 5s
+  #     timeout: 3s
+  #     retries: 5
 
-  redis-commander:
-    image: rediscommander/redis-commander:latest
-    container_name: dev-redis-commander-job
-    environment:
-      - REDIS_HOSTS=local:redis:6379
-    ports:
-      - "8081:8081"
-    depends_on:
-      redis:
-        condition: service_healthy
-    networks:
-      - dev-net
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile
+  #   container_name: dev-apps
+  #   environment:
+  #     NODE_ENV: development
+  #     REDIS_HOST: redis
+  #     REDIS_PORT: 6379
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./src:/app/src
+  #   depends_on:
+  #     redis:
+  #       condition: service_healthy
+  #   networks:
+  #     - dev-net
+  #   restart: unless-stopped
 
-  app:
-    build:
-      context: .
-      dockerfile: dockerfile
-    container_name: dev-apps
-    environment:
-      NODE_ENV: development
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./src:/app/src
-    depends_on:
-      redis:
-        condition: service_healthy
-    networks:
-      - dev-net
+  # worker:
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile
+  #   container_name: dev-worker
+  #   command: npm run worker
+  #   environment:
+  #     NODE_ENV: development
+  #     REDIS_HOST: redis
+  #     REDIS_PORT: 6379
+  #   volumes:
+  #     - ./src:/app/src
+  #   depends_on:
+  #     redis:
+  #       condition: service_healthy
+  #   networks:
+  #     - dev-net
+  #   restart: unless-stopped
+
+  api-async-pg:
+    image: bitnami/postgresql:latest
+    container_name: api-async-postgres
     restart: unless-stopped
-
-  worker:
-    build:
-      context: .
-      dockerfile: dockerfile
-    container_name: dev-worker
-    command: npm run worker
+    ports:
+      - "5432:5432"
     environment:
-      NODE_ENV: development
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=async-print
     volumes:
-      - ./src:/app/src
-    depends_on:
-      redis:
-        condition: service_healthy
-    networks:
-      - dev-net
-    restart: unless-stopped
+      - pg_data:/bitnami/postgresql
 
-  jobs-event-pg:
-      image: bitnami/postgresql:latest
-      container_name: jobs-event-postgres
-      restart: unless-stopped
-      ports:
-        - "1234:5432"
-      environment:
-        - POSTGRESQL_USERNAME=docker
-        - POSTGRESQL_PASSWORD=docker
-        - POSTGRESQL_DATABASE=jobs-event
-      volumes:
-        - pg_data:/bitnami/postgresql
-  minio:
-      image: minio/minio
-      container_name: minios
-      ports:
-        - "9000:9000"      # API
-        - "9001:9001"      # Console Web
-      environment:
-        MINIO_ROOT_USER: minioadmin
-        MINIO_ROOT_PASSWORD: minioadmin123
-        MINIO_CORS_ALLOWED_ORIGINS: "http://localhost:5173,http://localhost:3000"
-      volumes:
-        - minio_data:/data
-      command: server /data --console-address ":9001"
-      healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-        interval: 30s
-        timeout: 20s
-        retries: 3
+  # minio:
+  #     image: minio/minio
+  #     container_name: minios
+  #     ports:
+  #       - "9000:9000"      # API
+  #       - "9001:9001"      # Console Web
+  #     environment:
+  #       MINIO_ROOT_USER: minioadmin
+  #       MINIO_ROOT_PASSWORD: minioadmin123
+  #       MINIO_CORS_ALLOWED_ORIGINS: "http://localhost:5173,http://localhost:3000"
+  #     volumes:
+  #       - minio_data:/data
+  #     command: server /data --console-address ":9001"
+  #     healthcheck:
+  #       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+  #       interval: 30s
+  #       timeout: 20s
+  #       retries: 3
 
 volumes:
-  redis_data:
   pg_data:
-  minio_data:
+  # redis_data:
+  # minio_data:
 
 networks:
   dev-net:

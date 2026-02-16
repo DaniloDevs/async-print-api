@@ -31,7 +31,6 @@ export class RegisterService {
             name,
             email,
             passwordHash,
-            role: "admin",
         });
 
         return { user };
