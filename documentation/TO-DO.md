@@ -13,7 +13,9 @@
 - [x] Deve ser possivel atualizar o status de um evento
   * [x] Implementar operação administrativa de status
   * [ ] Validar consistência com regra temporal
-
+- [x] Deve ser possivel listar todos os eventos
+  * [ ] Adicionar paginação configurável
+  * [ ] Garantir retorno paginado consistente
 
 ### Lead 
 - [x] Deve ser possivel criar um lead

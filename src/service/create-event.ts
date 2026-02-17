@@ -33,7 +33,7 @@ export class CreateEventService {
             ...data,
             startAt: dayjs(data.startAt).toDate(),
             endsAt: dayjs(data.endsAt).toDate(),
-            status: "draft",
+            status: "DRAFT",
         });
 
         return { event };

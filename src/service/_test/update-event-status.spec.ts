@@ -4,7 +4,7 @@ import type { EventStatus, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { InvalidEventStatusTransitionError } from "../_errors/invalid-event-status-transitions-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/makeEvent";
+import { makeEvent } from "../_factory/test/makeEvent";
 import { UpdateEventStatusService } from "../update-event-status";
 
 describe("Update Event Status (Service)", () => {

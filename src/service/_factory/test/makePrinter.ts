@@ -1,7 +1,7 @@
 import type {
     PrinterStatusEnum,
     PrinterTypeEnum,
-} from "../../repository/printer";
+} from "../../../repository/printer";
 
 type MakePrinterOverrides = Partial<{
     name: string;

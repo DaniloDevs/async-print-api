@@ -4,7 +4,7 @@ import type { IStorageProvider } from "../../provider/storage-provider";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/makeEvent";
+import { makeEvent } from "../_factory/test/makeEvent";
 import { GetEventService } from "../get-event";
 
 describe("Get Event (Service)", () => {

@@ -59,6 +59,10 @@ export class EventInMemoryRepository implements IEventRepository {
 
         event.status = status;
     }
+
+    async findMany(): Promise<Event[]> {
+        return this.items;
+    }
 }
 
 function generateSlug(title: string): string {

@@ -6,13 +6,13 @@ interface RequestDate {
     eventId: string;
 }
 interface ResponseDate {
-    origen: {
-        origen: string;
+    origin: {
+        origin: string;
         total: number;
     }[];
 }
 
-export class GetLeadMetricsByOrigen {
+export class GetLeadMetricsByorigin {
     constructor(
         private eventRepository: IEventRepository,
         private leadsRepository: ILeadRepository,
@@ -30,38 +30,38 @@ export class GetLeadMetricsByOrigen {
 
         const leads = await this.leadsRepository.findManyByEventId(eventId);
 
-        const metrics = this.calculateMetricsByOrigen(leads);
+        const metrics = this.calculateMetricsByorigin(leads);
 
         return {
-            origen: metrics
+            origin: metrics
                 .map((metric) => ({
-                    origen: metric.origen,
+                    origin: metric.origin,
                     total: metric.totalLeads,
                 }))
                 .sort((a, b) => b.total - a.total),
         };
     }
 
-    calculateMetricsByOrigen(leads: Lead[]) {
+    calculateMetricsByorigin(leads: Lead[]) {
         const groups: Record<
             string,
             {
-                origen: string;
+                origin: string;
                 totalLeads: number;
             }
         > = {};
 
         for (const lead of leads) {
-            const origen = lead.origen;
+            const origin = lead.origin;
 
-            if (!groups[origen]) {
-                groups[origen] = {
-                    origen,
+            if (!groups[origin]) {
+                groups[origin] = {
+                    origin,
                     totalLeads: 0,
                 };
             }
 
-            groups[origen].totalLeads++;
+            groups[origin].totalLeads++;
         }
 
         return Object.values(groups);

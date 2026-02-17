@@ -8,7 +8,7 @@ import { EventAlreadyEndedError } from "../_errors/event-already-ended-error";
 import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
 import { InvalidFileTypeError } from "../_errors/invalid-file-type-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/makeEvent";
+import { makeEvent } from "../_factory/test/makeEvent";
 import { UpdateEventBannerService } from "../update-event-banner";
 
 describe("Update event Banner (Service)", () => {
@@ -155,7 +155,7 @@ describe("Update event Banner (Service)", () => {
                 makeEvent({
                     startAt: NOW.subtract(2, "hour").toDate(),
                     endsAt: NOW.subtract(1, "hour").toDate(),
-                    status: "finished",
+                    status: "FINISHED",
                 }),
             );
 
@@ -178,7 +178,7 @@ describe("Update event Banner (Service)", () => {
                 makeEvent({
                     startAt: NOW.add(5, "hour").toDate(),
                     endsAt: NOW.add(10, "hour").toDate(),
-                    status: "canceled",
+                    status: "CANCELED",
                 }),
             );
 
@@ -201,7 +201,7 @@ describe("Update event Banner (Service)", () => {
                 makeEvent({
                     startAt: NOW.subtract(1, "hour").toDate(),
                     endsAt: NOW.add(5, "hour").toDate(),
-                    status: "active",
+                    status: "ACTIVE",
                 }),
             );
 
@@ -224,7 +224,7 @@ describe("Update event Banner (Service)", () => {
                 makeEvent({
                     startAt: NOW.toDate(),
                     endsAt: NOW.add(10, "hour").toDate(),
-                    status: "active",
+                    status: "ACTIVE",
                 }),
             );
 

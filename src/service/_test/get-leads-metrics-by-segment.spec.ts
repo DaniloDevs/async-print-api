@@ -5,8 +5,8 @@ import { EventInMemoryRepository } from "../../repository/in-memory/events-repo"
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository, segment } from "../../repository/lead";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/makeEvent";
-import { makeLead } from "../_factory/makeLead";
+import { makeEvent } from "../_factory/test/makeEvent";
+import { makeLead } from "../_factory/test/makeLead";
 import { GetLeadMetricsBySegment } from "../get-lead-metrics-by-segment";
 
 describe("Get leads metrics by segment (Service)", () => {
@@ -84,14 +84,14 @@ describe("Get leads metrics by segment (Service)", () => {
             await leadRepository.create(
                 makeLead({
                     segment: "ANO_1_MEDIO",
-                    intendsToStudyNextYear: true,
+                    intentionNextYear: true,
                     eventId: event.id,
                 }),
             );
             await leadRepository.create(
                 makeLead({
                     segment: "ANO_1_MEDIO",
-                    intendsToStudyNextYear: false,
+                    intentionNextYear: false,
                     eventId: event.id,
                 }),
             );

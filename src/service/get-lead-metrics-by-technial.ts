@@ -67,7 +67,7 @@ export class GetLeadMetricsByTechnical {
 
             groups[technical].totalLeads++;
 
-            if (lead.intendsToStudyNextYear) {
+            if (lead.intentionNextYear) {
                 groups[technical].leadsWithIntentNextYear++;
             }
         }

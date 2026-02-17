@@ -5,8 +5,8 @@ import { EventInMemoryRepository } from "../../repository/in-memory/events-repo"
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import { LeadsNotFoundError } from "../_errors/leads-not-found-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/makeEvent";
-import { makeLead } from "../_factory/makeLead";
+import { makeEvent } from "../_factory/test/makeEvent";
+import { makeLead } from "../_factory/test/makeLead";
 import { ExportEventLeadsService } from "../export-event-leads";
 
 describe("Export event Lead (Service)", () => {

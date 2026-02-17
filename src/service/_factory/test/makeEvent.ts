@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import type { EventStatus } from "../../repository/event";
+import type { EventStatus } from "../../../repository/event";
 
 type MakeEventOverrides = Partial<{
     title: string;

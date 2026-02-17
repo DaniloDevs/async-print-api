@@ -2,7 +2,7 @@ import z from "zod";
 
 const technicalEnum = z.enum(["ENF", "INF", "ADM", "NONE"]);
 
-const origenEnum = z.enum(["qrcode", "instagram", "manual"]);
+const originEnum = z.enum(["QRCODE", "INSTAGRAM", "MANUAL"]);
 
 const segment = z.enum([
     "NONE",
@@ -28,8 +28,8 @@ const lead = z.object({
     phone: z.string(),
     email: z.string(),
     isStudent: z.boolean(),
-    intendsToStudyNextYear: z.boolean().default(false),
-    origen: z.enum(origenEnum.options).default("manual"),
+    intentionNextYear: z.boolean().default(false),
+    origin: z.enum(originEnum.options).default("MANUAL"),
     technical: z.enum(technicalEnum.options).default("NONE"),
     segment: z.enum(segment.options).default("NONE"),
     createdAt: z.date(),
@@ -52,7 +52,7 @@ export type Lead = z.infer<typeof lead>;
 export type LeadCreateInput = z.infer<typeof leadCreateInput>;
 export type segment = z.infer<typeof segment>;
 export type technical = z.infer<typeof technicalEnum>;
-export type OrigenLead = z.infer<typeof origenEnum>;
+export type originLead = z.infer<typeof originEnum>;
 export type PrintJobPayload = z.infer<typeof leadJobPayload>;
 
 export interface ILeadRepository {

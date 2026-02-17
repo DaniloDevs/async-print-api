@@ -38,7 +38,7 @@ export class UpdateEventBannerService {
         }
 
         // Validar se o evento já foi finalizado
-        if (event.status === "finished" || event.status === "canceled") {
+        if (event.status === "FINISHED" || event.status === "CANCELED") {
             throw new EventAlreadyEndedError(event.endsAt);
         }
 

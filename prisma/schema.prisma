@@ -93,6 +93,7 @@ model Lead {
   name              String
   phone             String
   email             String
+  isStudent         Boolean @default(false)
   intentionNextYear Boolean @default(true)
 
   origin    leadOringen

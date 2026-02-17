@@ -6,7 +6,7 @@ import { EventAlreadyExistsError } from "../_errors/event-already-exist-error";
 import { EventDurationTooShortError } from "../_errors/event-duration-too-short-error";
 import { EventEndBeforeStartError } from "../_errors/event-end-before-start-error";
 import { EventStartDateInPastError } from "../_errors/event-start-date-in-past-error";
-import { makeEvent } from "../_factory/makeEvent";
+import { makeEvent } from "../_factory/test/makeEvent";
 import { CreateEventService } from "../create-event";
 
 describe("Create Event (Service)", () => {

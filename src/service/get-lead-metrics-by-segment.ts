@@ -67,7 +67,7 @@ export class GetLeadMetricsBySegment {
 
             groups[segment].totalLeads++;
 
-            if (lead.intendsToStudyNextYear) {
+            if (lead.intentionNextYear) {
                 groups[segment].leadsWithIntentNextYear++;
             }
         }
