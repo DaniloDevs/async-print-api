@@ -1,6 +1,10 @@
-import type { Event, EventStatus, IEventRepository } from "../repository/event";
-import { InvalidEventStatusTransitionError } from "./_errors/invalid-event-status-transitions-error";
-import { ResourceNotFoundError } from "./_errors/resource-not-found-error";
+import type {
+    Event,
+    EventStatus,
+    IEventRepository,
+} from "../../repository/event";
+import { InvalidEventStatusTransitionError } from "../_errors/invalid-event-status-transitions-error";
+import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 
 interface RequestDate {
     eventId: string;
@@ -50,11 +54,11 @@ export class UpdateEventStatusService {
             EventStatus,
             EventStatus[]
         > = {
-            draft: ["active", "canceled"],
-            active: ["finished", "canceled", "inactive"],
-            inactive: ["active", "finished", "canceled"],
-            finished: ["canceled"],
-            canceled: [],
+            DRAFT: ["ACTIVE", "CANCELED"],
+            ACTIVE: ["FINISHED", "CANCELED", "INACTIVE"],
+            INACTIVE: ["ACTIVE", "FINISHED", "CANCELED"],
+            FINISHED: ["CANCELED"],
+            CANCELED: [],
         };
 
         return ALLOWED_EVENT_STATUS_TRANSITIONS[from].includes(to);

@@ -6,8 +6,8 @@ import { EventInMemoryRepository } from "../../repository/in-memory/events-repo"
 import { PrinterInMemoryRepository } from "../../repository/in-memory/printer-repo";
 import { generateSlug } from "../../utils/generate-slug";
 import { PrinterAlreadyExistsError } from "../_errors/printer-already-exist-error";
-import { makeEvent } from "../_factory/test/makeEvent";
-import { makePrinter } from "../_factory/test/makePrinter";
+import { makeEvent } from "../_factory/_test/makeEvent";
+import { makePrinter } from "../_factory/_test/makePrinter";
 import { CreatePrinterService } from "../create-printer";
 
 describe("Create Printer (Service)", () => {

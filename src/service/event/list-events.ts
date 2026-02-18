@@ -1,4 +1,4 @@
-import type { Event, IEventRepository } from "../repository/event";
+import type { Event, IEventRepository } from "../../repository/event";
 
 interface ResponseDate {
     events: Event[];

@@ -8,19 +8,16 @@ import {
     serializerCompiler,
     validatorCompiler,
 } from "fastify-type-provider-zod";
-import { serverAdapter } from "./connections/bull-board";
+import { ZodError } from "zod";
 import { env } from "./env";
-import SetupRoutes from "./routes/setup-routes";
+import EventRoutes from "./http/controllers/event/_routes";
+import LeadsRoutes from "./http/controllers/leads/_routes";
 
 const app = Fastify();
 
 app.register(cors, {
     origin: "*",
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-});
-
-app.register(serverAdapter.registerPlugin(), {
-    prefix: "/dashboard/jobs",
 });
 
 // Add schema validator and serializer
@@ -66,21 +63,6 @@ Esta API gerencia o fluxo completo de eventos presenciais, desde o cadastro de p
                 description:
                     "Cadastro e consulta de participantes captados e validação de funil.",
             },
-            {
-                name: "Printer",
-                description:
-                    "Integração direta com hardware, diagnóstico de conexão e comandos de impressão.",
-            },
-            {
-                name: "Jobs",
-                description:
-                    "Observabilidade das filas de processamento (Active, Waiting, Failed, Completed).",
-            },
-            {
-                name: "Metrics",
-                description:
-                    "Dashboards analíticos e KPIs de performance dos eventos.",
-            },
         ],
     },
     transform: jsonSchemaTransform,
@@ -95,6 +77,21 @@ app.register(fastifyScalar, {
     },
 });
 
-app.register(SetupRoutes);
+app.register(EventRoutes);
+app.register(LeadsRoutes);
+
+app.setErrorHandler((error, _, reply) => {
+    if (error instanceof ZodError) {
+        return reply.status(400).send({
+            message: "Validation error",
+            issues: error.issues,
+        });
+    }
+
+    return reply.status(500).send({
+        message: "Internal server error",
+        error: error.message,
+    });
+});
 
 export { app };

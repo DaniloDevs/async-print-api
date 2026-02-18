@@ -8,8 +8,8 @@ import { EventAlreadyEndedError } from "../_errors/event-already-ended-error";
 import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
 import { InvalidFileTypeError } from "../_errors/invalid-file-type-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/test/makeEvent";
-import { UpdateEventBannerService } from "../update-event-banner";
+import { makeEvent } from "../_factory/_test/makeEvent";
+import { UpdateEventBannerService } from "../event/update-event-banner";
 
 describe("Update event Banner (Service)", () => {
     let eventRepository: IEventRepository;

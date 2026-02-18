@@ -3,9 +3,9 @@ import { EventInMemoryRepository } from "../../repository/in-memory/events-repo"
 import { JobInMemoryRepository } from "../../repository/in-memory/job-repo";
 import { PrinterInMemoryRepository } from "../../repository/in-memory/printer-repo";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/test/makeEvent";
-import { makeJob } from "../_factory/test/makeJob";
-import { makePrinter } from "../_factory/test/makePrinter";
+import { makeEvent } from "../_factory/_test/makeEvent";
+import { makeJob } from "../_factory/_test/makeJob";
+import { makePrinter } from "../_factory/_test/makePrinter";
 import { GetPrinterQueue } from "../get-printer-queue";
 
 describe("Get printer queue (Service)", () => {

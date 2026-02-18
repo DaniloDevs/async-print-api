@@ -36,7 +36,7 @@ const lead = z.object({
     eventId: z.string(),
 });
 
-const leadCreateInput = lead.omit({
+export const leadCreateInput = lead.omit({
     id: true,
     createdAt: true,
 });

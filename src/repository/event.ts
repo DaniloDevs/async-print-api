@@ -1,6 +1,6 @@
 import z from "zod";
 
-const eventStatus = z.enum([
+export const eventStatusSchema = z.enum([
     "ACTIVE",
     "INACTIVE",
     "DRAFT",
@@ -8,24 +8,24 @@ const eventStatus = z.enum([
     "CANCELED",
 ]);
 
-const event = z.object({
+export const eventSchema = z.object({
     id: z.string(),
     title: z.string(),
     slug: z.string(),
     bannerKey: z.string().nullable(),
     startAt: z.date(),
     endsAt: z.date(),
-    status: eventStatus,
+    status: eventStatusSchema,
 });
 
-const EventCreateInput = event.omit({
+export const eventCreateInputSchema = eventSchema.omit({
     id: true,
     slug: true,
 });
 
-export type Event = z.infer<typeof event>;
-export type EventCreateInput = z.infer<typeof EventCreateInput>;
-export type EventStatus = z.infer<typeof eventStatus>;
+export type Event = z.infer<typeof eventSchema>;
+export type EventCreateInput = z.infer<typeof eventCreateInputSchema>;
+export type EventStatus = z.infer<typeof eventStatusSchema>;
 
 export interface IEventRepository {
     create(data: EventCreateInput): Promise<Event>;

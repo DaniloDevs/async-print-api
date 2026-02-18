@@ -5,9 +5,9 @@ import { EventInMemoryRepository } from "../../repository/in-memory/events-repo"
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/test/makeEvent";
-import { makeLead } from "../_factory/test/makeLead";
-import { ListEventLeadsByPeriodService } from "../list-event-leads-by-period";
+import { makeEvent } from "../_factory/_test/makeEvent";
+import { makeLead } from "../_factory/_test/makeLead";
+import { ListEventLeadsByPeriodService } from "../leads/list-leads-by-period";
 
 describe("List event leads by period (Service)", () => {
     let sut: ListEventLeadsByPeriodService;

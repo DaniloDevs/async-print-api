@@ -4,8 +4,8 @@ import type { IStorageProvider } from "../../provider/storage-provider";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/test/makeEvent";
-import { GetEventService } from "../get-event";
+import { makeEvent } from "../_factory/_test/makeEvent";
+import { GetEventService } from "../event/get-event";
 
 describe("Get Event (Service)", () => {
     let eventRepository: IEventRepository;

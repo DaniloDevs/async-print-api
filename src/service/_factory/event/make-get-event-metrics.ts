@@ -1,7 +1,7 @@
-import { prisma } from "../../lib/prisma";
-import { EventPrismaRepository } from "../../repository/prisma/event";
-import { LeadPrismaRepository } from "../../repository/prisma/leads";
-import { GetEventMetricsService } from "../get-event-metrics";
+import { prisma } from "../../../lib/prisma";
+import { EventPrismaRepository } from "../../../repository/prisma/event";
+import { LeadPrismaRepository } from "../../../repository/prisma/leads";
+import { GetEventMetricsService } from "../../event/get-event-metrics";
 
 export function makeGetEventMetrics() {
     const eventRepository = new EventPrismaRepository(prisma);

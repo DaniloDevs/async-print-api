@@ -11,8 +11,8 @@ import { EventNotActiveError } from "../_errors/event-not-active-error";
 import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
 import { LeadAlreadyRegisteredError } from "../_errors/lead-already-registered-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/test/makeEvent";
-import { makeLead } from "../_factory/test/makeLead";
+import { makeEvent } from "../_factory/_test/makeEvent";
+import { makeLead } from "../_factory/_test/makeLead";
 import { CreateLeadService } from "../create-lead";
 
 describe("Create Lead (Service)", () => {
