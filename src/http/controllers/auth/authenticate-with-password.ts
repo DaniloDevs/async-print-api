@@ -60,7 +60,8 @@ export default async function AuthenticateWithPasswordController(
 }
 
 export const AuthenticateWithPasswordControllerSchema: FastifySchema = {
-    summary: "Authenticate a user with email and password",
+    summary: "Authenticate with email and password",
+    description: "This endpoint allows a user to authenticate using their email and password. It returns a JWT token upon successful authentication.",
     body: z.object({
         email: z.email(),
         password: z.string(),
@@ -69,9 +70,6 @@ export const AuthenticateWithPasswordControllerSchema: FastifySchema = {
     response: {
         200: z.object({
             token: z.string(),
-        }),
-        400: z.object({
-            message: z.string(),
-        }),
+        }).describe("Successful authentication"),
     },
 };

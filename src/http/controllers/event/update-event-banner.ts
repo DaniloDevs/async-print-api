@@ -30,6 +30,8 @@ export default async function UpdateEventBannerController(
 
 export const updateEventBannerControllerSchema: FastifySchema = {
     summary: "Update event banner",
+      description: "Endpoint to update the banner of an existing event.",
+    security: [{ bearerAuth: [] }],
     tags: ["Events"],
     consumes: ["multipart/form-data"],
     params: z.object({
@@ -39,9 +41,6 @@ export const updateEventBannerControllerSchema: FastifySchema = {
         file: z.any(), // multipart file
     }),
     response: {
-        200: z.null(),
-        400: z.object({
-            error: z.string(),
-        }),
+        200: z.null().describe("Successful update of event banner"),
     },
 };

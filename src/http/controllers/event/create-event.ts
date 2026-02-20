@@ -25,11 +25,13 @@ export default async function CreateEventController(
 
 export const createEventControllerSchema: FastifySchema = {
     summary: "Create a new event",
+    description: "Endpoint to create a new event in the system.",
+    security: [{ bearerAuth: [] }],
     body: eventCreateInputSchema,
     tags: ["Events"],
     response: {
         201: z.object({
             eventId: z.string(),
-        }),
+        }).describe(" successful event creation"),
     },
 };

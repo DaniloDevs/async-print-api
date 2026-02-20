@@ -31,6 +31,6 @@ export const listLeadsByPeriodControllerSchema: FastifySchema = {
                     total: z.number(),
                 }),
             ),
-        }),
+        }).describe("Successful retrieval of leads by period") ,
     },
 };

@@ -22,7 +22,9 @@ export default async function UpdateEventStatusController(
 }
 
 export const updateEventStatusControllerSchema: FastifySchema = {
-    summary: "List events",
+    summary: "Update event status",
+    description: "Endpoint to update the status of an existing event.",
+    security: [{ bearerAuth: [] }],
     params: z.object({
         eventId: z.string(),
     }),
@@ -31,6 +33,8 @@ export const updateEventStatusControllerSchema: FastifySchema = {
     }),
     tags: ["Events"],
     response: {
-        200: eventSchema,
+        200: z.object({
+            event: eventSchema,
+        }).describe("Successful update of event status"),
     },
 };

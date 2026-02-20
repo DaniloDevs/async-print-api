@@ -22,13 +22,15 @@ export default async function GetEventController(
 
 export const getEventControllerSchema: FastifySchema = {
     summary: "Get event by params",
+    description: "Endpoint to retrieve a specific event by its slug.",
+    security: [{ bearerAuth: [] }],
     params: z.object({
         slug: z.string(),
     }),
     tags: ["Events"],
     response: {
-        201: z.object({
+        200: z.object({
             event: eventSchema,
-        }),
+        }).describe("Successful retrieval of event"),
     },
 };

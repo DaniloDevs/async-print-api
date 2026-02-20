@@ -11,25 +11,25 @@ import refreshController, { RefreshControllerSchema } from "./refresh";
 
 export default async function AuthRoutes(server: FastifyInstance) {
     server.post(
-        "/users",
+        "/auth/register",
         { schema: createUserControllerSchema },
         CreateUserController,
     );
 
     server.patch(
-        "/token/refresh",
+        "/auth/refresh",
         { schema: RefreshControllerSchema },
         refreshController,
     );
 
     server.post(
-        "/sessions/password",
+        "/auth/sessions/password",
         { schema: AuthenticateWithPasswordControllerSchema },
         AuthenticateWithPasswordController,
     );
 
     server.get(
-        "/profile",
+        "/auth/profile",
         { schema: ProfileControllerSchema, onRequest: [VerifyJwt] },
         profileController,
     );

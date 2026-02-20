@@ -25,6 +25,8 @@ export default async function GetEventMetricsController(
 
 export const getEventMetricsControllerSchema: FastifySchema = {
     summary: "Get event metrics",
+    description: "Endpoint to retrieve metrics for a specific event.",
+    security: [{ bearerAuth: [] }],
     params: z.object({
         eventId: z.string(),
     }),
@@ -34,6 +36,6 @@ export const getEventMetricsControllerSchema: FastifySchema = {
             currentLeads: z.number(),
             totalLeads: z.number(),
             eventStatus: eventStatusSchema,
-        }),
+        }).describe("successful retrieval of event metrics"),
     },
 };

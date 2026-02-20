@@ -18,8 +18,10 @@ export default async function ListEventsController(
 
 export const listEventsControllerSchema: FastifySchema = {
     summary: "List events",
+    description: "Endpoint to list all events in the system.",
+    security: [{ bearerAuth: [] }],
     tags: ["Events"],
     response: {
-        200: z.array(eventSchema),
+        200: z.array(eventSchema).describe("Successful retrieval of events"),
     },
 };

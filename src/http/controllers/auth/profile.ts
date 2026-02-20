@@ -1,6 +1,7 @@
 import type { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
 import { userSchema } from "../../../repository/user";
 import { MakeGetUserProfileService } from "../../../service/_factory/auth/make-get-user-profile";
+import z from "zod";
 
 export async function profileController(
     request: FastifyRequest,
@@ -8,7 +9,7 @@ export async function profileController(
 ) {
     const getUserProfile = MakeGetUserProfileService();
 
-    const user = await getUserProfile.execute({
+    const { user } = await getUserProfile.execute({
         userId: request.user.sub,
     });
 
@@ -18,9 +19,12 @@ export async function profileController(
 }
 
 export const ProfileControllerSchema: FastifySchema = {
-    summary: "Get authenticated user's profile",
+    summary: "Get user profile",
+    description: "This endpoint allows an authenticated user to retrieve their profile information.",
     tags: ["Auth"],
     response: {
-        200: userSchema,
+        200: z.object({
+            user: userSchema,
+        }).describe("Authenticated user's profile"),
     },
 };

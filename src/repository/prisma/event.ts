@@ -1,4 +1,7 @@
-import type { eventStatus, PrismaClient } from "../../../prisma/generated/prisma/client";
+import type {
+    eventStatus,
+    PrismaClient,
+} from "../../../prisma/generated/prisma/client";
 import { generateSlug } from "../../utils/generate-slug";
 import type { EventCreateInput, IEventRepository } from "../event";
 

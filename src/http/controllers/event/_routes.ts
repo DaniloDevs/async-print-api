@@ -18,11 +18,12 @@ import UpdateEventStatusController, {
 } from "./update-event-status";
 
 export default async function EventRoutes(server: FastifyInstance) {
+    server.addHook("onRequest", VerifyJwt);
+    
     server.post(
         "/events",
         {
             schema: createEventControllerSchema,
-            onRequest: [VerifyJwt],
         },
         CreateEventController,
     );
@@ -31,7 +32,6 @@ export default async function EventRoutes(server: FastifyInstance) {
         "/events/:eventId/metrics",
         {
             schema: getEventMetricsControllerSchema,
-            onRequest: [VerifyJwt],
         },
         GetEventMetricsController,
     );
@@ -40,7 +40,6 @@ export default async function EventRoutes(server: FastifyInstance) {
         "/events/:eventId/update-status",
         {
             schema: updateEventStatusControllerSchema,
-            onRequest: [VerifyJwt],
         },
         UpdateEventStatusController,
     );
@@ -49,7 +48,6 @@ export default async function EventRoutes(server: FastifyInstance) {
         "/events/:eventId/update-banner",
         {
             schema: updateEventBannerControllerSchema,
-            onRequest: [VerifyJwt],
         },
         UpdateEventBannerController,
     );
@@ -58,7 +56,6 @@ export default async function EventRoutes(server: FastifyInstance) {
         "/events/:slug",
         {
             schema: getEventControllerSchema,
-            onRequest: [VerifyJwt],
         },
         GetEventController,
     );
@@ -67,7 +64,6 @@ export default async function EventRoutes(server: FastifyInstance) {
         "/events",
         {
             schema: listEventsControllerSchema,
-            onRequest: [VerifyJwt],
         },
         ListEventsController,
     );
