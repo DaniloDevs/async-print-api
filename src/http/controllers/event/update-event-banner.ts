@@ -35,6 +35,7 @@ export const updateEventBannerControllerSchema: FastifySchema = {
     params: z.object({
         eventId: z.string(),
     }),
+    security: [{ cookieAuth: [] }],
     body: z.object({
         file: z.any(), // multipart file
     }),

@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { VerifyJwt } from "../../middleware/verify-jwt";
 import CreateEventController, {
     createEventControllerSchema,
 } from "./create-event";
@@ -21,6 +22,7 @@ export default async function EventRoutes(server: FastifyInstance) {
         "/events",
         {
             schema: createEventControllerSchema,
+            onRequest: [VerifyJwt],
         },
         CreateEventController,
     );
@@ -29,6 +31,7 @@ export default async function EventRoutes(server: FastifyInstance) {
         "/events/:eventId/metrics",
         {
             schema: getEventMetricsControllerSchema,
+            onRequest: [VerifyJwt],
         },
         GetEventMetricsController,
     );
@@ -37,6 +40,7 @@ export default async function EventRoutes(server: FastifyInstance) {
         "/events/:eventId/update-status",
         {
             schema: updateEventStatusControllerSchema,
+            onRequest: [VerifyJwt],
         },
         UpdateEventStatusController,
     );
@@ -45,6 +49,7 @@ export default async function EventRoutes(server: FastifyInstance) {
         "/events/:eventId/update-banner",
         {
             schema: updateEventBannerControllerSchema,
+            onRequest: [VerifyJwt],
         },
         UpdateEventBannerController,
     );
@@ -53,6 +58,7 @@ export default async function EventRoutes(server: FastifyInstance) {
         "/events/:slug",
         {
             schema: getEventControllerSchema,
+            onRequest: [VerifyJwt],
         },
         GetEventController,
     );
@@ -61,6 +67,7 @@ export default async function EventRoutes(server: FastifyInstance) {
         "/events",
         {
             schema: listEventsControllerSchema,
+            onRequest: [VerifyJwt],
         },
         ListEventsController,
     );

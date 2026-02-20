@@ -26,6 +26,7 @@ export const getEventControllerSchema: FastifySchema = {
         slug: z.string(),
     }),
     tags: ["Events"],
+    security: [{ cookieAuth: [] }],
     response: {
         201: z.object({
             event: eventSchema,

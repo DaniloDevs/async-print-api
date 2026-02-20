@@ -19,6 +19,7 @@ export default async function ListEventsController(
 export const listEventsControllerSchema: FastifySchema = {
     summary: "List events",
     tags: ["Events"],
+    security: [{ cookieAuth: [] }],
     response: {
         200: z.array(eventSchema),
     },

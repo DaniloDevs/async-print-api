@@ -28,6 +28,7 @@ export const getEventMetricsControllerSchema: FastifySchema = {
     params: z.object({
         eventId: z.string(),
     }),
+    security: [{ cookieAuth: [] }],
     tags: ["Events"],
     response: {
         201: z.object({

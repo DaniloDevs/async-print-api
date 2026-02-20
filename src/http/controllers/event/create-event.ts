@@ -26,6 +26,7 @@ export default async function CreateEventController(
 export const createEventControllerSchema: FastifySchema = {
     summary: "Create a new event",
     body: eventCreateInputSchema,
+    security: [{ cookieAuth: [] }],
     tags: ["Events"],
     response: {
         201: z.object({
