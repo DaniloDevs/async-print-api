@@ -10,81 +10,83 @@ import {
     serializerCompiler,
     validatorCompiler,
 } from "fastify-type-provider-zod";
-import { ZodError } from "zod";
 import { env } from "./env";
+import { errorHandler } from "./error/handler";
 import AuthRoutes from "./http/controllers/auth/_routes";
 import EventRoutes from "./http/controllers/event/_routes";
 import LeadsRoutes from "./http/controllers/leads/_routes";
 
 const app = Fastify();
 
+// === Security & Middleware ===
+// Cookies antes do JWT
+app.register(fastifyCookie);
+
 app.register(fastifyJwt, {
     secret: env.JWT_SECRET,
     cookie: {
         cookieName: "refreshToken",
-        signed: false,
+        signed: true,
     },
     sign: {
         expiresIn: "10m",
     },
 });
 
-app.register(fastifyCookie);
-
+// CORS restrito (em produção, não usar "*")
 app.register(cors, {
-    origin: "*",
+    origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
 });
 
-// Add schema validator and serializer
-app.setValidatorCompiler(validatorCompiler);
-app.setSerializerCompiler(serializerCompiler);
-
+// Upload de arquivos (limitado)
 app.register(Multipart, {
     limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB máximo
+        fileSize: 5 * 1024 * 1024, // 5MB
     },
 });
 
+// Validators e Serializers
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
+
+// === Swagger ===
 app.register(fastifySwagger, {
     openapi: {
         info: {
             title: "Lead Print API",
             description: `
 **Orquestrador de Captação de Leads e Impressão Térmica.**
-
 Esta API gerencia o fluxo completo de eventos presenciais, desde o cadastro de participantes até a emissão física de comprovantes para sorteios.
-
-### Módulos Principais:
-* **Hardware Integration:** Controle direto de impressoras térmicas (USB/Serial).
-* **Background Jobs:** Processamento assíncrono de filas (via BullMQ) para garantir alta disponibilidade.
-* **Event Management:** Gestão de múltiplos eventos e seus respectivos leads.
-         `,
+`,
             version: "1.0.0",
         },
         servers: [
             {
                 url: `http://localhost:${env.PORT}`,
-                description: "Ambiente de Desenvolvimento (Local)",
+                description: "Desenvolvimento Local",
             },
         ],
         tags: [
             {
                 name: "Events",
-                description:
-                    "Gerenciamento do ciclo de vida dos eventos e configurações globais.",
+                description: "Gestão de eventos e configurações globais.",
             },
-            {
-                name: "Leads",
-                description:
-                    "Cadastro e consulta de participantes captados e validação de funil.",
-            },
+            { name: "Leads", description: "Cadastro e funil de leads." },
             {
                 name: "Auth",
-                description:
-                    "Autenticação e gerenciamento de sessões de usuários.",
+                description: "Autenticação e sessões de usuários.",
             },
         ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT",
+                },
+            },
+        },
     },
     transform: jsonSchemaTransform,
 });
@@ -98,22 +100,12 @@ app.register(fastifyScalar, {
     },
 });
 
+// === Versionamento e Rotas ===
 app.register(EventRoutes);
 app.register(LeadsRoutes);
 app.register(AuthRoutes);
 
-app.setErrorHandler((error, _, reply) => {
-    if (error instanceof ZodError) {
-        return reply.status(400).send({
-            message: "Validation error",
-            issues: error.issues,
-        });
-    }
-
-    return reply.status(500).send({
-        message: "Internal server error",
-        error: error.message,
-    });
-});
+// === Error Handling ===
+app.setErrorHandler(errorHandler);
 
 export { app };
