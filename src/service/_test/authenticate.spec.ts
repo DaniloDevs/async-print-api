@@ -2,15 +2,15 @@ import { hash } from "bcryptjs";
 import { beforeEach, describe, expect, it } from "vitest";
 import { UserInMemoryRepository } from "../../repository/in-memory/user";
 import { InvalidCredentilsError } from "../_errors/invalid-credentials";
-import { AuthenticateService } from "../authenticate";
+import { AuthenticateWithPasswordService } from "../auth/authenticate-with-password";
 
 describe("Authenticate Services", () => {
     let repository: UserInMemoryRepository;
-    let service: AuthenticateService;
+    let service: AuthenticateWithPasswordService;
 
     beforeEach(() => {
         repository = new UserInMemoryRepository();
-        service = new AuthenticateService(repository);
+        service = new AuthenticateWithPasswordService(repository);
     });
     it("should be able to register ", async () => {
         repository.create({

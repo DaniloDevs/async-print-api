@@ -10,6 +10,7 @@ const envSchema = z.object({
     MINIO_SECRET_KEY: z.string(),
     MINIO_ENDPOINT: z.string(),
     MINIO_BUCKET: z.string(),
+    JWT_SECRET: z.string(),
     // REDIS_PORT: z.coerce.number().default(6379),
     // REDIS_HOST: z.string(),
 });

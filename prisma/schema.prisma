@@ -152,8 +152,8 @@ model User {
   id            String   @id @default(uuid())
   name          String
   email         String   @unique
-  password_hash String
-  created_at    DateTime @default(now())
+  passwordHash String
+  createdAt    DateTime @default(now())
   // role          Role     @default(MEMBER)
 
   @@map("users")

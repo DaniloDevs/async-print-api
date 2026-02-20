@@ -1,6 +1,6 @@
 import z from "zod";
 
-const user = z.object({
+export const userSchema = z.object({
     id: z.string(),
     name: z.string().min(2).max(100),
     email: z.string(),
@@ -8,13 +8,13 @@ const user = z.object({
     createdAt: z.date(),
 });
 
-const userCreateInput = user.omit({
+export const userCreateInputSchema = userSchema.omit({
     id: true,
     createdAt: true,
 });
 
-export type User = z.infer<typeof user>;
-export type UserCreateInput = z.infer<typeof userCreateInput>;
+export type User = z.infer<typeof userSchema>;
+export type UserCreateInput = z.infer<typeof userCreateInputSchema>;
 
 export interface IUserRepository {
     findById(id: string): Promise<User | null>;

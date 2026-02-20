@@ -1,4 +1,6 @@
+import fastifyCookie from "@fastify/cookie";
 import cors from "@fastify/cors";
+import fastifyJwt from "@fastify/jwt";
 import Multipart from "@fastify/multipart";
 import fastifySwagger from "@fastify/swagger";
 import fastifyScalar from "@scalar/fastify-api-reference";
@@ -10,10 +12,24 @@ import {
 } from "fastify-type-provider-zod";
 import { ZodError } from "zod";
 import { env } from "./env";
+import AuthRoutes from "./http/controllers/auth/_routes";
 import EventRoutes from "./http/controllers/event/_routes";
 import LeadsRoutes from "./http/controllers/leads/_routes";
 
 const app = Fastify();
+
+app.register(fastifyJwt, {
+    secret: env.JWT_SECRET,
+    cookie: {
+        cookieName: "refreshToken",
+        signed: false,
+    },
+    sign: {
+        expiresIn: "10m",
+    },
+});
+
+app.register(fastifyCookie);
 
 app.register(cors, {
     origin: "*",
@@ -52,6 +68,15 @@ Esta API gerencia o fluxo completo de eventos presenciais, desde o cadastro de p
                 description: "Ambiente de Desenvolvimento (Local)",
             },
         ],
+        components: {
+            securitySchemes: {
+                cookieAuth: {
+                    type: "apiKey",
+                    in: "cookie",
+                    name: "refreshToken",
+                },
+            },
+        },
         tags: [
             {
                 name: "Events",
@@ -62,6 +87,11 @@ Esta API gerencia o fluxo completo de eventos presenciais, desde o cadastro de p
                 name: "Leads",
                 description:
                     "Cadastro e consulta de participantes captados e validação de funil.",
+            },
+            {
+                name: "Auth",
+                description:
+                    "Autenticação e gerenciamento de sessões de usuários.",
             },
         ],
     },
@@ -79,6 +109,7 @@ app.register(fastifyScalar, {
 
 app.register(EventRoutes);
 app.register(LeadsRoutes);
+app.register(AuthRoutes);
 
 app.setErrorHandler((error, _, reply) => {
     if (error instanceof ZodError) {

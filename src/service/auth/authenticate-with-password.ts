@@ -1,16 +1,16 @@
 import { compare } from "bcryptjs";
-import type { IUserRepository } from "../repository/user";
-import { InvalidCredentilsError } from "./_errors/invalid-credentials";
+import type { IUserRepository } from "../../repository/user";
+import { InvalidCredentilsError } from "../_errors/invalid-credentials";
 
-interface AuthenticateRequest {
+interface AuthenticateWithPasswordRequest {
     email: string;
     password: string;
 }
 
-export class AuthenticateService {
+export class AuthenticateWithPasswordService {
     constructor(private repository: IUserRepository) {}
 
-    async execute({ email, password }: AuthenticateRequest) {
+    async execute({ email, password }: AuthenticateWithPasswordRequest) {
         const user = await this.repository.findByEmail(email);
 
         if (!user) {

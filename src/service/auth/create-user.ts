@@ -1,6 +1,6 @@
 import { hash } from "bcryptjs";
-import type { IUserRepository, User } from "../repository/user";
-import { UserAlreadyExistsError } from "./_errors/user-alredy-exists";
+import type { IUserRepository, User } from "../../repository/user";
+import { UserAlreadyExistsError } from "../_errors/user-alredy-exists";
 
 interface RequestDate {
     name: string;
@@ -11,7 +11,7 @@ interface RequestDate {
 interface ResponseDate {
     user: User;
 }
-export class RegisterService {
+export class CreateUserService {
     constructor(private userRepository: IUserRepository) {}
 
     async execute({
