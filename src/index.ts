@@ -68,15 +68,6 @@ Esta API gerencia o fluxo completo de eventos presenciais, desde o cadastro de p
                 description: "Ambiente de Desenvolvimento (Local)",
             },
         ],
-        components: {
-            securitySchemes: {
-                cookieAuth: {
-                    type: "apiKey",
-                    in: "cookie",
-                    name: "refreshToken",
-                },
-            },
-        },
         tags: [
             {
                 name: "Events",

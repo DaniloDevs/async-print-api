@@ -29,7 +29,6 @@ export const updateEventStatusControllerSchema: FastifySchema = {
     body: z.object({
         newStatus: eventStatusSchema,
     }),
-    security: [{ cookieAuth: [] }],
     tags: ["Events"],
     response: {
         200: eventSchema,

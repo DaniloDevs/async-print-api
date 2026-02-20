@@ -40,7 +40,6 @@ export default async function refreshController(
 export const RefreshControllerSchema: FastifySchema = {
     summary: "Generate a new access token using a valid refresh token (cookie)",
     tags: ["Auth"],
-    security: [{ cookieAuth: [] }],
     response: {
         200: z.object({
             token: z.string(),

@@ -20,7 +20,6 @@ export async function profileController(
 export const ProfileControllerSchema: FastifySchema = {
     summary: "Get authenticated user's profile",
     tags: ["Auth"],
-    security: [{ cookieAuth: [] }],
     response: {
         200: userSchema,
     },
