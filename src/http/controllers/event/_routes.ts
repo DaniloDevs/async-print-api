@@ -9,10 +9,12 @@ import GetEventMetricsController, {
 import ListEventsController, {
     listEventsControllerSchema,
 } from "./list-events";
+import UpdateEventBannerController, {
+    updateEventBannerControllerSchema,
+} from "./update-event-banner";
 import UpdateEventStatusController, {
     updateEventStatusControllerSchema,
 } from "./update-event-status";
-import UpdateEventBannerController, { updateEventBannerControllerSchema } from "./update-event-banner";
 
 export default async function EventRoutes(server: FastifyInstance) {
     server.post(
