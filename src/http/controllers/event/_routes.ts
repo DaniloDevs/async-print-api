@@ -12,6 +12,7 @@ import ListEventsController, {
 import UpdateEventStatusController, {
     updateEventStatusControllerSchema,
 } from "./update-event-status";
+import UpdateEventBannerController, { updateEventBannerControllerSchema } from "./update-event-banner";
 
 export default async function EventRoutes(server: FastifyInstance) {
     server.post(
@@ -36,6 +37,14 @@ export default async function EventRoutes(server: FastifyInstance) {
             schema: updateEventStatusControllerSchema,
         },
         UpdateEventStatusController,
+    );
+
+    server.patch(
+        "/events/:eventId/update-banner",
+        {
+            schema: updateEventBannerControllerSchema,
+        },
+        UpdateEventBannerController,
     );
 
     server.get(
