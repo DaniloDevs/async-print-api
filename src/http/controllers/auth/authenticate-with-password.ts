@@ -29,20 +29,10 @@ export default async function AuthenticateWithPasswordController(
                     sub: user.id,
                 },
             },
-        );
-
-        const refreshToken = await reply.jwtSign(
-            {},
-            {
-                sign: {
-                    sub: user.id,
-                    expiresIn: "7d",
-                },
-            },
-        );
+        )
 
         return reply
-            .setCookie("refreshToken", refreshToken, {
+            .setCookie("token", token, {
                 path: "/",
                 secure: true,
                 httpOnly: true,

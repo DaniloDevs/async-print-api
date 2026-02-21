@@ -37,9 +37,9 @@ export const updateEventBannerControllerSchema: FastifySchema = {
     params: z.object({
         eventId: z.string(),
     }),
-    body: z.object({
-        file: z.any(), // multipart file
-    }),
+    // body: z.object({
+    //     file: z.any(), // multipart file
+    // }),
     response: {
         200: z.null().describe("Successful update of event banner"),
     },

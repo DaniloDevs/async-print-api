@@ -22,6 +22,8 @@ export const listEventsControllerSchema: FastifySchema = {
     security: [{ bearerAuth: [] }],
     tags: ["Events"],
     response: {
-        200: z.array(eventSchema).describe("Successful retrieval of events"),
+        200: z.object({
+            events: z.array(eventSchema),
+        }).describe("Successful retrieval of events"),
     },
 };
