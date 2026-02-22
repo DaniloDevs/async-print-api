@@ -30,7 +30,7 @@ export default async function UpdateEventBannerController(
 
 export const updateEventBannerControllerSchema: FastifySchema = {
     summary: "Update event banner",
-      description: "Endpoint to update the banner of an existing event.",
+    description: "Endpoint to update the banner of an existing event.",
     security: [{ bearerAuth: [] }],
     tags: ["Events"],
     consumes: ["multipart/form-data"],

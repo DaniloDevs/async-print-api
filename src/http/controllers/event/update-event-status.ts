@@ -33,8 +33,10 @@ export const updateEventStatusControllerSchema: FastifySchema = {
     }),
     tags: ["Events"],
     response: {
-        200: z.object({
-            event: eventSchema,
-        }).describe("Successful update of event status"),
+        200: z
+            .object({
+                event: eventSchema,
+            })
+            .describe("Successful update of event status"),
     },
 };

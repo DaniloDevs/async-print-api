@@ -32,10 +32,12 @@ export const getEventMetricsControllerSchema: FastifySchema = {
     }),
     tags: ["Events"],
     response: {
-        201: z.object({
-            currentLeads: z.number(),
-            totalLeads: z.number(),
-            eventStatus: eventStatusSchema,
-        }).describe("successful retrieval of event metrics"),
+        201: z
+            .object({
+                currentLeads: z.number(),
+                totalLeads: z.number(),
+                eventStatus: eventStatusSchema,
+            })
+            .describe("successful retrieval of event metrics"),
     },
 };

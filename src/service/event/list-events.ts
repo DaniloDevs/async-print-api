@@ -10,11 +10,11 @@ interface ResponseDate {
         slug: string;
         bannerKey: string | null;
         status: "ACTIVE" | "INACTIVE" | "DRAFT" | "FINISHED" | "CANCELED";
-    }[]
+    }[];
 }
 
 export class ListEventsService {
-    constructor(private eventRepository: IEventRepository) { }
+    constructor(private eventRepository: IEventRepository) {}
 
     async execute(): Promise<ResponseDate> {
         const events = await this.eventRepository.findMany();

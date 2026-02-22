@@ -19,7 +19,7 @@ import UpdateEventStatusController, {
 
 export default async function EventRoutes(server: FastifyInstance) {
     server.addHook("onRequest", VerifyJwt);
-    
+
     server.post(
         "/events",
         {

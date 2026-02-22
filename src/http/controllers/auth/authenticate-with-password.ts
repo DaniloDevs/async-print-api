@@ -29,7 +29,7 @@ export default async function AuthenticateWithPasswordController(
                     sub: user.id,
                 },
             },
-        )
+        );
 
         return reply
             .setCookie("token", token, {
@@ -51,15 +51,18 @@ export default async function AuthenticateWithPasswordController(
 
 export const AuthenticateWithPasswordControllerSchema: FastifySchema = {
     summary: "Authenticate with email and password",
-    description: "This endpoint allows a user to authenticate using their email and password. It returns a JWT token upon successful authentication.",
+    description:
+        "This endpoint allows a user to authenticate using their email and password. It returns a JWT token upon successful authentication.",
     body: z.object({
         email: z.email(),
         password: z.string(),
     }),
     tags: ["Auth"],
     response: {
-        200: z.object({
-            token: z.string(),
-        }).describe("Successful authentication"),
+        200: z
+            .object({
+                token: z.string(),
+            })
+            .describe("Successful authentication"),
     },
 };

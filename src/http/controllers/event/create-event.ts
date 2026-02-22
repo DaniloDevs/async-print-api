@@ -30,8 +30,10 @@ export const createEventControllerSchema: FastifySchema = {
     body: eventCreateInputSchema,
     tags: ["Events"],
     response: {
-        201: z.object({
-            eventId: z.string(),
-        }).describe(" successful event creation"),
+        201: z
+            .object({
+                eventId: z.string(),
+            })
+            .describe(" successful event creation"),
     },
 };

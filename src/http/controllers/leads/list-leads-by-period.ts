@@ -24,13 +24,15 @@ export const listLeadsByPeriodControllerSchema: FastifySchema = {
     }),
     tags: ["Leads"],
     response: {
-        200: z.object({
-            leads: z.array(
-                z.object({
-                    hour: z.string(),
-                    total: z.number(),
-                }),
-            ),
-        }).describe("Successful retrieval of leads by period") ,
+        200: z
+            .object({
+                leads: z.array(
+                    z.object({
+                        hour: z.string(),
+                        total: z.number(),
+                    }),
+                ),
+            })
+            .describe("Successful retrieval of leads by period"),
     },
 };

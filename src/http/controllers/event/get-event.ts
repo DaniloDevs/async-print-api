@@ -29,11 +29,13 @@ export const getEventControllerSchema: FastifySchema = {
     }),
     tags: ["Events"],
     response: {
-        200: z.object({
-            event: eventSchema.extend({
-                startAt: z.string(),
-                endsAt: z.string(),
-            }),
-        }).describe("Successful retrieval of event"),
+        200: z
+            .object({
+                event: eventSchema.extend({
+                    startAt: z.string(),
+                    endsAt: z.string(),
+                }),
+            })
+            .describe("Successful retrieval of event"),
     },
 };

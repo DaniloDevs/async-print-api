@@ -22,13 +22,15 @@ export const listEventsControllerSchema: FastifySchema = {
     security: [{ bearerAuth: [] }],
     tags: ["Events"],
     response: {
-        200: z.object({
-            events: z.array(
-                eventSchema.extend({
-                    startAt: z.string(),
-                    endsAt: z.string(),
-                })
-            )
-        }).describe("Successful retrieval of events"),
+        200: z
+            .object({
+                events: z.array(
+                    eventSchema.extend({
+                        startAt: z.string(),
+                        endsAt: z.string(),
+                    }),
+                ),
+            })
+            .describe("Successful retrieval of events"),
     },
 };

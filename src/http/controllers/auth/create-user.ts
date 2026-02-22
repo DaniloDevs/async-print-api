@@ -27,12 +27,15 @@ export default async function CreateUserController(
 
 export const createUserControllerSchema: FastifySchema = {
     summary: "Create a new user",
-    description: "This endpoint allows you to create a new user by providing their name, email, and password.",
+    description:
+        "This endpoint allows you to create a new user by providing their name, email, and password.",
     body: userCreateInputSchema,
     tags: ["Auth"],
     response: {
-        201: z.object({
-            userId: z.string(),
-        }).describe("User created successfully"),
+        201: z
+            .object({
+                userId: z.string(),
+            })
+            .describe("User created successfully"),
     },
 };
