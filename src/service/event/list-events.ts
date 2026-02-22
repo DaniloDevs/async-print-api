@@ -1,10 +1,9 @@
-import dayjs from "dayjs";
 import type { IEventRepository } from "../../repository/event";
 
 interface ResponseDate {
     events: {
-        startAt: string;
-        endsAt: string;
+        startAt: Date;
+        endsAt: Date;
         id: string;
         title: string;
         slug: string;
@@ -22,8 +21,6 @@ export class ListEventsService {
         const formattedEvents = events.map((event) => ({
             ...event,
             bannerKey: event.bannerKey,
-            startAt: dayjs(event.startAt).format("DD-MM-YY HH:mm:ss"),
-            endsAt: dayjs(event.endsAt).format("DD-MM-YY HH:mm:ss"),
         }));
 
         return {

@@ -24,12 +24,7 @@ export const listEventsControllerSchema: FastifySchema = {
     response: {
         200: z
             .object({
-                events: z.array(
-                    eventSchema.extend({
-                        startAt: z.string(),
-                        endsAt: z.string(),
-                    }),
-                ),
+                events: z.array(eventSchema),
             })
             .describe("Successful retrieval of events"),
     },

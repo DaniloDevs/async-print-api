@@ -48,8 +48,6 @@ describe("Get Event (Service)", () => {
             expect(storageProvider.getPublicUrl).not.toHaveBeenCalled();
             expect(event).toEqual({
                 ...eventMock,
-                startAt: dayjs(event.startAt).format("DD-MM-YY HH:mm:ss"),
-                endsAt: dayjs(event.endsAt).format("DD-MM-YY HH:mm:ss"),
                 bannerUrl: null,
                 bannerKey: null,
             });
@@ -81,8 +79,6 @@ describe("Get Event (Service)", () => {
                 ...eventMock,
                 bannerUrl: "https://storage.example.com/event-banner.png",
                 bannerKey: "event-banner.png",
-                startAt: dayjs(eventMock.startAt).format("DD-MM-YY HH:mm:ss"),
-                endsAt: dayjs(eventMock.endsAt).format("DD-MM-YY HH:mm:ss"),
             });
         });
     });

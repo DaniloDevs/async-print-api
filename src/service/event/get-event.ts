@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import type { IStorageProvider } from "../../provider/storage-provider";
 import type { IEventRepository } from "../../repository/event";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
@@ -9,8 +8,8 @@ interface RequestDate {
 interface ResponseDate {
     event: {
         bannerUrl: string | null;
-        startAt: string;
-        endsAt: string;
+        startAt: Date;
+        endsAt: Date;
         id: string;
         title: string;
         slug: string;
@@ -44,8 +43,6 @@ export class GetEventService {
                 ...event,
                 bannerKey: bannerUrl ? event.bannerKey : null,
                 bannerUrl,
-                startAt: dayjs(event.startAt).format("DD-MM-YY HH:mm:ss"),
-                endsAt: dayjs(event.endsAt).format("DD-MM-YY HH:mm:ss"),
             },
         };
     }

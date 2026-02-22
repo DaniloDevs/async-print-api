@@ -31,15 +31,7 @@ export default async function AuthenticateWithPasswordController(
             },
         );
 
-        return reply
-            .setCookie("token", token, {
-                path: "/",
-                secure: true,
-                httpOnly: true,
-                sameSite: true,
-            })
-            .status(200)
-            .send({ token });
+        return reply.status(200).send({ token });
     } catch (err) {
         if (err instanceof InvalidCredentilsError) {
             return reply.status(400).send({ message: err.message });

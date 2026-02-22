@@ -31,10 +31,7 @@ export const getEventControllerSchema: FastifySchema = {
     response: {
         200: z
             .object({
-                event: eventSchema.extend({
-                    startAt: z.string(),
-                    endsAt: z.string(),
-                }),
+                event: eventSchema,
             })
             .describe("Successful retrieval of event"),
     },
