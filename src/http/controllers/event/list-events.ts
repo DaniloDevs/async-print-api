@@ -23,7 +23,12 @@ export const listEventsControllerSchema: FastifySchema = {
     tags: ["Events"],
     response: {
         200: z.object({
-            events: z.array(eventSchema),
+            events: z.array(
+                eventSchema.extend({
+                    startAt: z.string(),
+                    endsAt: z.string(),
+                })
+            )
         }).describe("Successful retrieval of events"),
     },
 };
