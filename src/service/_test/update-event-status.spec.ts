@@ -24,7 +24,7 @@ describe("Update Event Status (Service)", () => {
         const event = await eventRepository.create(
             makeEvent({
                 title: "Evento Teste",
-                status: "DRAFT",
+                status: "INACTIVE",
                 startAt: NOW.toDate(),
                 endsAt: NOW.add(10, "hour").toDate(),
             }),
@@ -39,9 +39,6 @@ describe("Update Event Status (Service)", () => {
     describe("Successful cases", () => {
         describe("valid status transitions", () => {
             it.each<[from: EventStatus, to: EventStatus]>([
-                ["DRAFT", "ACTIVE"],
-                ["DRAFT", "CANCELED"],
-
                 ["ACTIVE", "FINISHED"],
                 ["ACTIVE", "CANCELED"],
                 ["ACTIVE", "INACTIVE"],
@@ -52,10 +49,9 @@ describe("Update Event Status (Service)", () => {
 
                 ["FINISHED", "CANCELED"],
             ])("should allow %s → %s", async (from, to) => {
-                if (from !== "DRAFT") {
+                if (from !== "INACTIVE") {
                     await eventRepository.forceStatus(eventId, from);
                 }
-
                 const { event } = await sut.execute({
                     eventId: eventId,
                     newStatus: to,
@@ -71,23 +67,14 @@ describe("Update Event Status (Service)", () => {
 
     describe("error cases", () => {
         it.each<[from: EventStatus, to: EventStatus]>([
-            ["DRAFT", "INACTIVE"],
-            ["DRAFT", "FINISHED"],
-
-            ["ACTIVE", "DRAFT"],
-
-            ["INACTIVE", "DRAFT"],
-
-            ["FINISHED", "DRAFT"],
             ["FINISHED", "ACTIVE"],
             ["FINISHED", "INACTIVE"],
 
-            ["CANCELED", "DRAFT"],
             ["CANCELED", "ACTIVE"],
             ["CANCELED", "INACTIVE"],
             ["CANCELED", "FINISHED"],
         ])("should NOT allow %s → %s", async (from, to) => {
-            if (from !== "DRAFT") {
+            if (from !== "INACTIVE") {
                 await eventRepository.forceStatus(eventId, from);
             }
 

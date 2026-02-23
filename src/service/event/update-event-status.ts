@@ -54,7 +54,6 @@ export class UpdateEventStatusService {
             EventStatus,
             EventStatus[]
         > = {
-            DRAFT: ["ACTIVE", "CANCELED"],
             ACTIVE: ["FINISHED", "CANCELED", "INACTIVE"],
             INACTIVE: ["ACTIVE", "FINISHED", "CANCELED"],
             FINISHED: ["CANCELED"],

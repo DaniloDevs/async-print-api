@@ -123,14 +123,14 @@ describe("Get Event Metrics (Service)", () => {
         it("should be possible to calculate the event status.", async () => {
             // Arrange - Criar evento com status diferente
             const inactiveEvent = await eventRepository.create(
-                makeEvent({ status: "inactive" }),
+                makeEvent({ status: "INACTIVE" }),
             );
 
             // Act
             const result = await sut.execute({ eventId: inactiveEvent.id });
 
             // Assert
-            expect(result.eventStatus).toBe("inactive");
+            expect(result.eventStatus).toBe("INACTIVE");
         });
 
         it("should be possible to calculate the metric for large volumes.", async () => {

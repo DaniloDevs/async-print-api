@@ -10,7 +10,6 @@ datasource db {
 enum eventStatus {
   ACTIVE
   INACTIVE
-  DRAFT
   FINISHED
   CANCELED
 }
@@ -77,7 +76,7 @@ model Event {
   title     String
   slug      String      @unique
   bannerKey String?
-  status    eventStatus @default(DRAFT)
+  status    eventStatus @default(INACTIVE)
   startAt   DateTime
   endsAt    DateTime
   createdAt DateTime    @default(now())

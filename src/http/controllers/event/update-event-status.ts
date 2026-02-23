@@ -9,6 +9,7 @@ export default async function UpdateEventStatusController(
 ) {
     const { eventId } = request.params as { eventId: string };
     const { newStatus } = request.body as { newStatus: string };
+    
     const updateEventStatus = makeUpdateEventStatus();
 
     const { event } = await updateEventStatus.execute({

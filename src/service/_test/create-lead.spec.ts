@@ -113,7 +113,7 @@ describe("Create Lead (Service)", () => {
         it("should not be possible to create a lead in an event that is not active.", async () => {
             const event = await eventRepository.create({
                 ...eventInput,
-                status: "inactive",
+                status: "INACTIVE",
             });
 
             await expect(() =>
