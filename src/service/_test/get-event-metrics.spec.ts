@@ -37,7 +37,7 @@ describe("Get Event Metrics (Service)", () => {
             const result = await sut.execute({ eventId: event.id });
 
             expect(result).toEqual({
-                eventStatus: "active",
+                eventStatus: "ACTIVE",
                 currentLeads: 0,
                 totalLeads: 0,
             });
@@ -114,7 +114,7 @@ describe("Get Event Metrics (Service)", () => {
 
             // Assert
             expect(result).toEqual({
-                eventStatus: "active",
+                eventStatus: "ACTIVE",
                 currentLeads: 0,
                 totalLeads: 3,
             });

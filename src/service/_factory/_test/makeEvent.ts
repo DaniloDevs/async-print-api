@@ -15,7 +15,7 @@ export function makeEvent(overrides: MakeEventOverrides = {}) {
     return {
         title: "Event Test",
         bannerKey: null,
-        status: "active" as EventStatus,
+        status: "ACTIVE" as EventStatus,
         startAt: NOW.toDate(),
         endsAt: NOW.add(5, "hour").toDate(),
         ...overrides,

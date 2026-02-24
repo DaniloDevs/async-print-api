@@ -22,7 +22,7 @@ const segment = z.enum([
     "ANO_3_MEDIO",
 ]);
 
-const lead = z.object({
+export const leadSchema = z.object({
     id: z.string(),
     name: z.string(),
     phone: z.string(),
@@ -36,20 +36,20 @@ const lead = z.object({
     eventId: z.string(),
 });
 
-export const leadCreateInput = lead.omit({
+export const leadCreateInputSchema = leadSchema.omit({
     id: true,
     createdAt: true,
 });
 
-export const leadJobPayload = lead.pick({
+export const leadJobPayload = leadSchema.pick({
     id: true,
     name: true,
     phone: true,
     email: true,
 });
 
-export type Lead = z.infer<typeof lead>;
-export type LeadCreateInput = z.infer<typeof leadCreateInput>;
+export type Lead = z.infer<typeof leadSchema>;
+export type LeadCreateInput = z.infer<typeof leadCreateInputSchema>;
 export type segment = z.infer<typeof segment>;
 export type technical = z.infer<typeof technicalEnum>;
 export type originLead = z.infer<typeof originEnum>;

@@ -32,6 +32,7 @@ export type JobStatusEnum = z.infer<typeof JobStatus>;
 
 export interface IJobRepository {
     create(data: JobCreateInput): Promise<Job>;
+    findManyPending(): Promise<Job[]>;
     findPendingByPrinterId(printerId: string): Promise<Job[]>;
     markAsProcessing(jobId: string): Promise<void>;
     markAsCompleted(jobId: string): Promise<void>;

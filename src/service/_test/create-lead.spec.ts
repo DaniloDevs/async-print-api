@@ -50,7 +50,6 @@ describe("Create Lead (Service)", () => {
 
             const { lead } = await sut.execute({
                 data: { ...leadInput, eventId: event.id },
-                eventId: event.id,
             });
 
             expect(lead.name).toBe("Danilo Ribeiro Pinho");
@@ -61,7 +60,6 @@ describe("Create Lead (Service)", () => {
 
             const { lead } = await sut.execute({
                 data: { ...leadInput, eventId: event.id },
-                eventId: event.id,
             });
 
             const normalizedPhoneNumber = sut.normalizePhoneNumber(
@@ -78,7 +76,6 @@ describe("Create Lead (Service)", () => {
 
             const { lead } = await sut.execute({
                 data: { ...leadInput, eventId: event.id },
-                eventId: event.id,
             });
 
             expect(createSpy).toHaveBeenCalledTimes(1);
@@ -106,7 +103,7 @@ describe("Create Lead (Service)", () => {
             eventRepository.findBySlug("non-exist-event");
 
             await expect(() =>
-                sut.execute({ data: leadInput, eventId: "non-exist" }),
+                sut.execute({ data: {...leadInput, eventId: "non-exist"}  }),
             ).rejects.toBeInstanceOf(ResourceNotFoundError);
         });
 
@@ -118,8 +115,7 @@ describe("Create Lead (Service)", () => {
 
             await expect(() =>
                 sut.execute({
-                    data: { ...leadInput, eventId: event.id },
-                    eventId: event.id,
+                    data: { ...leadInput, eventId: event.id},
                 }),
             ).rejects.toBeInstanceOf(EventNotActiveError);
         });
@@ -133,7 +129,6 @@ describe("Create Lead (Service)", () => {
             await expect(() =>
                 sut.execute({
                     data: { ...leadInput, eventId: event.id },
-                    eventId: event.id,
                 }),
             ).rejects.toBeInstanceOf(EventNotStartedYetError);
         });
@@ -145,7 +140,6 @@ describe("Create Lead (Service)", () => {
             await expect(() =>
                 sut.execute({
                     data: { ...leadInput, eventId: event.id },
-                    eventId: event.id,
                 }),
             ).rejects.toBeInstanceOf(EventAlreadyEndedError);
         });
@@ -158,11 +152,11 @@ describe("Create Lead (Service)", () => {
                 Promise.all([
                     sut.execute({
                         data: { ...leadInput, eventId: event.id },
-                        eventId: event.id,
+    
                     }),
                     sut.execute({
                         data: { ...leadInput, eventId: event.id },
-                        eventId: event.id,
+    
                     }),
                 ]),
             ).rejects.toBeInstanceOf(LeadAlreadyRegisteredError);

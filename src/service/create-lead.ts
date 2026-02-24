@@ -13,7 +13,6 @@ import { LeadAlreadyRegisteredError } from "./_errors/lead-already-registered-er
 import { ResourceNotFoundError } from "./_errors/resource-not-found-error";
 
 interface RequestDate {
-    eventId: string;
     data: LeadCreateInput;
 }
 interface ResponseDate {
@@ -27,17 +26,17 @@ export class CreateLeadService {
         private jobRepository: IJobRepository,
     ) {}
 
-    async execute({ data, eventId }: RequestDate): Promise<ResponseDate> {
-        const event = await this.eventRepository.findById(eventId);
+    async execute({ data }: RequestDate): Promise<ResponseDate> {
+        const event = await this.eventRepository.findById(data.eventId);
         if (!event) {
             throw new ResourceNotFoundError({
                 resourceType: "Event",
-                resource: eventId,
+                resource: data.eventId,
             });
         }
 
-        if (event.status !== "active") {
-            throw new EventNotActiveError(eventId);
+        if (event.status !== "ACTIVE") {
+            throw new EventNotActiveError(data.eventId);
         }
 
         this.isValidPeriod(event.startAt, event.endsAt);
@@ -48,7 +47,7 @@ export class CreateLeadService {
         );
 
         if (existingLead) {
-            throw new LeadAlreadyRegisteredError(data.email, eventId);
+            throw new LeadAlreadyRegisteredError(data.email, data.eventId);
         }
 
         const formattedPhoneNumber = this.normalizePhoneNumber(data.phone);

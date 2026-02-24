@@ -6,7 +6,7 @@ export default async function ListLeadsByPeriodController(
     request: FastifyRequest,
     reply: FastifyReply,
 ) {
-    const eventId = request.params as string;
+    const { eventId } = request.params as { eventId: string };
 
     const listLeadsByPeriodService = makeListLeadsByPeriod();
 

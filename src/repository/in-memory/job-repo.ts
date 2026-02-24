@@ -26,7 +26,15 @@ export class JobInMemoryRepository implements IJobRepository {
         return job;
     }
 
-    async findPendingByPrinterId(printerId: string): Promise<Job[]> {
+    async findManyPending(): Promise<Job[]> {
+        const jobs = this.items
+            .filter((item) => item.status === "PENDING")
+            .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+
+        return jobs;
+    }
+
+      async findPendingByPrinterId(printerId: string): Promise<Job[]> {
         const jobs = this.items
             .filter(
                 (item) =>
@@ -38,6 +46,7 @@ export class JobInMemoryRepository implements IJobRepository {
         return jobs;
     }
 
+    
     async markAsProcessing(jobId: string): Promise<void> {
         const job = this.items.find((j) => j.id === jobId);
         if (!job) return;
