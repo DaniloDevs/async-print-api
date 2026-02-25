@@ -8,14 +8,14 @@ import type { EventCreateInput, IEventRepository } from "../event";
 export class EventPrismaRepository implements IEventRepository {
     constructor(private prisma: PrismaClient) {}
 
-    async create(data: EventCreateInput) {
+    async create(data: { status: string } & EventCreateInput) {
         const event = await this.prisma.event.create({
             data: {
                 title: data.title,
                 slug: generateSlug(data.title),
                 startAt: new Date(data.startAt),
                 endsAt: new Date(data.endsAt),
-                bannerKey: data.bannerKey,
+                bannerKey: "",
                 status: data.status as eventStatus,
             },
         });

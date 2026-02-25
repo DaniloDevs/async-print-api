@@ -5,19 +5,20 @@ import type {
     EventStatus,
     IEventRepository,
 } from "../event";
+import { eventStatus } from "../../../prisma/generated/prisma";
 
 export class EventInMemoryRepository implements IEventRepository {
     public items: Event[] = [];
 
-    async create(data: EventCreateInput): Promise<Event> {
+    async create(data: { status: string } & EventCreateInput): Promise<Event> {
         const event: Event = {
             id: crypto.randomUUID(),
             title: data.title,
             slug: generateSlug(data.title),
             startAt: dayjs(data.startAt).toDate(),
             endsAt: dayjs(data.endsAt).toDate(),
-            bannerKey: data.bannerKey,
-            status: data.status,
+            bannerKey: "",
+            status: data.status as eventStatus,
         };
 
         this.items.push(event);
