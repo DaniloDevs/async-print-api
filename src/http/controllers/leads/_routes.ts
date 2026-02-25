@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { VerifyJwt } from "../../middleware/verify-jwt";
 import CreateLeadController, {
     createLeadControllerSchema,
 } from "./create-lead";
@@ -7,7 +8,7 @@ import ListLeadsByPeriodController, {
 } from "./list-leads-by-period";
 
 export default async function LeadsRoutes(server: FastifyInstance) {
-    // server.addHook("onRequest", VerifyJwt);
+    server.addHook("onRequest", VerifyJwt);
 
     server.get(
         "/events/:eventId/leads-by-period",

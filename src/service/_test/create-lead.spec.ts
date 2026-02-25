@@ -103,7 +103,7 @@ describe("Create Lead (Service)", () => {
             eventRepository.findBySlug("non-exist-event");
 
             await expect(() =>
-                sut.execute({ data: {...leadInput, eventId: "non-exist"}  }),
+                sut.execute({ data: { ...leadInput, eventId: "non-exist" } }),
             ).rejects.toBeInstanceOf(ResourceNotFoundError);
         });
 
@@ -115,7 +115,7 @@ describe("Create Lead (Service)", () => {
 
             await expect(() =>
                 sut.execute({
-                    data: { ...leadInput, eventId: event.id},
+                    data: { ...leadInput, eventId: event.id },
                 }),
             ).rejects.toBeInstanceOf(EventNotActiveError);
         });
@@ -152,11 +152,9 @@ describe("Create Lead (Service)", () => {
                 Promise.all([
                     sut.execute({
                         data: { ...leadInput, eventId: event.id },
-    
                     }),
                     sut.execute({
                         data: { ...leadInput, eventId: event.id },
-    
                     }),
                 ]),
             ).rejects.toBeInstanceOf(LeadAlreadyRegisteredError);

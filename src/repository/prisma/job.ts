@@ -48,11 +48,9 @@ export class JobPrismaRepository implements IJobRepository {
         });
     }
 
+    async findPendingByPrinterId(_printerId: string) {
+        const limit = 10;
 
-
-    async findPendingByPrinterId(printerId: string) {
-        const limit = 10
-        
         return this.prisma.$transaction(async (tx) => {
             const jobs = await tx.job.findMany({
                 where: {
