@@ -1,7 +1,10 @@
-import type { EventsStatus } from "../repository/events";
+import type { EventStatus } from "./../../repository/event";
 
-export class InvalidEventStatusTransitionError extends Error {
-    constructor(from: EventsStatus, to: EventsStatus) {
-        super(`Cannot change status from ${from} to ${to}`);
+import { AppError } from "./app-error";
+
+export class InvalidEventStatusTransitionError extends AppError {
+    constructor(from: EventStatus, to: EventStatus) {
+        super(`Cannot change status from ${from} to ${to}`, 400);
+        this.name = "InvalidEventStatusTransitionError";
     }
 }

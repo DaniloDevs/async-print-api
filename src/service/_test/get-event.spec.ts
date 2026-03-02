@@ -49,7 +49,6 @@ describe("Get Event (Service)", () => {
             expect(event).toEqual({
                 ...eventMock,
                 bannerUrl: null,
-                bannerKey: null,
             });
         });
 
