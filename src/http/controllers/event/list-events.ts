@@ -30,7 +30,7 @@ export const listEventsControllerSchema: FastifySchema = {
                             bannerKey: true,
                         })
                         .extend({
-                            bannerUrl: z.string(),
+                            bannerUrl: z.string().nullable(),
                         }),
                 ),
             })

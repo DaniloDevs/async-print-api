@@ -22,7 +22,7 @@ export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
         });
     }
 
-    request.log.error(error as any);
+    console.log(error);
 
     return reply.status(500).send({
         statusCode: 500,
