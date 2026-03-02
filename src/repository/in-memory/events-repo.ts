@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
+import type { eventStatus } from "../../../prisma/generated/prisma";
 import type {
     Event,
     EventCreateInput,
     EventStatus,
     IEventRepository,
 } from "../event";
-import { eventStatus } from "../../../prisma/generated/prisma";
 
 export class EventInMemoryRepository implements IEventRepository {
     public items: Event[] = [];

@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { VerifyJwt } from "../../middleware/verify-jwt";
 import CreateEventController, {
     createEventControllerSchema,
 } from "./create-event";
@@ -17,7 +18,7 @@ import UpdateEventStatusController, {
 } from "./update-event-status";
 
 export default async function EventRoutes(server: FastifyInstance) {
-    // server.addHook("onRequest", VerifyJwt);
+    server.addHook("onRequest", VerifyJwt);
 
     server.post(
         "/events",

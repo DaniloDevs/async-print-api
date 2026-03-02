@@ -21,7 +21,7 @@ export const eventCreateInputSchema = eventSchema.omit({
     id: true,
     slug: true,
     bannerKey: true,
-    status: true
+    status: true,
 });
 
 export type Event = z.infer<typeof eventSchema>;

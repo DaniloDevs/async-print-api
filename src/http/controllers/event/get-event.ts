@@ -31,7 +31,13 @@ export const getEventControllerSchema: FastifySchema = {
     response: {
         200: z
             .object({
-                event: eventSchema,
+                event: eventSchema
+                    .omit({
+                        bannerKey: true,
+                    })
+                    .extend({
+                        bannerUrl: z.string(),
+                    }),
             })
             .describe("Successful retrieval of event"),
     },

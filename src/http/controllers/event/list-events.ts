@@ -24,7 +24,15 @@ export const listEventsControllerSchema: FastifySchema = {
     response: {
         200: z
             .object({
-                events: z.array(eventSchema),
+                events: z.array(
+                    eventSchema
+                        .omit({
+                            bannerKey: true,
+                        })
+                        .extend({
+                            bannerUrl: z.string(),
+                        }),
+                ),
             })
             .describe("Successful retrieval of events"),
     },

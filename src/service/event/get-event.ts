@@ -7,13 +7,12 @@ interface RequestDate {
 }
 interface ResponseDate {
     event: {
-        bannerUrl: string | null;
         startAt: Date;
         endsAt: Date;
         id: string;
         title: string;
         slug: string;
-        bannerKey: string | null;
+        bannerUrl: string | null;
         status: "ACTIVE" | "INACTIVE" | "DRAFT" | "FINISHED" | "CANCELED";
     };
 }
@@ -41,7 +40,6 @@ export class GetEventService {
         return {
             event: {
                 ...event,
-                bannerKey: bannerUrl ? event.bannerKey : null,
                 bannerUrl,
             },
         };

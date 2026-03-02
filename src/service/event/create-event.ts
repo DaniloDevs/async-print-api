@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import type { eventStatus } from "../../../prisma/generated/prisma";
 import type {
     Event,
     EventCreateInput,
@@ -8,7 +9,6 @@ import { EventAlreadyExistsError } from "../_errors/event-already-exist-error";
 import { EventDurationTooShortError } from "../_errors/event-duration-too-short-error";
 import { EventEndBeforeStartError } from "../_errors/event-end-before-start-error";
 import { EventStartDateInPastError } from "../_errors/event-start-date-in-past-error";
-import { eventStatus } from "../../../prisma/generated/prisma";
 
 interface RequestDate {
     data: EventCreateInput;
