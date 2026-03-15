@@ -15,6 +15,7 @@ import { errorHandler } from "./error/handler";
 import AuthRoutes from "./http/controllers/auth/_routes";
 import EventRoutes from "./http/controllers/event/_routes";
 import LeadsRoutes from "./http/controllers/leads/_routes";
+import PrintersRoutes from "./http/controllers/printers/_routes";
 
 const app = Fastify();
 
@@ -104,6 +105,7 @@ app.register(fastifyScalar, {
 app.register(EventRoutes);
 app.register(LeadsRoutes);
 app.register(AuthRoutes);
+app.register(PrintersRoutes);
 
 // === Error Handling ===
 app.setErrorHandler(errorHandler);

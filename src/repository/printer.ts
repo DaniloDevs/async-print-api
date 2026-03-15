@@ -26,13 +26,13 @@ const printer = z.object({
     eventId: z.string(),
 });
 
-const printerCreateInput = printer.omit({
+export const printerCreateInputSchema = printer.omit({
     id: true,
     createdAt: true,
 });
 
 export type Printer = z.infer<typeof printer>;
-export type PrinterCreateInput = z.infer<typeof printerCreateInput>;
+export type PrinterCreateInput = z.infer<typeof printerCreateInputSchema>;
 export type PrinterTypeEnum = z.infer<typeof printerTypeEnum>;
 export type PrinterStatusEnum = z.infer<typeof printerStatusEnum>;
 
