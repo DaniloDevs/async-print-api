@@ -67,6 +67,14 @@ Esta API gerencia o fluxo completo de eventos presenciais, desde o cadastro de p
                 url: `http://localhost:${env.PORT}`,
                 description: "Desenvolvimento Local",
             },
+            // {
+            //     url: "https://api.staging.asyncprint.com",
+            //     description: "Ambiente de Staging",
+            // },
+            // {
+            //     url: "https://api.asyncprint.com",
+            //     description: "Ambiente de Produção",
+            // },
         ],
         tags: [
             {
@@ -78,6 +86,10 @@ Esta API gerencia o fluxo completo de eventos presenciais, desde o cadastro de p
                 name: "Auth",
                 description: "Autenticação e sessões de usuários.",
             },
+            {
+                name: "Printers",
+                description: "Fila de impressão e gestão de impressoras.",
+            },
         ],
         components: {
             securitySchemes: {
@@ -88,6 +100,7 @@ Esta API gerencia o fluxo completo de eventos presenciais, desde o cadastro de p
                 },
             },
         },
+        security: [{ bearerAuth: [] }],
     },
     transform: jsonSchemaTransform,
 });
