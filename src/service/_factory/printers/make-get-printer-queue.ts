@@ -6,10 +6,7 @@ import { GetPrinterQueue } from "../../printers/get-printer-queue";
 export function makeGetPrinterQueue() {
     const printerRepository = new PrinterPrismaRepository(prisma);
     const jobRepository = new JobPrismaRepository(prisma);
-    const service = new GetPrinterQueue(
-        printerRepository,
-        jobRepository,
-    );
+    const service = new GetPrinterQueue(printerRepository, jobRepository);
 
     return service;
 }

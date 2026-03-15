@@ -6,10 +6,7 @@ import { GetLeadMetricsByorigin } from "../../leads/get-lead-metrics-by-origen";
 export function makeGetLeadMetricsByOrigen() {
     const eventRepository = new EventPrismaRepository(prisma);
     const leadRepository = new LeadPrismaRepository(prisma);
-    const service = new GetLeadMetricsByorigin(
-        eventRepository,
-        leadRepository,
-    );
+    const service = new GetLeadMetricsByorigin(eventRepository, leadRepository);
 
     return service;
 }

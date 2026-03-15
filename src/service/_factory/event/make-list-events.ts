@@ -5,7 +5,7 @@ import { ListEventsService } from "../../event/list-events";
 
 export function makeListEvents() {
     const eventRepository = new EventPrismaRepository(prisma);
-    const minioProvider = new MinioStorageProvider()
+    const minioProvider = new MinioStorageProvider();
     const service = new ListEventsService(eventRepository, minioProvider);
 
     return service;

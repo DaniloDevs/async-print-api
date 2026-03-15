@@ -6,10 +6,7 @@ import { ListEventLeadsService } from "../../leads/list-event-leads";
 export function makeListEventLeads() {
     const eventRepository = new EventPrismaRepository(prisma);
     const leadRepository = new LeadPrismaRepository(prisma);
-    const service = new ListEventLeadsService(
-        eventRepository,
-        leadRepository,
-    );
+    const service = new ListEventLeadsService(eventRepository, leadRepository);
 
     return service;
 }

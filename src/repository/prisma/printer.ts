@@ -1,5 +1,9 @@
-import { PrismaClient } from "../../../prisma/generated/prisma";
-import { IPrinterRepository, Printer, PrinterCreateInput } from "../printer";
+import type { PrismaClient } from "../../../prisma/generated/prisma";
+import type {
+    IPrinterRepository,
+    Printer,
+    PrinterCreateInput,
+} from "../printer";
 
 export class PrinterPrismaRepository implements IPrinterRepository {
     constructor(private prisma: PrismaClient) {}
@@ -22,7 +26,10 @@ export class PrinterPrismaRepository implements IPrinterRepository {
         return printer as unknown as Printer | null;
     }
 
-    async fidnByIdAndEventId(id: string, eventId: string): Promise<Printer | null> {
+    async fidnByIdAndEventId(
+        id: string,
+        eventId: string,
+    ): Promise<Printer | null> {
         const printer = await this.prisma.printer.findFirst({
             where: { id, eventId },
         });
