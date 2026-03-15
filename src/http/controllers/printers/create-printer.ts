@@ -7,7 +7,9 @@ export default async function CreatePrinterController(
     request: FastifyRequest,
     reply: FastifyReply,
 ) {
-    const data = request.body as { data: z.infer<typeof printerCreateInputSchema> };
+    const data = request.body as {
+        data: z.infer<typeof printerCreateInputSchema>;
+    };
 
     const formatData = printerCreateInputSchema.parse(data.data);
     const createPrinter = makeCreatePrinter();
