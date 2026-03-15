@@ -1,10 +1,10 @@
 import path from "node:path";
 import type { IStorageProvider } from "../../provider/storage-provider";
 import type { IEventRepository } from "../../repository/event";
-import { EventAlreadyEndedError } from "../_errors/event-already-ended-error";
-import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
-import { InvalidFileTypeError } from "../_errors/invalid-file-type-error";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
+import { EventAlreadyEndedError } from "../@errors/event-already-ended-error";
+import { EventNotStartedYetError } from "../@errors/event-not-started-yet-error";
+import { InvalidFileTypeError } from "../@errors/invalid-file-type-error";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
 
 interface RequestDate {
     eventId: string;

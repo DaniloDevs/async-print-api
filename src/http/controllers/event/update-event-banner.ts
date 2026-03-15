@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
 import z from "zod";
-import { makeUpdateEventBannerService } from "../../../service/_factory/event/make-update-event-banner";
+import { makeUpdateEventBannerService } from "../../../service/@factory/event/make-update-event-banner";
 
 export default async function UpdateEventBannerController(
     request: FastifyRequest,

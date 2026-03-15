@@ -1,8 +1,8 @@
 import { hash } from "bcryptjs";
 import { beforeEach, describe, expect, it } from "vitest";
 import { UserInMemoryRepository } from "../../repository/in-memory/user";
-import { InvalidCredentilsError } from "../_errors/invalid-credentials";
-import { AuthenticateWithPasswordService } from "../auth/authenticate-with-password";
+import { InvalidCredentilsError } from "../@errors/invalid-credentials";
+import { AuthenticateWithPasswordService } from "./authenticate-with-password";
 
 describe("Authenticate Services", () => {
     let repository: UserInMemoryRepository;

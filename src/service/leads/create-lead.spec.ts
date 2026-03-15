@@ -6,14 +6,14 @@ import { JobInMemoryRepository } from "../../repository/in-memory/job-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { IJobRepository } from "../../repository/job";
 import type { ILeadRepository } from "../../repository/lead";
-import { EventAlreadyEndedError } from "../_errors/event-already-ended-error";
-import { EventNotActiveError } from "../_errors/event-not-active-error";
-import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
-import { LeadAlreadyRegisteredError } from "../_errors/lead-already-registered-error";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/_test/makeEvent";
-import { makeLead } from "../_factory/_test/makeLead";
-import { CreateLeadService } from "../leads/create-lead";
+import { EventAlreadyEndedError } from "../@errors/event-already-ended-error";
+import { EventNotActiveError } from "../@errors/event-not-active-error";
+import { EventNotStartedYetError } from "../@errors/event-not-started-yet-error";
+import { LeadAlreadyRegisteredError } from "../@errors/lead-already-registered-error";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
+import { makeEvent } from "../@factory/_test/makeEvent";
+import { makeLead } from "../@factory/_test/makeLead";
+import { CreateLeadService } from "./create-lead";
 
 describe("Create Lead (Service)", () => {
     let eventRepository: IEventRepository;

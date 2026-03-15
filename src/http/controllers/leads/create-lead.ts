@@ -4,7 +4,7 @@ import {
     type LeadCreateInput,
     leadCreateInputSchema,
 } from "../../../repository/lead";
-import { makeCreateLead } from "../../../service/_factory/leads/make-create-lead";
+import { makeCreateLead } from "../../../service/@factory/leads/make-create-lead";
 
 export default async function CreateLeadController(
     request: FastifyRequest,

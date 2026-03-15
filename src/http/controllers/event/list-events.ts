@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
 import z from "zod";
 import { eventSchema } from "./../../../repository/event";
-import { makeListEvents } from "../../../service/_factory/event/make-list-events";
+import { makeListEvents } from "../../../service/@factory/event/make-list-events";
 
 export default async function ListEventsController(
     _request: FastifyRequest,

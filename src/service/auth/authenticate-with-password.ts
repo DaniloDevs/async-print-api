@@ -1,6 +1,6 @@
 import { compare } from "bcryptjs";
 import type { IUserRepository } from "../../repository/user";
-import { InvalidCredentilsError } from "../_errors/invalid-credentials";
+import { InvalidCredentilsError } from "../@errors/invalid-credentials";
 
 interface AuthenticateWithPasswordRequest {
     email: string;

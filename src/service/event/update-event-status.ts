@@ -3,8 +3,8 @@ import type {
     EventStatus,
     IEventRepository,
 } from "../../repository/event";
-import { InvalidEventStatusTransitionError } from "../_errors/invalid-event-status-transitions-error";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
+import { InvalidEventStatusTransitionError } from "../@errors/invalid-event-status-transitions-error";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
 
 interface RequestDate {
     eventId: string;

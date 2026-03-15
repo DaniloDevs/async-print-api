@@ -4,10 +4,10 @@ import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository } from "../../repository/lead";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/_test/makeEvent";
-import { makeLead } from "../_factory/_test/makeLead";
-import { ListEventLeadsByPeriodService } from "../leads/list-leads-by-period";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
+import { makeEvent } from "../@factory/_test/makeEvent";
+import { makeLead } from "../@factory/_test/makeLead";
+import { ListEventLeadsByPeriodService } from "./list-leads-by-period";
 
 describe("List event leads by period (Service)", () => {
     let sut: ListEventLeadsByPeriodService;

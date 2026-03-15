@@ -2,12 +2,12 @@ import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
-import { EventAlreadyExistsError } from "../_errors/event-already-exist-error";
-import { EventDurationTooShortError } from "../_errors/event-duration-too-short-error";
-import { EventEndBeforeStartError } from "../_errors/event-end-before-start-error";
-import { EventStartDateInPastError } from "../_errors/event-start-date-in-past-error";
-import { makeEvent } from "../_factory/_test/makeEvent";
-import { CreateEventService } from "../event/create-event";
+import { EventAlreadyExistsError } from "../@errors/event-already-exist-error";
+import { EventDurationTooShortError } from "../@errors/event-duration-too-short-error";
+import { EventEndBeforeStartError } from "../@errors/event-end-before-start-error";
+import { EventStartDateInPastError } from "../@errors/event-start-date-in-past-error";
+import { makeEvent } from "../@factory/_test/makeEvent";
+import { CreateEventService } from "./create-event";
 
 describe("Create Event (Service)", () => {
     let eventRepository: IEventRepository;

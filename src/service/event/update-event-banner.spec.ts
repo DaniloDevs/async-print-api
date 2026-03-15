@@ -4,12 +4,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { IStorageProvider } from "../../provider/storage-provider";
 import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
-import { EventAlreadyEndedError } from "../_errors/event-already-ended-error";
-import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
-import { InvalidFileTypeError } from "../_errors/invalid-file-type-error";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/_test/makeEvent";
-import { UpdateEventBannerService } from "../event/update-event-banner";
+import { EventAlreadyEndedError } from "../@errors/event-already-ended-error";
+import { EventNotStartedYetError } from "../@errors/event-not-started-yet-error";
+import { InvalidFileTypeError } from "../@errors/invalid-file-type-error";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
+import { makeEvent } from "../@factory/_test/makeEvent";
+import { UpdateEventBannerService } from "./update-event-banner";
 
 describe("Update event Banner (Service)", () => {
     let eventRepository: IEventRepository;

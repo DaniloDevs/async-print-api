@@ -4,10 +4,10 @@ import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
 import type { ILeadRepository, originLead } from "../../repository/lead";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/_test/makeEvent";
-import { makeLead } from "../_factory/_test/makeLead";
-import { GetLeadMetricsByorigin } from "../leads/get-lead-metrics-by-origen";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
+import { makeEvent } from "../@factory/_test/makeEvent";
+import { makeLead } from "../@factory/_test/makeLead";
+import { GetLeadMetricsByorigin } from "./get-lead-metrics-by-origen";
 
 describe("Get leads metrics by origin (Service)", () => {
     let sut: GetLeadMetricsByorigin;

@@ -4,7 +4,7 @@ import {
     type UserCreateInput,
     userCreateInputSchema,
 } from "../../../repository/user";
-import { MakeCreateUser } from "../../../service/_factory/auth/make-create-user";
+import { MakeCreateUser } from "../../../service/@factory/auth/make-create-user";
 
 export default async function CreateUserController(
     request: FastifyRequest,

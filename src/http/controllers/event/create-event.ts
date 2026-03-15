@@ -4,7 +4,7 @@ import {
     type EventCreateInput,
     eventCreateInputSchema,
 } from "./../../../repository/event";
-import { makeCreateEvent } from "../../../service/_factory/event/make-create-event";
+import { makeCreateEvent } from "../../../service/@factory/event/make-create-event";
 
 export default async function CreateEventController(
     request: FastifyRequest,

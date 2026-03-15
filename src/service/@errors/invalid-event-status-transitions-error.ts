@@ -1,4 +1,4 @@
-import type { EventStatus } from "./../../repository/event";
+import type { EventStatus } from "../../repository/event";
 
 import { AppError } from "./app-error";
 

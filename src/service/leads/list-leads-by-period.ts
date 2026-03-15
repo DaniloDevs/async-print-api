@@ -2,7 +2,7 @@ import dayjs, { type Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import type { IEventRepository } from "../../repository/event";
 import type { ILeadRepository, Lead } from "../../repository/lead";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
 
 dayjs.extend(utc);
 

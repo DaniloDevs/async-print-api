@@ -1,5 +1,5 @@
 import type { IUserRepository, User } from "../../repository/user";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
 
 interface GetUserProfileServiceDTO {
     userId: string;

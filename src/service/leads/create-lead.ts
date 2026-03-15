@@ -6,11 +6,11 @@ import type {
     Lead,
     LeadCreateInput,
 } from "../../repository/lead";
-import { EventAlreadyEndedError } from "../_errors/event-already-ended-error";
-import { EventNotActiveError } from "../_errors/event-not-active-error";
-import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
-import { LeadAlreadyRegisteredError } from "../_errors/lead-already-registered-error";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
+import { EventAlreadyEndedError } from "../@errors/event-already-ended-error";
+import { EventNotActiveError } from "../@errors/event-not-active-error";
+import { EventNotStartedYetError } from "../@errors/event-not-started-yet-error";
+import { LeadAlreadyRegisteredError } from "../@errors/lead-already-registered-error";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
 
 interface RequestDate {
     data: LeadCreateInput;

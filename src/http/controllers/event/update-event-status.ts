@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
 import z from "zod";
 import { eventSchema, eventStatusSchema } from "./../../../repository/event";
-import { makeUpdateEventStatus } from "../../../service/_factory/event/make-update-event-status";
+import { makeUpdateEventStatus } from "../../../service/@factory/event/make-update-event-status";
 
 export default async function UpdateEventStatusController(
     request: FastifyRequest,

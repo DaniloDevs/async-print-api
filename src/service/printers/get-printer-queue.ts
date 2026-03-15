@@ -1,6 +1,6 @@
 import type { IJobRepository, Job } from "../../repository/job";
 import type { IPrinterRepository } from "../../repository/printer";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
 
 interface RequestDate {
     printerId: string;

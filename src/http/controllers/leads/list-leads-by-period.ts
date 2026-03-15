@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
 import z from "zod";
-import { makeListLeadsByPeriod } from "../../../service/_factory/leads/make-list-leads-by-period";
+import { makeListLeadsByPeriod } from "../../../service/@factory/leads/make-list-leads-by-period";
 
 export default async function ListLeadsByPeriodController(
     request: FastifyRequest,

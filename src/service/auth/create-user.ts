@@ -1,6 +1,6 @@
 import { hash } from "bcryptjs";
 import type { IUserRepository, User } from "../../repository/user";
-import { UserAlreadyExistsError } from "../_errors/user-alredy-exists";
+import { UserAlreadyExistsError } from "../@errors/user-alredy-exists";
 
 interface RequestDate {
     name: string;

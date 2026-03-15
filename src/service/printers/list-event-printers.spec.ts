@@ -3,10 +3,10 @@ import { beforeEach, describe, expect, it } from "vitest";
 import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { PrinterInMemoryRepository } from "../../repository/in-memory/printer-repo";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/_test/makeEvent";
-import { makePrinter } from "../_factory/_test/makePrinter";
-import { ListPrinterLeadsService } from "../printers/list-event-printers";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
+import { makeEvent } from "../@factory/_test/makeEvent";
+import { makePrinter } from "../@factory/_test/makePrinter";
+import { ListPrinterLeadsService } from "./list-event-printers";
 
 describe("List event printers (Service)", () => {
     let sut: ListPrinterLeadsService;

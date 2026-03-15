@@ -5,10 +5,10 @@ import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { PrinterInMemoryRepository } from "../../repository/in-memory/printer-repo";
 import { generateSlug } from "../../utils/generate-slug";
-import { PrinterAlreadyExistsError } from "../_errors/printer-already-exist-error";
-import { makeEvent } from "../_factory/_test/makeEvent";
-import { makePrinter } from "../_factory/_test/makePrinter";
-import { CreatePrinterService } from "../printers/create-printer";
+import { PrinterAlreadyExistsError } from "../@errors/printer-already-exist-error";
+import { makeEvent } from "../@factory/_test/makeEvent";
+import { makePrinter } from "../@factory/_test/makePrinter";
+import { CreatePrinterService } from "./create-printer";
 
 describe("Create Printer (Service)", () => {
     let printerRepository: PrinterInMemoryRepository;

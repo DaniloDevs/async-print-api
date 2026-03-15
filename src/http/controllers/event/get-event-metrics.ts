@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
 import z from "zod";
 import { eventStatusSchema } from "./../../../repository/event";
-import { makeGetEventMetrics } from "../../../service/_factory/event/make-get-event-metrics";
+import { makeGetEventMetrics } from "../../../service/@factory/event/make-get-event-metrics";
 
 export default async function GetEventMetricsController(
     request: FastifyRequest,

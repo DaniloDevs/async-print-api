@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
 import z from "zod";
 import { userSchema } from "../../../repository/user";
-import { MakeGetUserProfileService } from "../../../service/_factory/auth/make-get-user-profile";
+import { MakeGetUserProfileService } from "../../../service/@factory/auth/make-get-user-profile";
 
 export async function profileController(
     request: FastifyRequest,

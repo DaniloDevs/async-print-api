@@ -3,11 +3,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Event } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
-import { LeadsNotFoundError } from "../_errors/leads-not-found-error";
-import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
-import { makeEvent } from "../_factory/_test/makeEvent";
-import { makeLead } from "../_factory/_test/makeLead";
-import { ExportEventLeadsService } from "../leads/export-event-leads";
+import { LeadsNotFoundError } from "../@errors/leads-not-found-error";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
+import { makeEvent } from "../@factory/_test/makeEvent";
+import { makeLead } from "../@factory/_test/makeLead";
+import { ExportEventLeadsService } from "./export-event-leads";
 
 describe("Export event Lead (Service)", () => {
     let eventRepository: EventInMemoryRepository;

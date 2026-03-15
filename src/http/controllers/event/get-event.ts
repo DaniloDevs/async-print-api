@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
 import z from "zod";
 import { eventSchema } from "./../../../repository/event";
-import { makeGetEvent } from "../../../service/_factory/event/make-get-event";
+import { makeGetEvent } from "../../../service/@factory/event/make-get-event";
 
 export default async function GetEventController(
     request: FastifyRequest,

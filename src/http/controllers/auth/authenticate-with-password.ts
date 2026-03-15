@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
 import z from "zod";
-import { InvalidCredentilsError } from "../../../service/_errors/invalid-credentials";
-import { makeAuthenticateWithPassword } from "../../../service/_factory/auth/make-autheticate-with-password";
+import { InvalidCredentilsError } from "../../../service/@errors/invalid-credentials";
+import { makeAuthenticateWithPassword } from "../../../service/@factory/auth/make-autheticate-with-password";
 
 export default async function AuthenticateWithPasswordController(
     request: FastifyRequest,
