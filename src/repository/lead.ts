@@ -1,10 +1,10 @@
 import z from "zod";
 
-const technicalInterestEnum = z.enum(["ENF", "INF", "ADM", "NONE"]);
+const technicalEnum = z.enum(["ENF", "INF", "ADM", "NONE"]);
 
-const origenEnum = z.enum(["qrcode", "instagram", "manual"]);
+const originEnum = z.enum(["QRCODE", "INSTAGRAM", "MANUAL"]);
 
-const segmentInterest = z.enum([
+const segment = z.enum([
     "NONE",
     "JARDIM_1",
     "JARDIM_2",
@@ -22,30 +22,38 @@ const segmentInterest = z.enum([
     "ANO_3_MEDIO",
 ]);
 
-const lead = z.object({
+export const leadSchema = z.object({
     id: z.string(),
     name: z.string(),
     phone: z.string(),
     email: z.string(),
     isStudent: z.boolean(),
-    intendsToStudyNextYear: z.boolean().default(false),
-    origen: z.enum(origenEnum.options).default("manual"),
-    technicalInterest: z.enum(technicalInterestEnum.options).default("NONE"),
-    segmentInterest: z.enum(segmentInterest.options).default("NONE"),
+    intentionNextYear: z.boolean().default(false),
+    origin: z.enum(originEnum.options).default("MANUAL"),
+    technical: z.enum(technicalEnum.options).default("NONE"),
+    segment: z.enum(segment.options).default("NONE"),
     createdAt: z.date(),
     eventId: z.string(),
 });
 
-const leadCreateInput = lead.omit({
+export const leadCreateInputSchema = leadSchema.omit({
     id: true,
     createdAt: true,
 });
 
-export type Lead = z.infer<typeof lead>;
-export type LeadCreateInput = z.infer<typeof leadCreateInput>;
-export type SegmentInterest = z.infer<typeof segmentInterest>;
-export type TechnicalInterest = z.infer<typeof technicalInterestEnum>;
-export type OrigenLead = z.infer<typeof origenEnum>;
+export const leadJobPayload = leadSchema.pick({
+    id: true,
+    name: true,
+    phone: true,
+    email: true,
+});
+
+export type Lead = z.infer<typeof leadSchema>;
+export type LeadCreateInput = z.infer<typeof leadCreateInputSchema>;
+export type segment = z.infer<typeof segment>;
+export type technical = z.infer<typeof technicalEnum>;
+export type originLead = z.infer<typeof originEnum>;
+export type PrintJobPayload = z.infer<typeof leadJobPayload>;
 
 export interface ILeadRepository {
     create(data: LeadCreateInput): Promise<Lead>;

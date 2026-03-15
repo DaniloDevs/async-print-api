@@ -1,0 +1,47 @@
+import type { IEventRepository } from "../../repository/event";
+import type { ILeadRepository, Lead } from "../../repository/lead";
+import { LeadsNotFoundError } from "../@errors/leads-not-found-error";
+import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
+
+interface RequestDate {
+    slug: string;
+}
+interface ResponseDate {
+    eventId: string;
+    eventSlug: string;
+    eventTitle: string;
+    leads: Lead[];
+}
+
+export class ExportEventLeadsService {
+    constructor(
+        private readonly eventRepository: IEventRepository,
+        private readonly leadRepository: ILeadRepository,
+    ) {}
+
+    async execute({ slug }: RequestDate): Promise<ResponseDate> {
+        const event = await this.eventRepository.findBySlug(slug);
+
+        if (!event) {
+            throw new ResourceNotFoundError({
+                resourceType: "Event",
+                resource: slug,
+            });
+        }
+
+        const leads = await this.leadRepository.findManyByEventId(event.id);
+
+        if (leads.length === 0) {
+            throw new LeadsNotFoundError({
+                resource: event.id,
+            });
+        }
+
+        return {
+            eventId: event.id,
+            eventSlug: event.slug,
+            eventTitle: event.title,
+            leads,
+        };
+    }
+}

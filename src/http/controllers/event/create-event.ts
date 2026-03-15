@@ -1,0 +1,39 @@
+import type { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
+import z from "zod";
+import {
+    type EventCreateInput,
+    eventCreateInputSchema,
+} from "./../../../repository/event";
+import { makeCreateEvent } from "../../../service/@factory/event/make-create-event";
+
+export default async function CreateEventController(
+    request: FastifyRequest,
+    reply: FastifyReply,
+) {
+    const data = eventCreateInputSchema.parse(request.body) as EventCreateInput;
+
+    const createEventService = makeCreateEvent();
+
+    const { event } = await createEventService.execute({
+        data,
+    });
+
+    return reply.status(201).send({
+        eventId: event.id,
+    });
+}
+
+export const createEventControllerSchema: FastifySchema = {
+    summary: "Create a new event",
+    description: "Endpoint to create a new event in the system.",
+    security: [{ bearerAuth: [] }],
+    body: eventCreateInputSchema,
+    tags: ["Events"],
+    response: {
+        201: z
+            .object({
+                eventId: z.string(),
+            })
+            .describe(" successful event creation"),
+    },
+};

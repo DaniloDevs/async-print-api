@@ -1,32 +1,159 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-model events {
-  id        String  @id @default(cuid())
-  title     String
-  slug      String  @unique
-  active    Boolean
-  bannerURL String?
-  createdAt DateTime
-  startIn   DateTime
-  endIn     DateTime
-  
-  leads leads[]
+enum eventStatus {
+  ACTIVE
+  INACTIVE
+  FINISHED
+  CANCELED
 }
 
-model leads {
-  id        String  @id @default(cuid())
-  name      String
-  cellphone String  @unique
-  isValid   Boolean @default(true)
-  createdAt DateTime
+enum leadTechnical {
+  ENF
+  INF
+  ADM
+  NONE
+}
 
-  events   events @relation(fields: [eventsId], references: [id])
-  eventsId String
+enum leadOringen {
+  QRCODE
+  INSTAGRAM
+  MANUAL
+}
+
+enum leadSegment {
+  NONE
+  JARDIM_1
+  JARDIM_2
+  ANO_1_FUNDAMENTAL
+  ANO_2_FUNDAMENTAL
+  ANO_3_FUNDAMENTAL
+  ANO_4_FUNDAMENTAL
+  ANO_5_FUNDAMENTAL
+  ANO_6_FUNDAMENTAL
+  ANO_7_FUNDAMENTAL
+  ANO_8_FUNDAMENTAL
+  ANO_9_FUNDAMENTAL
+  ANO_1_MEDIO
+  ANO_2_MEDIO
+  ANO_3_MEDIO
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum PrinterType {
+  THERMAL
+  INKJET
+  LASER
+  PDF
+  NETWORK
+}
+
+enum PrinterStatus {
+  DISCONNECTED
+  CONNECTED
+  PRINTING
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+model Event {
+  id        String      @id @default(cuid())
+  title     String
+  slug      String      @unique
+  bannerKey String?
+  status    eventStatus @default(INACTIVE)
+  startAt   DateTime
+  endsAt    DateTime
+  createdAt DateTime    @default(now())
+
+  leads    Lead[]
+  printers Printer[]
+
+  @@map("events")
+}
+
+model Lead {
+  id                String  @id @default(cuid())
+  name              String
+  phone             String
+  email             String
+  isStudent         Boolean @default(false)
+  intentionNextYear Boolean @default(true)
+
+  origin    leadOringen
+  technical leadTechnical
+  segment   leadSegment
+
+  createdAt DateTime @default(now())
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([email, eventId])
+  @@unique([phone, eventId])
+  @@index([eventId])
+  @@map("leads")
+}
+
+model Job {
+  id      String    @id @default(uuid())
+  name    String
+  payload Json
+  status  JobStatus @default(PENDING)
+
+  attempts    Int @default(0)
+  maxAttempts Int
+
+  createdAt   DateTime  @default(now())
+  processedAt DateTime?
+  completedAt DateTime?
+  error       String?
+
+  @@index([status, createdAt])
+}
+
+model Printer {
+  id          String  @id @default(uuid())
+  name        String
+  slug        String  @unique
+  path        String
+  description String?
+
+  type   PrinterType
+  status PrinterStatus @default(DISCONNECTED)
+
+  createdAt DateTime @default(now())
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+}
+
+
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  // role          Role     @default(MEMBER)
+
+  @@map("users")
 }

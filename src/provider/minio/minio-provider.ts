@@ -1,7 +1,8 @@
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { s3 } from "../../connections/minio";
+
 import { env } from "../../env";
+import { s3 } from "../../lib/minio-s3";
 import type { IStorageProvider, uploadInput } from "../storage-provider";
 
 export class MinioStorageProvider implements IStorageProvider {

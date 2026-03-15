@@ -13,12 +13,12 @@ export class LeadInMemoryRepository implements ILeadRepository {
             phone: data.phone,
             email: data.email,
             isStudent: data.isStudent,
-            intendsToStudyNextYear: data.intendsToStudyNextYear,
-            technicalInterest: data.technicalInterest,
-            segmentInterest: data.segmentInterest,
+            intentionNextYear: data.intentionNextYear,
+            technical: data.technical,
+            segment: data.segment,
             createdAt: dayjs().utc().toDate(),
             eventId: data.eventId,
-            origen: data.origen,
+            origin: data.origin,
         };
 
         this.items.push(leads);

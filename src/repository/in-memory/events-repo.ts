@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { createSlug } from "../../utils/create-slug";
+import type { eventStatus } from "../../../prisma/generated/prisma";
 import type {
     Event,
     EventCreateInput,
@@ -10,15 +10,15 @@ import type {
 export class EventInMemoryRepository implements IEventRepository {
     public items: Event[] = [];
 
-    async create(data: EventCreateInput): Promise<Event> {
+    async create(data: { status: string } & EventCreateInput): Promise<Event> {
         const event: Event = {
             id: crypto.randomUUID(),
             title: data.title,
-            slug: createSlug(data.title),
+            slug: generateSlug(data.title),
             startAt: dayjs(data.startAt).toDate(),
             endsAt: dayjs(data.endsAt).toDate(),
-            bannerKey: data.bannerKey,
-            status: data.status,
+            bannerKey: "",
+            status: data.status as eventStatus,
         };
 
         this.items.push(event);
@@ -60,4 +60,17 @@ export class EventInMemoryRepository implements IEventRepository {
 
         event.status = status;
     }
+
+    async findMany(): Promise<Event[]> {
+        return this.items;
+    }
+}
+
+function generateSlug(title: string): string {
+    return title
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
 }
