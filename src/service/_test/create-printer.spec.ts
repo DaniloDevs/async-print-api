@@ -8,7 +8,7 @@ import { generateSlug } from "../../utils/generate-slug";
 import { PrinterAlreadyExistsError } from "../_errors/printer-already-exist-error";
 import { makeEvent } from "../_factory/_test/makeEvent";
 import { makePrinter } from "../_factory/_test/makePrinter";
-import { CreatePrinterService } from "../create-printer";
+import { CreatePrinterService } from "../printers/create-printer";
 
 describe("Create Printer (Service)", () => {
     let printerRepository: PrinterInMemoryRepository;

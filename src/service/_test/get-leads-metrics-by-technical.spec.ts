@@ -7,7 +7,7 @@ import type { ILeadRepository, technical } from "../../repository/lead";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/_test/makeEvent";
 import { makeLead } from "../_factory/_test/makeLead";
-import { GetLeadMetricsByTechnical } from "../get-lead-metrics-by-technial";
+import { GetLeadMetricsByTechnical } from "../leads/get-lead-metrics-by-technial";
 
 describe("Get leads metrics by technical (Service)", () => {
     let sut: GetLeadMetricsByTechnical;

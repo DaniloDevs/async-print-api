@@ -1,19 +1,18 @@
-import type { IEventRepository } from "../repository/event";
-import type { ILeadRepository, Lead } from "../repository/lead";
-import { ResourceNotFoundError } from "./_errors/resource-not-found-error";
+import type { IEventRepository } from "../../repository/event";
+import type { ILeadRepository, Lead } from "../../repository/lead";
+import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 
 interface RequestDate {
     eventId: string;
 }
 interface ResponseDate {
-    segments: {
-        segment: string;
+    origin: {
+        origin: string;
         total: number;
-        interestNewyear: number;
     }[];
 }
 
-export class GetLeadMetricsBySegment {
+export class GetLeadMetricsByorigin {
     constructor(
         private eventRepository: IEventRepository,
         private leadsRepository: ILeadRepository,
@@ -31,45 +30,38 @@ export class GetLeadMetricsBySegment {
 
         const leads = await this.leadsRepository.findManyByEventId(eventId);
 
-        const metrics = this.calculateMetricsBySegment(leads);
+        const metrics = this.calculateMetricsByorigin(leads);
 
         return {
-            segments: metrics
+            origin: metrics
                 .map((metric) => ({
-                    segment: metric.segment,
+                    origin: metric.origin,
                     total: metric.totalLeads,
-                    interestNewyear: metric.leadsWithIntentNextYear,
                 }))
                 .sort((a, b) => b.total - a.total),
         };
     }
 
-    calculateMetricsBySegment(leads: Lead[]) {
+    calculateMetricsByorigin(leads: Lead[]) {
         const groups: Record<
             string,
             {
-                segment: string;
+                origin: string;
                 totalLeads: number;
-                leadsWithIntentNextYear: number;
             }
         > = {};
 
         for (const lead of leads) {
-            const segment = lead.segment;
+            const origin = lead.origin;
 
-            if (!groups[segment]) {
-                groups[segment] = {
-                    segment,
+            if (!groups[origin]) {
+                groups[origin] = {
+                    origin,
                     totalLeads: 0,
-                    leadsWithIntentNextYear: 0,
                 };
             }
 
-            groups[segment].totalLeads++;
-
-            if (lead.intentionNextYear) {
-                groups[segment].leadsWithIntentNextYear++;
-            }
+            groups[origin].totalLeads++;
         }
 
         return Object.values(groups);

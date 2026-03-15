@@ -1,11 +1,11 @@
-import type { IPrinterProvider } from "../provider/Printer-provider";
+import type { IPrinterProvider } from "../../provider/Printer-provider";
 import type {
     IPrinterRepository,
     Printer,
     PrinterCreateInput,
-} from "../repository/printer";
-import { generateSlug } from "../utils/generate-slug";
-import { PrinterAlreadyExistsError } from "./_errors/printer-already-exist-error";
+} from "../../repository/printer";
+import { generateSlug } from "../../utils/generate-slug";
+import { PrinterAlreadyExistsError } from "../_errors/printer-already-exist-error";
 
 interface RequestDate {
     data: PrinterCreateInput;

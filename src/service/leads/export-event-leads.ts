@@ -1,7 +1,7 @@
-import type { IEventRepository } from "../repository/event";
-import type { ILeadRepository, Lead } from "../repository/lead";
-import { LeadsNotFoundError } from "./_errors/leads-not-found-error";
-import { ResourceNotFoundError } from "./_errors/resource-not-found-error";
+import type { IEventRepository } from "../../repository/event";
+import type { ILeadRepository, Lead } from "../../repository/lead";
+import { LeadsNotFoundError } from "../_errors/leads-not-found-error";
+import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 
 interface RequestDate {
     slug: string;

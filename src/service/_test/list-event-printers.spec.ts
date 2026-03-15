@@ -6,7 +6,7 @@ import { PrinterInMemoryRepository } from "../../repository/in-memory/printer-re
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/_test/makeEvent";
 import { makePrinter } from "../_factory/_test/makePrinter";
-import { ListPrinterLeadsService } from "../list-event-printers";
+import { ListPrinterLeadsService } from "../printers/list-event-printers";
 
 describe("List event printers (Service)", () => {
     let sut: ListPrinterLeadsService;

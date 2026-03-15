@@ -7,7 +7,7 @@ import { LeadsNotFoundError } from "../_errors/leads-not-found-error";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/_test/makeEvent";
 import { makeLead } from "../_factory/_test/makeLead";
-import { ExportEventLeadsService } from "../export-event-leads";
+import { ExportEventLeadsService } from "../leads/export-event-leads";
 
 describe("Export event Lead (Service)", () => {
     let eventRepository: EventInMemoryRepository;

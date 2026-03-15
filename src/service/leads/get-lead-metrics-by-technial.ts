@@ -1,18 +1,19 @@
-import type { IEventRepository } from "../repository/event";
-import type { ILeadRepository, Lead } from "../repository/lead";
-import { ResourceNotFoundError } from "./_errors/resource-not-found-error";
+import type { IEventRepository } from "../../repository/event";
+import type { ILeadRepository, Lead } from "../../repository/lead";
+import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 
 interface RequestDate {
     eventId: string;
 }
 interface ResponseDate {
-    origin: {
-        origin: string;
+    technical: {
+        technical: string;
         total: number;
+        interestNewyear: number;
     }[];
 }
 
-export class GetLeadMetricsByorigin {
+export class GetLeadMetricsByTechnical {
     constructor(
         private eventRepository: IEventRepository,
         private leadsRepository: ILeadRepository,
@@ -30,38 +31,45 @@ export class GetLeadMetricsByorigin {
 
         const leads = await this.leadsRepository.findManyByEventId(eventId);
 
-        const metrics = this.calculateMetricsByorigin(leads);
+        const metrics = this.calculateMetricsByTechnical(leads);
 
         return {
-            origin: metrics
+            technical: metrics
                 .map((metric) => ({
-                    origin: metric.origin,
+                    technical: metric.technical,
                     total: metric.totalLeads,
+                    interestNewyear: metric.leadsWithIntentNextYear,
                 }))
                 .sort((a, b) => b.total - a.total),
         };
     }
 
-    calculateMetricsByorigin(leads: Lead[]) {
+    calculateMetricsByTechnical(leads: Lead[]) {
         const groups: Record<
             string,
             {
-                origin: string;
+                technical: string;
                 totalLeads: number;
+                leadsWithIntentNextYear: number;
             }
         > = {};
 
         for (const lead of leads) {
-            const origin = lead.origin;
+            const technical = lead.technical;
 
-            if (!groups[origin]) {
-                groups[origin] = {
-                    origin,
+            if (!groups[technical]) {
+                groups[technical] = {
+                    technical,
                     totalLeads: 0,
+                    leadsWithIntentNextYear: 0,
                 };
             }
 
-            groups[origin].totalLeads++;
+            groups[technical].totalLeads++;
+
+            if (lead.intentionNextYear) {
+                groups[technical].leadsWithIntentNextYear++;
+            }
         }
 
         return Object.values(groups);

@@ -28,7 +28,6 @@ const printer = z.object({
 
 const printerCreateInput = printer.omit({
     id: true,
-    slug: true,
     createdAt: true,
 });
 

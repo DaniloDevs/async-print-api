@@ -7,7 +7,7 @@ import type { ILeadRepository, segment } from "../../repository/lead";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/_test/makeEvent";
 import { makeLead } from "../_factory/_test/makeLead";
-import { GetLeadMetricsBySegment } from "../get-lead-metrics-by-segment";
+import { GetLeadMetricsBySegment } from "../leads/get-lead-metrics-by-segment";
 
 describe("Get leads metrics by segment (Service)", () => {
     let sut: GetLeadMetricsBySegment;

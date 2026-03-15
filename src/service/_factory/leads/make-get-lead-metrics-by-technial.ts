@@ -1,17 +1,14 @@
 import { prisma } from "../../../lib/prisma";
 import { EventPrismaRepository } from "../../../repository/prisma/event";
-import { JobPrismaRepository } from "../../../repository/prisma/job";
 import { LeadPrismaRepository } from "../../../repository/prisma/leads";
-import { CreateLeadService } from "../../leads/create-lead";
+import { GetLeadMetricsByTechnical } from "../../leads/get-lead-metrics-by-technial";
 
-export function makeCreateLead() {
+export function makeGetLeadMetricsByTechnial() {
     const eventRepository = new EventPrismaRepository(prisma);
     const leadRepository = new LeadPrismaRepository(prisma);
-    const jobRepository = new JobPrismaRepository(prisma);
-    const service = new CreateLeadService(
+    const service = new GetLeadMetricsByTechnical(
         eventRepository,
         leadRepository,
-        jobRepository,
     );
 
     return service;

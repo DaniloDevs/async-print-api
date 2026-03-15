@@ -7,7 +7,7 @@ import type { ILeadRepository } from "../../repository/lead";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/_test/makeEvent";
 import { makeLead } from "../_factory/_test/makeLead";
-import { ListEventLeadsService } from "../list-event-leads";
+import { ListEventLeadsService } from "../leads/list-event-leads";
 
 describe("List event leads (Service)", () => {
     let sut: ListEventLeadsService;

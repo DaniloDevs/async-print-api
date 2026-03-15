@@ -13,7 +13,7 @@ import { LeadAlreadyRegisteredError } from "../_errors/lead-already-registered-e
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/_test/makeEvent";
 import { makeLead } from "../_factory/_test/makeLead";
-import { CreateLeadService } from "../create-lead";
+import { CreateLeadService } from "../leads/create-lead";
 
 describe("Create Lead (Service)", () => {
     let eventRepository: IEventRepository;

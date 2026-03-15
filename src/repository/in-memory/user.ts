@@ -23,7 +23,6 @@ export class UserInMemoryRepository implements IUserRepository {
             email: data.email,
             passwordHash: data.passwordHash,
             createdAt: new Date(),
-            role: data.role,
         };
 
         this.itens.push(user);

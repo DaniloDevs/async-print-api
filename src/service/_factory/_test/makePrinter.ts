@@ -5,6 +5,7 @@ import type {
 
 type MakePrinterOverrides = Partial<{
     name: string;
+    slug: string;
     path: string;
     description: string;
     type: PrinterTypeEnum;
@@ -15,6 +16,7 @@ type MakePrinterOverrides = Partial<{
 export function makePrinter(overrides: MakePrinterOverrides = {}) {
     return {
         name: "Impressora Teste",
+        slug: "impressora-teste",
         path: "/dev/usb/lp-test",
         description: undefined,
         type: "network" as PrinterTypeEnum,

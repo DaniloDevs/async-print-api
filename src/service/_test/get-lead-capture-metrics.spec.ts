@@ -7,7 +7,7 @@ import type { ILeadRepository } from "../../repository/lead";
 import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/_test/makeEvent";
 import { makeLead } from "../_factory/_test/makeLead";
-import { GetLeadCaptureMetricsService } from "../get-lead-capture-metrics";
+import { GetLeadCaptureMetricsService } from "../leads/get-lead-capture-metrics";
 
 describe("Get lead capture metrics (Service)", () => {
     let sut: GetLeadCaptureMetricsService;

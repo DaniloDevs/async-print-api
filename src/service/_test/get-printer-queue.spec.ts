@@ -6,7 +6,7 @@ import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 import { makeEvent } from "../_factory/_test/makeEvent";
 import { makeJob } from "../_factory/_test/makeJob";
 import { makePrinter } from "../_factory/_test/makePrinter";
-import { GetPrinterQueue } from "../get-printer-queue";
+import { GetPrinterQueue } from "../printers/get-printer-queue";
 
 describe("Get printer queue (Service)", () => {
     let sut: GetPrinterQueue;

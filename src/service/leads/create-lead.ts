@@ -1,16 +1,16 @@
 import dayjs from "dayjs";
-import type { IEventRepository } from "../repository/event";
-import type { IJobRepository } from "../repository/job";
+import type { IEventRepository } from "../../repository/event";
+import type { IJobRepository } from "../../repository/job";
 import type {
     ILeadRepository,
     Lead,
     LeadCreateInput,
-} from "../repository/lead";
-import { EventAlreadyEndedError } from "./_errors/event-already-ended-error";
-import { EventNotActiveError } from "./_errors/event-not-active-error";
-import { EventNotStartedYetError } from "./_errors/event-not-started-yet-error";
-import { LeadAlreadyRegisteredError } from "./_errors/lead-already-registered-error";
-import { ResourceNotFoundError } from "./_errors/resource-not-found-error";
+} from "../../repository/lead";
+import { EventAlreadyEndedError } from "../_errors/event-already-ended-error";
+import { EventNotActiveError } from "../_errors/event-not-active-error";
+import { EventNotStartedYetError } from "../_errors/event-not-started-yet-error";
+import { LeadAlreadyRegisteredError } from "../_errors/lead-already-registered-error";
+import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 
 interface RequestDate {
     data: LeadCreateInput;

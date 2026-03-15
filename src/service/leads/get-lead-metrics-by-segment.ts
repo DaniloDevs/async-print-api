@@ -1,19 +1,19 @@
-import type { IEventRepository } from "../repository/event";
-import type { ILeadRepository, Lead } from "../repository/lead";
-import { ResourceNotFoundError } from "./_errors/resource-not-found-error";
+import type { IEventRepository } from "../../repository/event";
+import type { ILeadRepository, Lead } from "../../repository/lead";
+import { ResourceNotFoundError } from "../_errors/resource-not-found-error";
 
 interface RequestDate {
     eventId: string;
 }
 interface ResponseDate {
-    technical: {
-        technical: string;
+    segments: {
+        segment: string;
         total: number;
         interestNewyear: number;
     }[];
 }
 
-export class GetLeadMetricsByTechnical {
+export class GetLeadMetricsBySegment {
     constructor(
         private eventRepository: IEventRepository,
         private leadsRepository: ILeadRepository,
@@ -31,12 +31,12 @@ export class GetLeadMetricsByTechnical {
 
         const leads = await this.leadsRepository.findManyByEventId(eventId);
 
-        const metrics = this.calculateMetricsByTechnical(leads);
+        const metrics = this.calculateMetricsBySegment(leads);
 
         return {
-            technical: metrics
+            segments: metrics
                 .map((metric) => ({
-                    technical: metric.technical,
+                    segment: metric.segment,
                     total: metric.totalLeads,
                     interestNewyear: metric.leadsWithIntentNextYear,
                 }))
@@ -44,31 +44,31 @@ export class GetLeadMetricsByTechnical {
         };
     }
 
-    calculateMetricsByTechnical(leads: Lead[]) {
+    calculateMetricsBySegment(leads: Lead[]) {
         const groups: Record<
             string,
             {
-                technical: string;
+                segment: string;
                 totalLeads: number;
                 leadsWithIntentNextYear: number;
             }
         > = {};
 
         for (const lead of leads) {
-            const technical = lead.technical;
+            const segment = lead.segment;
 
-            if (!groups[technical]) {
-                groups[technical] = {
-                    technical,
+            if (!groups[segment]) {
+                groups[segment] = {
+                    segment,
                     totalLeads: 0,
                     leadsWithIntentNextYear: 0,
                 };
             }
 
-            groups[technical].totalLeads++;
+            groups[segment].totalLeads++;
 
             if (lead.intentionNextYear) {
-                groups[technical].leadsWithIntentNextYear++;
+                groups[segment].leadsWithIntentNextYear++;
             }
         }
 

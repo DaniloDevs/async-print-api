@@ -1,17 +1,14 @@
 import { prisma } from "../../../lib/prisma";
 import { EventPrismaRepository } from "../../../repository/prisma/event";
-import { JobPrismaRepository } from "../../../repository/prisma/job";
 import { LeadPrismaRepository } from "../../../repository/prisma/leads";
-import { CreateLeadService } from "../../leads/create-lead";
+import { ListEventLeadsService } from "../../leads/list-event-leads";
 
-export function makeCreateLead() {
+export function makeListEventLeads() {
     const eventRepository = new EventPrismaRepository(prisma);
     const leadRepository = new LeadPrismaRepository(prisma);
-    const jobRepository = new JobPrismaRepository(prisma);
-    const service = new CreateLeadService(
+    const service = new ListEventLeadsService(
         eventRepository,
         leadRepository,
-        jobRepository,
     );
 
     return service;
