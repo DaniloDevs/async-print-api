@@ -1,76 +1,76 @@
 # Async Print API - Version(0.13.17)
 
-Orquestrador de gestão de eventos presenciais, captura de participantes (leads) e impressão térmica assíncrona. Uma solução completa para eventos corporativos que necessitam de rastreabilidade, escalabilidade e tolerância a falhas.
+Orchestrator for in-person event management, participant (lead) capture, and asynchronous thermal printing. A complete solution for corporate events that require traceability, scalability, and fault tolerance.
 
-## 📋 Sobre
+## 📋 About
 
-A **Async Print API** é uma plataforma de orquestração de eventos construída para gerenciar o fluxo completo de eventos presenciais, desde a configuração do evento até a emissão de comprovantes para sorteios. O projeto utiliza arquitetura baseada em **eventos e domínios** com três pilares principais:
+The **Async Print API** is an event orchestration platform built to manage the complete flow of in-person events, from event configuration to the issuance of raffle receipts. The project uses an **event- and domain-based** architecture with three main pillars:
 
-### Principais Funcionalidades
+### Key Features
 
-**📅 Gestão de Eventos & Leads**
-- Criar eventos com slug único e imutável
-- Capturar participantes (leads) de forma imutável e atômica
-- Listar leads com paginação, filtros temporais e agrupamento
-- Exportar leads de forma assíncrona
-- Atualizar banner apenas enquanto evento está ativo/futuro
-- Status de evento derivado automaticamente do horário atual
+**📅 Event & Lead Management**
+- Create events with unique and immutable slugs
+- Capture participants (leads) immutably and atomically
+- List leads with pagination, temporal filters, and grouping
+- Export leads asynchronously
+- Update banner only while the event is active/future
+- Event status automatically derived from current time
 
-**📊 Análise de Métricas**
-- Leads capturados por período (janelas temporais determinísticas)
-- Taxa média de captura considerando apenas tempo ativo
-- Resumo consolidado com total de leads e status em tempo real
-- Agrupamento por origem e segmento de interesse
+**📊 Metrics Analysis**
+- Leads captured per period (deterministic time windows)
+- Average capture rate considering only active time
+- Consolidated summary with total leads and real-time status
+- Grouping by origin and interest segment
 
-**🖨️ Fila de Impressão & Jobs**
-- Enfileiramento assíncrono de solicitações de impressão
-- Processamento FIFO com suporte a priorização
-- Histórico de tentativas e tratamento de falhas
-- Tolerância a impressoras offline sem impacto na captura
-- Dashboard de monitoramento de filas (Bull Board)
-- Suporte a reprocessamento e cancelamento manual de jobs
-
----
-
-## 🚀 Tecnologias
-
-Este projeto foi desenvolvido com as seguintes tecnologias:
-
-- [Node.js 20+](https://nodejs.org/) - Runtime JavaScript/TypeScript
-- [TypeScript 5.9](https://www.typescriptlang.org/) - Tipagem estática e segurança
-- [Fastify 5](https://www.fastify.io/) - Framework web moderno e altamente performático
-- [PostgreSQL](https://www.postgresql.org/) - Banco de dados relacional
-- [Prisma 7](https://www.prisma.io/) - ORM type-safe para Node.js
-- [BullMQ](https://docs.bullmq.io/) - Fila de jobs em Redis para processamento assíncrono
-- [Bull Board](https://bull-board.js.org/) - Dashboard para monitoramento de filas
-- [MinIO](https://min.io/) - Armazenamento compatível com S3
-- [Zod](https://zod.dev/) - Validação de esquemas e tipos
-- [Vitest 4](https://vitest.dev/) - Framework de testes unitários e E2E
-- [Biome 2](https://biomejs.dev/) - Linter e formatter unificado
-- [Scalar](https://scalar.com/) - Documentação interativa de API
+**🖨️ Print Queue & Jobs**
+- Asynchronous queuing of print requests
+- FIFO processing with priority support
+- Attempt history and failure handling
+- Tolerance for offline printers without impacting capture
+- Queue monitoring dashboard (Bull Board)
+- Support for reprocessing and manual cancellation of jobs
 
 ---
 
-## 🎯 Regras de Negócio (Invariantes)
+## 🚀 Technologies
 
-1. **Eventos**: Status é derivado automaticamente do horário atual; não pode ser definido manualmente
-2. **Leads**: Imutáveis após criação; só podem ser capturados enquanto evento está ativo
-3. **Exportações**: Sempre assíncronas; requerem ≥1 lead no evento
-4. **Métricas**: Apenas leitura; nunca afetam operações de captura
-5. **Impressoras**: Offline não bloqueia o sistema; jobs são rejeitados com motivo claro
-6. **Jobs**: Idempotentes e vinculados à mesma transação de origem
-7. **Tolerância a Falhas**: Falhas de impressão nunca impactam a captura de leads
-8. **Auditoria**: Logs estruturados (JSON) obrigatórios para todas as operações
+This project was developed with the following technologies:
+
+- [Node.js 20+](https://nodejs.org/) - JavaScript/TypeScript runtime
+- [TypeScript 5.9](https://www.typescriptlang.org/) - Static typing and security
+- [Fastify 5](https://www.fastify.io/) - Modern and highly performant web framework
+- [PostgreSQL](https://www.postgresql.org/) - Relational database
+- [Prisma 7](https://www.prisma.io/) - Type-safe ORM for Node.js
+- [BullMQ](https://docs.bullmq.io/) - Redis-based job queue for asynchronous processing
+- [Bull Board](https://bull-board.js.org/) - Dashboard for queue monitoring
+- [MinIO](https://min.io/) - S3-compatible storage
+- [Zod](https://zod.dev/) - Schema and type validation
+- [Vitest 4](https://vitest.dev/) - Unit and E2E testing framework
+- [Biome 2](https://biomejs.dev/) - Unified linter and formatter
+- [Scalar](https://scalar.com/) - Interactive API documentation
 
 ---
 
-## ⚙️ Requisitos Não Funcionais
+## 🎯 Business Rules (Invariants)
 
-- **Performance**: Criação de evento/lead ≤ 300ms em carga normal
-- **Paginação**: Suporte a cursor/offset com default de 20 registros
-- **Processamento**: Todas as exportações/impressões são assíncronas (202 Accepted)
-- **Disponibilidade**: Sistema funciona com todas as impressoras offline
-- **Rastreabilidade**: Logs estruturados por eventId/printerId/jobId
-- **Segurança**: RBAC para operações críticas (export, reprocessar, cancelar)
-- **Observabilidade**: Alertas quando fila cresce além de threshold configurável
+1. **Events**: Status is automatically derived from the current time; cannot be set manually
+2. **Leads**: Immutable after creation; can only be captured while the event is active
+3. **Exports**: Always asynchronous; require ≥1 lead in the event
+4. **Metrics**: Read-only; never affect capture operations
+5. **Printers**: Offline status does not block the system; jobs are rejected with a clear reason
+6. **Jobs**: Idempotent and linked to the same origin transaction
+7. **Fault Tolerance**: Printing failures never impact lead capture
+8. **Audit**: Structured logs (JSON) are mandatory for all operations
+
+---
+
+## ⚙️ Non-Functional Requirements
+
+- **Performance**: Event/lead creation ≤ 300ms under normal load
+- **Pagination**: Cursor/offset support with a default of 20 records
+- **Processing**: All exports/prints are asynchronous (202 Accepted)
+- **Availability**: System functions even with all printers offline
+- **Traceability**: Structured logs by eventId/printerId/jobId
+- **Security**: RBAC for critical operations (export, reprocess, cancel)
+- **Observability**: Alerts when the queue grows beyond a configurable threshold
 
