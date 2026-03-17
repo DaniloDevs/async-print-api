@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
 import z from "zod";
-import { makeGetLeadMetricsByTechnial } from "../../../service/@factory/leads/make-get-lead-metrics-by-technial";
+import { makeGetLeadMetricsByTechnial } from "../../../service/@factory/leads/make-get-lead-by-technial";
 
 export default async function GetLeadMetricsByTechnicalController(
     request: FastifyRequest,

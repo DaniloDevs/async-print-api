@@ -1,8 +1,8 @@
 import type { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
 import z from "zod";
-import { makeGetLeadMetricsByOrigen } from "../../../service/@factory/leads/make-get-lead-metrics-by-origen";
+import { makeGetLeadMetricsBySegment } from "../../../service/@factory/leads/make-get-lead-by-segment";
 
-export default async function GetLeadMetricsByOriginController(
+export default async function GetLeadMetricsBySegmentController(
     request: FastifyRequest,
     reply: FastifyReply,
 ) {
@@ -12,17 +12,17 @@ export default async function GetLeadMetricsByOriginController(
 
     const { eventId } = paramsSchema.parse(request.params);
 
-    const getLeadMetricsByOrigin = makeGetLeadMetricsByOrigen();
+    const getLeadMetricsBySegment = makeGetLeadMetricsBySegment();
 
-    const result = await getLeadMetricsByOrigin.execute({
+    const result = await getLeadMetricsBySegment.execute({
         eventId,
     });
 
     return reply.status(200).send(result);
 }
 
-export const getLeadMetricsByOriginControllerSchema: FastifySchema = {
-    summary: "Get lead metrics by origin",
+export const getLeadMetricsBySegmentControllerSchema: FastifySchema = {
+    summary: "Get lead metrics by segment",
     tags: ["Leads"],
     params: z.object({
         eventId: z.string().uuid().describe("The ID of the event"),

@@ -6,18 +6,18 @@ import CreateLeadController, {
 import ExportEventLeadsController, {
     exportEventLeadsControllerSchema,
 } from "./export-event-leads";
-import GetLeadCaptureMetricsController, {
-    getLeadCaptureMetricsControllerSchema,
-} from "./get-lead-capture-metrics";
 import GetLeadMetricsByOriginController, {
     getLeadMetricsByOriginControllerSchema,
-} from "./get-lead-metrics-by-origen";
+} from "./get-lead-by-origen";
 import GetLeadMetricsBySegmentController, {
     getLeadMetricsBySegmentControllerSchema,
-} from "./get-lead-metrics-by-segment";
+} from "./get-lead-by-segment";
 import GetLeadMetricsByTechnicalController, {
     getLeadMetricsByTechnicalControllerSchema,
-} from "./get-lead-metrics-by-technial";
+} from "./get-lead-by-technial";
+import GetLeadCaptureMetricsController, {
+    getLeadCaptureMetricsControllerSchema,
+} from "./get-lead-metrics";
 import ListEventLeadsController, {
     listEventLeadsControllerSchema,
 } from "./list-event-leads";
@@ -48,7 +48,7 @@ export default async function LeadsRoutes(server: FastifyInstance) {
         ExportEventLeadsController,
     );
     server.get(
-        "/events/:eventId/leads/metrics/capture",
+        "/events/:slug/leads/metrics",
         { schema: getLeadCaptureMetricsControllerSchema },
         GetLeadCaptureMetricsController,
     );

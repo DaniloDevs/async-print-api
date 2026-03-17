@@ -1,12 +1,12 @@
 import { prisma } from "../../../lib/prisma";
 import { EventPrismaRepository } from "../../../repository/prisma/event";
 import { LeadPrismaRepository } from "../../../repository/prisma/leads";
-import { GetLeadCaptureMetricsService } from "../../leads/get-lead-capture-metrics";
+import { GetLeadMetricsBySegment } from "../../leads/get-lead-by-segment";
 
-export function makeGetLeadCaptureMetrics() {
+export function makeGetLeadMetricsBySegment() {
     const eventRepository = new EventPrismaRepository(prisma);
     const leadRepository = new LeadPrismaRepository(prisma);
-    const service = new GetLeadCaptureMetricsService(
+    const service = new GetLeadMetricsBySegment(
         eventRepository,
         leadRepository,
     );

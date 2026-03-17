@@ -3,14 +3,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Event, IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { LeadInMemoryRepository } from "../../repository/in-memory/leads-repo";
-import type { ILeadRepository, originLead } from "../../repository/lead";
+import type { ILeadRepository, segment } from "../../repository/lead";
 import { ResourceNotFoundError } from "../@errors/resource-not-found-error";
 import { makeEvent } from "../@factory/_test/makeEvent";
 import { makeLead } from "../@factory/_test/makeLead";
-import { GetLeadMetricsByorigin } from "./get-lead-metrics-by-origen";
+import { GetLeadMetricsBySegment } from "./get-lead-by-segment";
 
-describe("Get leads metrics by origin (Service)", () => {
-    let sut: GetLeadMetricsByorigin;
+describe("Get leads metrics by segment (Service)", () => {
+    let sut: GetLeadMetricsBySegment;
     let eventRepository: IEventRepository;
     let leadRepository: ILeadRepository;
     let event: Event;
@@ -23,7 +23,7 @@ describe("Get leads metrics by origin (Service)", () => {
 
         eventRepository = new EventInMemoryRepository();
         leadRepository = new LeadInMemoryRepository();
-        sut = new GetLeadMetricsByorigin(eventRepository, leadRepository);
+        sut = new GetLeadMetricsBySegment(eventRepository, leadRepository);
 
         event = await eventRepository.create(
             makeEvent({
@@ -38,58 +38,59 @@ describe("Get leads metrics by origin (Service)", () => {
     });
 
     describe("Successful cases", () => {
-        it("should group leads by origin interest correctly", async () => {
+        it("should group leads by segment interest correctly", async () => {
             await leadRepository.create(
-                makeLead({ origin: "MANUAL", eventId: event.id }),
+                makeLead({ segment: "ANO_1_MEDIO", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ origin: "MANUAL", eventId: event.id }),
+                makeLead({ segment: "ANO_1_MEDIO", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ origin: "QRCODE", eventId: event.id }),
+                makeLead({ segment: "ANO_2_MEDIO", eventId: event.id }),
             );
 
             const result = await sut.execute({ eventId: event.id });
-            expect(result.origin).toEqual([
-                { origin: "MANUAL", total: 2 },
-                { origin: "QRCODE", total: 1 },
+
+            expect(result.segments).toEqual([
+                { segment: "ANO_1_MEDIO", total: 2, interestNewyear: 2 },
+                { segment: "ANO_2_MEDIO", total: 1, interestNewyear: 1 },
             ]);
         });
 
-        it("should sort t.origin by total leads desc", async () => {
+        it("should sort t.segment by total leads desc", async () => {
             await leadRepository.create(
-                makeLead({ origin: "QRCODE", eventId: event.id }),
+                makeLead({ segment: "ANO_2_MEDIO", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ origin: "MANUAL", eventId: event.id }),
+                makeLead({ segment: "ANO_1_MEDIO", eventId: event.id }),
             );
             await leadRepository.create(
-                makeLead({ origin: "MANUAL", eventId: event.id }),
+                makeLead({ segment: "ANO_1_MEDIO", eventId: event.id }),
             );
 
             const result = await sut.execute({ eventId: event.id });
 
-            expect(result.origin[0].origin).toBe("MANUAL");
-            expect(result.origin[0].total).toBe(2);
-            expect(result.origin[1].origin).toBe("QRCODE");
+            expect(result.segments[0].segment).toBe("ANO_1_MEDIO");
+            expect(result.segments[0].total).toBe(2);
+            expect(result.segments[1].segment).toBe("ANO_2_MEDIO");
         });
-        it("should return empty t.origin array when event has no leads", async () => {
+        it("should return empty t.segment array when event has no leads", async () => {
             const result = await sut.execute({ eventId: event.id });
 
-            expect(result.origin).toEqual([]);
+            expect(result.segments).toEqual([]);
         });
 
-        it("should count only leads with intent to study next year per origin", async () => {
+        it("should count only leads with intent to study next year per segment", async () => {
             await leadRepository.create(
                 makeLead({
-                    origin: "MANUAL",
+                    segment: "ANO_1_MEDIO",
                     intentionNextYear: true,
                     eventId: event.id,
                 }),
             );
             await leadRepository.create(
                 makeLead({
-                    origin: "MANUAL",
+                    segment: "ANO_1_MEDIO",
                     intentionNextYear: false,
                     eventId: event.id,
                 }),
@@ -97,19 +98,24 @@ describe("Get leads metrics by origin (Service)", () => {
 
             const result = await sut.execute({ eventId: event.id });
 
-            expect(result.origin[0]).toEqual({
-                origin: "MANUAL",
+            expect(result.segments[0]).toEqual({
+                segment: "ANO_1_MEDIO",
                 total: 2,
+                interestNewyear: 1,
             });
         });
 
-        it("should return all origin interests present in leads", async () => {
-            const origins: originLead[] = ["MANUAL", "QRCODE", "INSTAGRAM"];
+        it("should return all segment interests present in leads", async () => {
+            const segments: segment[] = [
+                "ANO_1_MEDIO",
+                "ANO_2_MEDIO",
+                "ANO_3_MEDIO",
+            ];
 
-            for (const origin of origins) {
+            for (const segment of segments) {
                 await leadRepository.create(
                     makeLead({
-                        origin: origin,
+                        segment: segment,
                         eventId: event.id,
                     }),
                 );
@@ -117,8 +123,8 @@ describe("Get leads metrics by origin (Service)", () => {
 
             const result = await sut.execute({ eventId: event.id });
 
-            expect(result.origin.map((t) => t.origin)).toEqual(
-                expect.arrayContaining(origins),
+            expect(result.segments.map((t) => t.segment)).toEqual(
+                expect.arrayContaining(segments),
             );
         });
     });

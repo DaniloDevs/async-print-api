@@ -4,3 +4,4 @@ dist
 coverage
 
 /prisma/generated/prisma
+.docs
