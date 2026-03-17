@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { IJobProvider } from "../../provider/job-provider";
 import type { IEventRepository } from "../../repository/event";
 import { EventInMemoryRepository } from "../../repository/in-memory/events-repo";
 import { JobInMemoryRepository } from "../../repository/in-memory/job-repo";
@@ -19,6 +20,7 @@ describe("Create Lead (Service)", () => {
     let eventRepository: IEventRepository;
     let leadRepository: ILeadRepository;
     let jobRepository: IJobRepository;
+    let jobProvider: IJobProvider;
     let sut: CreateLeadService;
 
     const NOW = dayjs("2024-01-01T12:00:00Z");
@@ -33,10 +35,15 @@ describe("Create Lead (Service)", () => {
         eventRepository = new EventInMemoryRepository();
         leadRepository = new LeadInMemoryRepository();
         jobRepository = new JobInMemoryRepository();
+        jobProvider = {
+            enqueue: vi.fn(),
+        } as unknown as IJobProvider;
+
         sut = new CreateLeadService(
             eventRepository,
             leadRepository,
             jobRepository,
+            jobProvider,
         );
     });
 
@@ -90,7 +97,16 @@ describe("Create Lead (Service)", () => {
                         name: lead.name,
                         phone: expectedPhoneSuffix,
                     },
-                    maxAttempts: 1,
+                    maxAttempts: 3,
+                }),
+            );
+
+            expect(jobProvider.enqueue).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    jobId: expect.any(String),
+                    leadId: lead.id,
+                    name: lead.name,
+                    phone: expectedPhoneSuffix,
                 }),
             );
 

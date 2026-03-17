@@ -11,8 +11,8 @@ const envSchema = z.object({
     MINIO_ENDPOINT: z.string(),
     MINIO_BUCKET: z.string(),
     JWT_SECRET: z.string(),
-    // REDIS_PORT: z.coerce.number().default(6379),
-    // REDIS_HOST: z.string(),
+    REDIS_PORT: z.coerce.number().default(6379),
+    REDIS_HOST: z.string().default("127.0.0.1"),
 });
 
 const _env = envSchema.safeParse(process.env);

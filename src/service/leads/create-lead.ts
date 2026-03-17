@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import type { IJobProvider } from "../../provider/job-provider";
 import type { IEventRepository } from "../../repository/event";
 import type { IJobRepository } from "../../repository/job";
 import type {
@@ -24,6 +25,7 @@ export class CreateLeadService {
         private eventRepository: IEventRepository,
         private leadRepository: ILeadRepository,
         private jobRepository: IJobRepository,
+        private jobProvider: IJobProvider,
     ) {}
 
     async execute({ data }: RequestDate): Promise<ResponseDate> {
@@ -58,14 +60,21 @@ export class CreateLeadService {
             phone: formattedPhoneNumber,
         });
 
-        await this.jobRepository.create({
+        const job = await this.jobRepository.create({
             name: `JOB - ${lead.id} - ${lead.name}`,
             payload: {
                 id: lead.id,
                 name: lead.name,
                 phone: lead.phone.slice(-4),
             },
-            maxAttempts: 1,
+            maxAttempts: 3,
+        });
+
+        await this.jobProvider.enqueue({
+            jobId: job.id,
+            leadId: lead.id,
+            name: lead.name,
+            phone: lead.phone.slice(-4),
         });
 
         return { lead };

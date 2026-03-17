@@ -1,3 +1,6 @@
+import { createBullBoard } from "@bull-board/api";
+import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
+import { FastifyAdapter } from "@bull-board/fastify";
 import fastifyCookie from "@fastify/cookie";
 import cors from "@fastify/cors";
 import fastifyJwt from "@fastify/jwt";
@@ -16,6 +19,7 @@ import AuthRoutes from "./http/controllers/auth/_routes";
 import EventRoutes from "./http/controllers/event/_routes";
 import LeadsRoutes from "./http/controllers/leads/_routes";
 import PrintersRoutes from "./http/controllers/printers/_routes";
+import { printQueue } from "./lib/queue";
 
 const app = Fastify();
 
@@ -119,6 +123,15 @@ app.register(EventRoutes);
 app.register(LeadsRoutes);
 app.register(AuthRoutes);
 app.register(PrintersRoutes);
+
+// === Bull Board ===
+const serverAdapter = new FastifyAdapter();
+createBullBoard({
+    queues: [new BullMQAdapter(printQueue)],
+    serverAdapter,
+});
+serverAdapter.setBasePath("/admin/queues");
+app.register(serverAdapter.registerPlugin(), { prefix: "/admin/queues" });
 
 // === Error Handling ===
 app.setErrorHandler(errorHandler);
