@@ -25,6 +25,14 @@ export const getLeadCaptureMetricsControllerSchema: FastifySchema = {
     summary: "Get lead capture metrics",
     tags: ["Leads"],
     params: z.object({
-        slug: z.string().uuid().describe("The ID of the event"),
+        slug: z.string().describe("The ID of the event"),
     }),
+    response: {
+        200: z.object({
+            totalLeads: z.number(),
+            currentLeads: z.number(),
+            catchPercentage: z.number(),
+            averageTotals: z.number(),
+        }),
+    },
 };

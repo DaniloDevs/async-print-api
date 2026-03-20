@@ -1,22 +1,22 @@
 version: "3.9"
 
 services:
-  # redis:
-  #   image: redis:7-alpine
-  #   container_name: dev-redis-jobs
-  #   ports:
-  #     - "6379:6379"
-  #   volumes:
-  #     - redis_data:/data
-  #     - ./redis:/usr/local/etc/redis/redis.conf
-  #   command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-  #   networks:
-  #     - dev-net
-  #   healthcheck:
-  #     test: ["CMD", "redis-cli", "ping"]
-  #     interval: 5s
-  #     timeout: 3s
-  #     retries: 5
+  redis:
+    image: redis:7-alpine
+    container_name: dev-redis-jobs
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./redis:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    networks:
+      - dev-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   # app:
   #   build:
@@ -91,7 +91,7 @@ services:
 
 volumes:
   pg_data:
-  # redis_data:
+  redis_data:
   minio_data:
 
 networks:
